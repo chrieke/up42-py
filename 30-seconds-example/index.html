@@ -6,11 +6,12 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width,initial-scale=1" name="viewport"/>
 <meta content="UP42 Python SDK" name="description"/>
+<link href="https://up42.github.io/up42-py/30-seconds-example/" rel="canonical"/>
 <link href="../assets/logo-up42.ico" rel="shortcut icon"/>
-<meta content="mkdocs-1.1, mkdocs-material-5.0.2" name="generator"/>
+<meta content="mkdocs-1.1, mkdocs-material-5.1.1" name="generator"/>
 <title>30 Seconds Example - UP42 Python SDK</title>
-<link href="../assets/stylesheets/main.07c9fbf5.min.css" rel="stylesheet"/>
-<link href="../assets/stylesheets/palette.ecd4686e.min.css" rel="stylesheet"/>
+<link href="../assets/stylesheets/main.a676eddb.min.css" rel="stylesheet"/>
+<link href="../assets/stylesheets/palette.b302131d.min.css" rel="stylesheet"/>
 <meta content="#3f51b5" name="theme-color"/>
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
 <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&amp;display=fallback" rel="stylesheet"/>
@@ -33,7 +34,7 @@
 </div>
 <header class="md-header" data-md-component="header">
 <nav aria-label="Header" class="md-header-nav md-grid">
-<a aria-label="UP42 Python SDK" class="md-header-nav__button md-logo" href=".." title="UP42 Python SDK">
+<a aria-label="UP42 Python SDK" class="md-header-nav__button md-logo" href="https://up42.github.io/up42-py/" title="UP42 Python SDK">
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 
@@ -137,7 +138,7 @@
 <div class="md-sidebar__inner">
 <nav aria-label="Navigation" class="md-nav md-nav--primary" data-md-level="0">
 <label class="md-nav__title" for="__drawer">
-<a aria-label="UP42 Python SDK" class="md-nav__button md-logo" href=".." title="UP42 Python SDK">
+<a aria-label="UP42 Python SDK" class="md-nav__button md-logo" href="https://up42.github.io/up42-py/" title="UP42 Python SDK">
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 
@@ -334,7 +335,7 @@
 The area of interest and workflow parameters are defined. After running the job, 
 the results are downloaded and visualized.</p>
 <div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">up42</span>
-<span class="n">up42</span><span class="o">.</span><span class="n">authenticate</span><span class="p">(</span><span class="n">porject_id</span><span class="o">=</span><span class="mi">12345</span><span class="p">,</span> <span class="n">project_api_key</span><span class="o">=</span><span class="mi">12345</span><span class="p">)</span>
+<span class="n">up42</span><span class="o">.</span><span class="n">authenticate</span><span class="p">(</span><span class="n">project_id</span><span class="o">=</span><span class="mi">12345</span><span class="p">,</span> <span class="n">project_api_key</span><span class="o">=</span><span class="mi">12345</span><span class="p">)</span>
 <span class="c1"># up42.authenticate(cfg_file="config.json")</span>
 
 <span class="n">project</span> <span class="o">=</span> <span class="n">up42</span><span class="o">.</span><span class="n">initialize_project</span><span class="p">()</span>
@@ -358,8 +359,13 @@ the results are downloaded and visualized.</p>
 <span class="n">input_parameters</span><span class="p">[</span><span class="s2">"sobloo-s2-l1c-aoiclipped:1"</span><span class="p">]</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">"max_cloud_cover"</span><span class="p">:</span><span class="mi">60</span><span class="p">})</span>
 <span class="n">input_parameters</span>
 </code></pre></div>
-<div class="highlight"><pre><span></span><code><span class="n">job</span> <span class="o">=</span> <span class="n">workflow</span><span class="o">.</span><span class="n">create_and_run_job</span><span class="p">(</span><span class="n">input_parameters</span><span class="o">=</span><span class="n">input_parameters</span><span class="p">)</span>
-<span class="n">job</span><span class="o">.</span><span class="n">track_status</span><span class="p">()</span>
+<div class="highlight"><pre><span></span><code><span class="c1"># Run a test job to query data availability and check the configuration.</span>
+<span class="n">test_job</span> <span class="o">=</span> <span class="n">workflow</span><span class="o">.</span><span class="n">test_job</span><span class="p">(</span><span class="n">input_parameters</span><span class="o">=</span><span class="n">input_parameters</span><span class="p">,</span> <span class="n">track_status</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">test_results</span> <span class="o">=</span> <span class="n">test_job</span><span class="o">.</span><span class="n">get_results_json</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">test_results</span><span class="p">)</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="c1"># Run the actual job.</span>
+<span class="n">job</span> <span class="o">=</span> <span class="n">workflow</span><span class="o">.</span><span class="n">run_job</span><span class="p">(</span><span class="n">input_parameters</span><span class="o">=</span><span class="n">input_parameters</span><span class="p">,</span> <span class="n">track_status</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </code></pre></div>
 <div class="highlight"><pre><span></span><code><span class="n">job</span><span class="o">.</span><span class="n">download_results</span><span class="p">()</span>
 <span class="n">job</span><span class="o">.</span><span class="n">plot_results</span><span class="p">()</span>
@@ -426,14 +432,14 @@ the results are downloaded and visualized.</p>
 </div>
 </footer>
 </div>
-<script src="../assets/javascripts/vendor.36cbf620.min.js"></script>
-<script src="../assets/javascripts/bundle.00c583dd.min.js"></script><script id="__lang" type="application/json">{"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents"}</script>
+<script src="../assets/javascripts/vendor.c51dfa35.min.js"></script>
+<script src="../assets/javascripts/bundle.eaaa3931.min.js"></script><script id="__lang" type="application/json">{"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents"}</script>
 <script>
         app = initialize({
           base: "..",
           features: ["tabs"],
           search: Object.assign({
-            worker: "../assets/javascripts/worker/search.7f7c8775.min.js"
+            worker: "../assets/javascripts/worker/search.58d22e8e.min.js"
           }, typeof search !== "undefined" && search)
         })
       </script>

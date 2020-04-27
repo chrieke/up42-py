@@ -6,11 +6,12 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width,initial-scale=1" name="viewport"/>
 <meta content="UP42 Python SDK" name="description"/>
+<link href="https://up42.github.io/up42-py/reference/jobtask/" rel="canonical"/>
 <link href="../../assets/logo-up42.ico" rel="shortcut icon"/>
-<meta content="mkdocs-1.1, mkdocs-material-5.0.2" name="generator"/>
+<meta content="mkdocs-1.1, mkdocs-material-5.1.1" name="generator"/>
 <title>JobTask - UP42 Python SDK</title>
-<link href="../../assets/stylesheets/main.07c9fbf5.min.css" rel="stylesheet"/>
-<link href="../../assets/stylesheets/palette.ecd4686e.min.css" rel="stylesheet"/>
+<link href="../../assets/stylesheets/main.a676eddb.min.css" rel="stylesheet"/>
+<link href="../../assets/stylesheets/palette.b302131d.min.css" rel="stylesheet"/>
 <meta content="#3f51b5" name="theme-color"/>
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
 <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&amp;display=fallback" rel="stylesheet"/>
@@ -33,7 +34,7 @@
 </div>
 <header class="md-header" data-md-component="header">
 <nav aria-label="Header" class="md-header-nav md-grid">
-<a aria-label="UP42 Python SDK" class="md-header-nav__button md-logo" href="../.." title="UP42 Python SDK">
+<a aria-label="UP42 Python SDK" class="md-header-nav__button md-logo" href="https://up42.github.io/up42-py/" title="UP42 Python SDK">
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 
@@ -137,7 +138,7 @@
 <div class="md-sidebar__inner">
 <nav aria-label="Navigation" class="md-nav md-nav--primary" data-md-level="0">
 <label class="md-nav__title" for="__drawer">
-<a aria-label="UP42 Python SDK" class="md-nav__button md-logo" href="../.." title="UP42 Python SDK">
+<a aria-label="UP42 Python SDK" class="md-nav__button md-logo" href="https://up42.github.io/up42-py/" title="UP42 Python SDK">
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 
@@ -529,7 +530,8 @@ directory.</p>
 <tr>
 <td class="linenos">
 <div class="linenodiv">
-<pre><span></span>117
+<pre><span></span>116
+117
 118
 119
 120
@@ -577,8 +579,7 @@ directory.</p>
 162
 163
 164
-165
-166</pre>
+165</pre>
 </div>
 </td>
 <td class="code">
@@ -693,7 +694,8 @@ directory.</p>
 <tr>
 <td class="linenos">
 <div class="linenodiv">
-<pre><span></span> 85
+<pre><span></span> 84
+ 85
  86
  87
  88
@@ -722,8 +724,7 @@ directory.</p>
 111
 112
 113
-114
-115</pre>
+114</pre>
 </div>
 </td>
 <td class="code">
@@ -840,15 +841,12 @@ get_results_json<span class="p">(</span><span class="bp">self</span><span class=
 70
 71
 72
-73
-74</pre>
+73</pre>
 </div>
 </td>
 <td class="code">
 <div class="highlight">
-<pre><span></span><code><span class="k">def</span> <span class="nf">get_results_json</span><span class="p">(</span>
-    <span class="bp">self</span><span class="p">,</span> <span class="n">as_dataframe</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">Dict</span><span class="p">,</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">]:</span>
+<pre><span></span><code><span class="k">def</span> <span class="nf">get_results_json</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">as_dataframe</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">Dict</span><span class="p">,</span> <span class="n">GeoDataFrame</span><span class="p">]:</span>
     <span class="sd">"""</span>
 <span class="sd">    Gets the Jobtask results data.json.</span>
 
@@ -863,10 +861,11 @@ get_results_json<span class="p">(</span><span class="bp">self</span><span class=
         <span class="sa">f</span><span class="s2">"/tasks/</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">jobtask_id</span><span class="si">}</span><span class="s2">/outputs/data-json/"</span>
     <span class="p">)</span>
     <span class="n">response_json</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">auth</span><span class="o">.</span><span class="n">_request</span><span class="p">(</span><span class="n">request_type</span><span class="o">=</span><span class="s2">"GET"</span><span class="p">,</span> <span class="n">url</span><span class="o">=</span><span class="n">url</span><span class="p">)</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">"Retrieved </span><span class="si">%s</span><span class="s2"> features."</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">response_json</span><span class="p">[</span><span class="s2">"features"</span><span class="p">]))</span>
 
     <span class="k">if</span> <span class="n">as_dataframe</span><span class="p">:</span>
         <span class="c1"># UP42 results are always in EPSG 4326</span>
-        <span class="n">df</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="o">.</span><span class="n">from_features</span><span class="p">(</span><span class="n">response_json</span><span class="p">,</span> <span class="n">crs</span><span class="o">=</span><span class="mi">4326</span><span class="p">)</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">GeoDataFrame</span><span class="o">.</span><span class="n">from_features</span><span class="p">(</span><span class="n">response_json</span><span class="p">,</span> <span class="n">crs</span><span class="o">=</span><span class="mi">4326</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">df</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">response_json</span>
@@ -943,14 +942,14 @@ get_results_json<span class="p">(</span><span class="bp">self</span><span class=
 </div>
 </footer>
 </div>
-<script src="../../assets/javascripts/vendor.36cbf620.min.js"></script>
-<script src="../../assets/javascripts/bundle.00c583dd.min.js"></script><script id="__lang" type="application/json">{"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents"}</script>
+<script src="../../assets/javascripts/vendor.c51dfa35.min.js"></script>
+<script src="../../assets/javascripts/bundle.eaaa3931.min.js"></script><script id="__lang" type="application/json">{"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents"}</script>
 <script>
         app = initialize({
           base: "../..",
           features: ["tabs"],
           search: Object.assign({
-            worker: "../../assets/javascripts/worker/search.7f7c8775.min.js"
+            worker: "../../assets/javascripts/worker/search.58d22e8e.min.js"
           }, typeof search !== "undefined" && search)
         })
       </script>

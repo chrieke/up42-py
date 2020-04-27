@@ -6,11 +6,12 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width,initial-scale=1" name="viewport"/>
 <meta content="UP42 Python SDK" name="description"/>
+<link href="https://up42.github.io/up42-py/reference/tools/" rel="canonical"/>
 <link href="../../assets/logo-up42.ico" rel="shortcut icon"/>
-<meta content="mkdocs-1.1, mkdocs-material-5.0.2" name="generator"/>
+<meta content="mkdocs-1.1, mkdocs-material-5.1.1" name="generator"/>
 <title>Tools - UP42 Python SDK</title>
-<link href="../../assets/stylesheets/main.07c9fbf5.min.css" rel="stylesheet"/>
-<link href="../../assets/stylesheets/palette.ecd4686e.min.css" rel="stylesheet"/>
+<link href="../../assets/stylesheets/main.a676eddb.min.css" rel="stylesheet"/>
+<link href="../../assets/stylesheets/palette.b302131d.min.css" rel="stylesheet"/>
 <meta content="#3f51b5" name="theme-color"/>
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
 <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&amp;display=fallback" rel="stylesheet"/>
@@ -33,7 +34,7 @@
 </div>
 <header class="md-header" data-md-component="header">
 <nav aria-label="Header" class="md-header-nav md-grid">
-<a aria-label="UP42 Python SDK" class="md-header-nav__button md-logo" href="../.." title="UP42 Python SDK">
+<a aria-label="UP42 Python SDK" class="md-header-nav__button md-logo" href="https://up42.github.io/up42-py/" title="UP42 Python SDK">
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 
@@ -137,7 +138,7 @@
 <div class="md-sidebar__inner">
 <nav aria-label="Navigation" class="md-nav md-nav--primary" data-md-level="0">
 <label class="md-nav__title" for="__drawer">
-<a aria-label="UP42 Python SDK" class="md-nav__button md-logo" href="../.." title="UP42 Python SDK">
+<a aria-label="UP42 Python SDK" class="md-nav__button md-logo" href="https://up42.github.io/up42-py/" title="UP42 Python SDK">
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 
@@ -488,19 +489,19 @@ They can be accessed from every object and also from the imported up42 package d
 <tr>
 <td class="linenos">
 <div class="linenodiv">
-<pre><span></span>23
-24
-25
-26
-27
-28
-29
-30
-31
+<pre><span></span>31
 32
 33
 34
-35</pre>
+35
+36
+37
+38
+39
+40
+41
+42
+43</pre>
 </div>
 </td>
 <td class="code">
@@ -532,26 +533,17 @@ They can be accessed from every object and also from the imported up42 package d
 draw_aoi<span class="p">(</span><span class="bp">self</span><span class="p">)</span> </code>
 <a class="headerlink" href="#up42.tools.Tools.draw_aoi" title="Permanent link">¶</a></h2>
 <div class="doc doc-contents">
-<p>Opens a interactive map to draw an aoi by hand, export via the export button.
-Then read in via read_aoi_file().</p>
-<p>Currently no way to get the drawn geometry via a callback in Python, as not
-supported by folium.
-And ipyleaflet misses raster vizualization &amp; folium plugins functionality.</p>
+<p>Displays an interactive map to draw an aoi by hand, returns the folium object if
+not run in a Jupyter notebook.</p>
+<p>Export the drawn aoi via the export button, then read the geometries via
+read_aoi_file().</p>
 <details class="quote">
 <summary>Source code in <code>up42/tools.py</code></summary>
 <table class="highlighttable">
 <tr>
 <td class="linenos">
 <div class="linenodiv">
-<pre><span></span>116
-117
-118
-119
-120
-121
-122
-123
-124
+<pre><span></span>124
 125
 126
 127
@@ -570,23 +562,32 @@ And ipyleaflet misses raster vizualization &amp; folium plugins functionality.</
 140
 141
 142
-143</pre>
+143
+144
+145
+146
+147
+148
+149
+150
+151
+152
+153
+154
+155
+156</pre>
 </div>
 </td>
 <td class="code">
 <div class="highlight">
-<pre><span></span><code><span class="k">def</span> <span class="nf">draw_aoi</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<pre><span></span><code><span class="k">def</span> <span class="nf">draw_aoi</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
     <span class="sd">"""</span>
-<span class="sd">    Opens a interactive map to draw an aoi by hand, export via the export button.</span>
-<span class="sd">    Then read in via read_aoi_file().</span>
+<span class="sd">    Displays an interactive map to draw an aoi by hand, returns the folium object if</span>
+<span class="sd">    not run in a Jupyter notebook.</span>
 
-<span class="sd">    Currently no way to get the drawn geometry via a callback in Python, as not</span>
-<span class="sd">    supported by folium.</span>
-<span class="sd">    And ipyleaflet misses raster vizualization &amp; folium plugins functionality.</span>
+<span class="sd">    Export the drawn aoi via the export button, then read the geometries via</span>
+<span class="sd">    read_aoi_file().</span>
 <span class="sd">    """</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">is_notebook</span><span class="p">():</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"Only works in Jupyter notebook."</span><span class="p">)</span>
-
     <span class="n">m</span> <span class="o">=</span> <span class="n">folium_base_map</span><span class="p">(</span><span class="n">layer_control</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="n">DrawFoliumOverride</span><span class="p">(</span>
         <span class="n">export</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
@@ -602,7 +603,16 @@ And ipyleaflet misses raster vizualization &amp; folium plugins functionality.</
         <span class="p">},</span>
         <span class="n">edit_options</span><span class="o">=</span><span class="p">{</span><span class="s2">"polygon"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"allowIntersection"</span><span class="p">:</span> <span class="kc">False</span><span class="p">}},</span>
     <span class="p">)</span><span class="o">.</span><span class="n">add_to</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
-    <span class="n">display</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">assert</span> <span class="n">get_ipython</span><span class="p">()</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+        <span class="n">display</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
+    <span class="k">except</span> <span class="p">(</span><span class="ne">AssertionError</span><span class="p">,</span> <span class="ne">NameError</span><span class="p">):</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+            <span class="s2">"Returning folium map object. To display it directly run in a "</span>
+            <span class="s2">"Jupyter notebook!"</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">m</span>
 </code></pre>
 </div>
 </td>
@@ -671,9 +681,7 @@ the server, includes all manifest.json and marketplace.json contents.</p>
 <tr>
 <td class="linenos">
 <div class="linenodiv">
-<pre><span></span>353
-354
-355
+<pre><span></span>355
 356
 357
 358
@@ -690,7 +698,9 @@ the server, includes all manifest.json and marketplace.json contents.</p>
 369
 370
 371
-372</pre>
+372
+373
+374</pre>
 </div>
 </td>
 <td class="code">
@@ -791,9 +801,7 @@ dict.</p>
 <tr>
 <td class="linenos">
 <div class="linenodiv">
-<pre><span></span>300
-301
-302
+<pre><span></span>302
 303
 304
 305
@@ -842,7 +850,9 @@ dict.</p>
 348
 349
 350
-351</pre>
+351
+352
+353</pre>
 </div>
 </td>
 <td class="code">
@@ -967,15 +977,7 @@ get_example_aoi<span class="p">(</span><span class="bp">self</span><span class="
 <tr>
 <td class="linenos">
 <div class="linenodiv">
-<pre><span></span> 81
- 82
- 83
- 84
- 85
- 86
- 87
- 88
- 89
+<pre><span></span> 89
  90
  91
  92
@@ -999,14 +1001,22 @@ get_example_aoi<span class="p">(</span><span class="bp">self</span><span class="
 110
 111
 112
-113</pre>
+113
+114
+115
+116
+117
+118
+119
+120
+121</pre>
 </div>
 </td>
 <td class="code">
 <div class="highlight">
 <pre><span></span><code><span class="k">def</span> <span class="nf">get_example_aoi</span><span class="p">(</span>
     <span class="bp">self</span><span class="p">,</span> <span class="n">location</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"Berlin"</span><span class="p">,</span> <span class="n">as_dataframe</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="nb">dict</span><span class="p">,</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">]:</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="nb">dict</span><span class="p">,</span> <span class="n">GeoDataFrame</span><span class="p">]:</span>
     <span class="sd">"""</span>
 <span class="sd">    Gets predefined, small, rectangular example aoi for the selected location.</span>
 
@@ -1033,7 +1043,7 @@ get_example_aoi<span class="p">(</span><span class="bp">self</span><span class="
         <span class="p">)</span>
 
     <span class="k">if</span> <span class="n">as_dataframe</span><span class="p">:</span>
-        <span class="n">df</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="o">.</span><span class="n">from_features</span><span class="p">(</span><span class="n">example_aoi</span><span class="p">,</span> <span class="n">crs</span><span class="o">=</span><span class="mi">4326</span><span class="p">)</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">GeoDataFrame</span><span class="o">.</span><span class="n">from_features</span><span class="p">(</span><span class="n">example_aoi</span><span class="p">,</span> <span class="n">crs</span><span class="o">=</span><span class="mi">4326</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">df</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">example_aoi</span>
@@ -1107,20 +1117,7 @@ Legend entries are sorted and this determines plotting order.</p>
 <tr>
 <td class="linenos">
 <div class="linenodiv">
-<pre><span></span>145
-146
-147
-148
-149
-150
-151
-152
-153
-154
-155
-156
-157
-158
+<pre><span></span>158
 159
 160
 161
@@ -1151,15 +1148,25 @@ Legend entries are sorted and this determines plotting order.</p>
 186
 187
 188
-189</pre>
+189
+190
+191
+192
+193
+194
+195
+196
+197
+198
+199</pre>
 </div>
 </td>
 <td class="code">
 <div class="highlight">
 <pre><span></span><code><span class="nd">@staticmethod</span>
 <span class="k">def</span> <span class="nf">plot_coverage</span><span class="p">(</span>
-    <span class="n">scenes</span><span class="p">:</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">,</span>
-    <span class="n">aoi</span><span class="p">:</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">scenes</span><span class="p">:</span> <span class="n">GeoDataFrame</span><span class="p">,</span>
+    <span class="n">aoi</span><span class="p">:</span> <span class="n">GeoDataFrame</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">legend_column</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"scene_id"</span><span class="p">,</span>
     <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">16</span><span class="p">),</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
@@ -1172,9 +1179,6 @@ Legend entries are sorted and this determines plotting order.</p>
 <span class="sd">            Legend entries are sorted and this determines plotting order.</span>
 <span class="sd">        figsize: Matplotlib figure size.</span>
 <span class="sd">    """</span>
-    <span class="k">if</span> <span class="n">is_notebook</span><span class="p">():</span>
-        <span class="n">get_ipython</span><span class="p">()</span><span class="o">.</span><span class="n">run_line_magic</span><span class="p">(</span><span class="s2">"matplotlib"</span><span class="p">,</span> <span class="s2">"inline"</span><span class="p">)</span>
-
     <span class="k">if</span> <span class="n">legend_column</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">scenes</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
         <span class="n">legend_column</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># type: ignore</span>
         <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
@@ -1244,17 +1248,7 @@ respective object, e.g. job, catalog).</p>
 <tr>
 <td class="linenos">
 <div class="linenodiv">
-<pre><span></span>191
-192
-193
-194
-195
-196
-197
-198
-199
-200
-201
+<pre><span></span>201
 202
 203
 204
@@ -1289,7 +1283,14 @@ respective object, e.g. job, catalog).</p>
 233
 234
 235
-236</pre>
+236
+237
+238
+239
+240
+241
+242
+243</pre>
 </div>
 </td>
 <td class="code">
@@ -1304,9 +1305,6 @@ respective object, e.g. job, catalog).</p>
 <span class="sd">    Args:</span>
 <span class="sd">        figsize: matplotlib figure size.</span>
 <span class="sd">    """</span>
-    <span class="k">if</span> <span class="n">is_notebook</span><span class="p">():</span>
-        <span class="n">get_ipython</span><span class="p">()</span><span class="o">.</span><span class="n">run_line_magic</span><span class="p">(</span><span class="s2">"matplotlib"</span><span class="p">,</span> <span class="s2">"inline"</span><span class="p">)</span>
-
     <span class="c1"># TODO: Remove empty axes &amp; give title option.</span>
     <span class="k">if</span> <span class="n">filepaths</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">quicklooks</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -1325,7 +1323,7 @@ respective object, e.g. job, catalog).</p>
         <span class="s2">"ignore"</span><span class="p">,</span> <span class="n">category</span><span class="o">=</span><span class="n">rasterio</span><span class="o">.</span><span class="n">errors</span><span class="o">.</span><span class="n">NotGeoreferencedWarning</span>
     <span class="p">)</span>
 
-    <span class="n">fig</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">nrows</span><span class="o">=</span><span class="n">nrows</span><span class="p">,</span> <span class="n">ncols</span><span class="o">=</span><span class="n">ncols</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="n">figsize</span><span class="p">)</span>
+    <span class="n">_</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">nrows</span><span class="o">=</span><span class="n">nrows</span><span class="p">,</span> <span class="n">ncols</span><span class="o">=</span><span class="n">ncols</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="n">figsize</span><span class="p">)</span>
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">filepaths</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
         <span class="n">axs</span> <span class="o">=</span> <span class="n">axs</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
     <span class="k">else</span><span class="p">:</span>
@@ -1390,14 +1388,7 @@ plot_results<span class="p">(</span><span class="bp">self</span><span class="p">
 <tr>
 <td class="linenos">
 <div class="linenodiv">
-<pre><span></span>238
-239
-240
-241
-242
-243
-244
-245
+<pre><span></span>245
 246
 247
 248
@@ -1450,7 +1441,9 @@ plot_results<span class="p">(</span><span class="bp">self</span><span class="p">
 295
 296
 297
-298</pre>
+298
+299
+300</pre>
 </div>
 </td>
 <td class="code">
@@ -1491,18 +1484,13 @@ plot_results<span class="p">(</span><span class="bp">self</span><span class="p">
     <span class="k">if</span> <span class="ow">not</span> <span class="n">titles</span><span class="p">:</span>
         <span class="n">titles</span> <span class="o">=</span> <span class="p">[</span><span class="n">Path</span><span class="p">(</span><span class="n">fp</span><span class="p">)</span><span class="o">.</span><span class="n">stem</span> <span class="k">for</span> <span class="n">fp</span> <span class="ow">in</span> <span class="n">imagepaths</span><span class="p">]</span>
 
-    <span class="k">if</span> <span class="n">is_notebook</span><span class="p">():</span>
-        <span class="n">get_ipython</span><span class="p">()</span><span class="o">.</span><span class="n">run_line_magic</span><span class="p">(</span><span class="s2">"matplotlib"</span><span class="p">,</span> <span class="s2">"inline"</span><span class="p">)</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"Only works in Jupyter notebook."</span><span class="p">)</span>
-
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">imagepaths</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
         <span class="n">nrows</span><span class="p">,</span> <span class="n">ncols</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">ncols</span> <span class="o">=</span> <span class="mi">3</span>
         <span class="n">nrows</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">imagepaths</span><span class="p">)</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="n">ncols</span><span class="p">)))</span>
 
-    <span class="n">fig</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">nrows</span><span class="o">=</span><span class="n">nrows</span><span class="p">,</span> <span class="n">ncols</span><span class="o">=</span><span class="n">ncols</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="n">figsize</span><span class="p">)</span>
+    <span class="n">_</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">nrows</span><span class="o">=</span><span class="n">nrows</span><span class="p">,</span> <span class="n">ncols</span><span class="o">=</span><span class="n">ncols</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="n">figsize</span><span class="p">)</span>
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">imagepaths</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
         <span class="n">axs</span> <span class="o">=</span> <span class="n">axs</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
     <span class="k">else</span><span class="p">:</span>
@@ -1586,15 +1574,7 @@ for use as the aoi geometry in the workflow input parameters
 <tr>
 <td class="linenos">
 <div class="linenodiv">
-<pre><span></span>38
-39
-40
-41
-42
-43
-44
-45
-46
+<pre><span></span>46
 47
 48
 49
@@ -1627,14 +1607,22 @@ for use as the aoi geometry in the workflow input parameters
 76
 77
 78
-79</pre>
+79
+80
+81
+82
+83
+84
+85
+86
+87</pre>
 </div>
 </td>
 <td class="code">
 <div class="highlight">
 <pre><span></span><code><span class="k">def</span> <span class="nf">read_vector_file</span><span class="p">(</span>
     <span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"aoi.geojson"</span><span class="p">,</span> <span class="n">as_dataframe</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">Dict</span><span class="p">,</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">]:</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">Dict</span><span class="p">,</span> <span class="n">GeoDataFrame</span><span class="p">]:</span>
     <span class="sd">"""</span>
 <span class="sd">    Reads vector files (geojson, shapefile, kml, wkt) to a feature collection,</span>
 <span class="sd">    for use as the aoi geometry in the workflow input parameters</span>
@@ -1659,7 +1647,7 @@ for use as the aoi geometry in the workflow input parameters
             <span class="n">wkt</span> <span class="o">=</span> <span class="n">wkt_file</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
             <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">"geometry"</span><span class="p">:</span> <span class="p">[</span><span class="n">wkt</span><span class="p">]})</span>
             <span class="n">df</span><span class="p">[</span><span class="s2">"geometry"</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">"geometry"</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">shapely</span><span class="o">.</span><span class="n">wkt</span><span class="o">.</span><span class="n">loads</span><span class="p">)</span>
-            <span class="n">df</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">geometry</span><span class="o">=</span><span class="s2">"geometry"</span><span class="p">,</span> <span class="n">crs</span><span class="o">=</span><span class="mi">4326</span><span class="p">)</span>
+            <span class="n">df</span> <span class="o">=</span> <span class="n">GeoDataFrame</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">geometry</span><span class="o">=</span><span class="s2">"geometry"</span><span class="p">,</span> <span class="n">crs</span><span class="o">=</span><span class="mi">4326</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">df</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
 
@@ -1776,9 +1764,7 @@ validate_manifest<span class="p">(</span><span class="bp">self</span><span class
 <tr>
 <td class="linenos">
 <div class="linenodiv">
-<pre><span></span>374
-375
-376
+<pre><span></span>376
 377
 378
 379
@@ -1837,7 +1823,9 @@ validate_manifest<span class="p">(</span><span class="bp">self</span><span class
 432
 433
 434
-435</pre>
+435
+436
+437</pre>
 </div>
 </td>
 <td class="code">
@@ -1977,14 +1965,14 @@ validate_manifest<span class="p">(</span><span class="bp">self</span><span class
 </div>
 </footer>
 </div>
-<script src="../../assets/javascripts/vendor.36cbf620.min.js"></script>
-<script src="../../assets/javascripts/bundle.00c583dd.min.js"></script><script id="__lang" type="application/json">{"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents"}</script>
+<script src="../../assets/javascripts/vendor.c51dfa35.min.js"></script>
+<script src="../../assets/javascripts/bundle.eaaa3931.min.js"></script><script id="__lang" type="application/json">{"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents"}</script>
 <script>
         app = initialize({
           base: "../..",
           features: ["tabs"],
           search: Object.assign({
-            worker: "../../assets/javascripts/worker/search.7f7c8775.min.js"
+            worker: "../../assets/javascripts/worker/search.58d22e8e.min.js"
           }, typeof search !== "undefined" && search)
         })
       </script>

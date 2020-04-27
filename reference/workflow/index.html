@@ -6,11 +6,12 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width,initial-scale=1" name="viewport"/>
 <meta content="UP42 Python SDK" name="description"/>
+<link href="https://up42.github.io/up42-py/reference/workflow/" rel="canonical"/>
 <link href="../../assets/logo-up42.ico" rel="shortcut icon"/>
-<meta content="mkdocs-1.1, mkdocs-material-5.0.2" name="generator"/>
+<meta content="mkdocs-1.1, mkdocs-material-5.1.1" name="generator"/>
 <title>Workflow - UP42 Python SDK</title>
-<link href="../../assets/stylesheets/main.07c9fbf5.min.css" rel="stylesheet"/>
-<link href="../../assets/stylesheets/palette.ecd4686e.min.css" rel="stylesheet"/>
+<link href="../../assets/stylesheets/main.a676eddb.min.css" rel="stylesheet"/>
+<link href="../../assets/stylesheets/palette.b302131d.min.css" rel="stylesheet"/>
 <meta content="#3f51b5" name="theme-color"/>
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
 <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&amp;display=fallback" rel="stylesheet"/>
@@ -33,7 +34,7 @@
 </div>
 <header class="md-header" data-md-component="header">
 <nav aria-label="Header" class="md-header-nav md-grid">
-<a aria-label="UP42 Python SDK" class="md-header-nav__button md-logo" href="../.." title="UP42 Python SDK">
+<a aria-label="UP42 Python SDK" class="md-header-nav__button md-logo" href="https://up42.github.io/up42-py/" title="UP42 Python SDK">
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 
@@ -137,7 +138,7 @@
 <div class="md-sidebar__inner">
 <nav aria-label="Navigation" class="md-nav md-nav--primary" data-md-level="0">
 <label class="md-nav__title" for="__drawer">
-<a aria-label="UP42 Python SDK" class="md-nav__button md-logo" href="../.." title="UP42 Python SDK">
+<a aria-label="UP42 Python SDK" class="md-nav__button md-logo" href="https://up42.github.io/up42-py/" title="UP42 Python SDK">
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 
@@ -276,11 +277,6 @@
   </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="#up42.workflow.Workflow.create_and_run_job">
-    create_and_run_job()
-  </a>
-</li>
-<li class="md-nav__item">
 <a class="md-nav__link" href="#up42.workflow.Workflow.delete">
     delete()
   </a>
@@ -303,6 +299,16 @@
 <li class="md-nav__item">
 <a class="md-nav__link" href="#up42.workflow.Workflow.get_workflow_tasks">
     get_workflow_tasks()
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#up42.workflow.Workflow.run_job">
+    run_job()
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#up42.workflow.Workflow.test_job">
+    test_job()
   </a>
 </li>
 <li class="md-nav__item">
@@ -421,11 +427,6 @@
   </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="#up42.workflow.Workflow.create_and_run_job">
-    create_and_run_job()
-  </a>
-</li>
-<li class="md-nav__item">
 <a class="md-nav__link" href="#up42.workflow.Workflow.delete">
     delete()
   </a>
@@ -448,6 +449,16 @@
 <li class="md-nav__item">
 <a class="md-nav__link" href="#up42.workflow.Workflow.get_workflow_tasks">
     get_workflow_tasks()
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#up42.workflow.Workflow.run_job">
+    run_job()
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#up42.workflow.Workflow.test_job">
+    test_job()
   </a>
 </li>
 <li class="md-nav__item">
@@ -482,7 +493,7 @@ an UP42 Workflow and helps to find and set the the workflow tasks, parameters
 and aoi.</p>
 <p>Public Methods:
     get_compatible_blocks, get_workflow_tasks, add_workflow_tasks, get_parameters_info,
-    construct_parameters, create_and_run_job, get_jobs, update_name, delete</p>
+    construct_parameters, test_job, run_job, get_jobs, update_name, delete</p>
 <details class="quote">
 <summary>Source code in <code>up42/workflow.py</code></summary>
 <table class="highlighttable">
@@ -516,7 +527,7 @@ and aoi.</p>
 
 <span class="sd">    Public Methods:</span>
 <span class="sd">        get_compatible_blocks, get_workflow_tasks, add_workflow_tasks, get_parameters_info,</span>
-<span class="sd">        construct_parameters, create_and_run_job, get_jobs, update_name, delete</span>
+<span class="sd">        construct_parameters, test_job, run_job, get_jobs, update_name, delete</span>
 <span class="sd">    """</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">auth</span> <span class="o">=</span> <span class="n">auth</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">project_id</span> <span class="o">=</span> <span class="n">project_id</span>
@@ -708,7 +719,7 @@ via dict.update({key:value}).</p>
 <td><code>Optional[Union[Dict, geojson.feature.Feature, geojson.feature.FeatureCollection, geojson.geometry.Polygon, List, geopandas.geodataframe.GeoDataFrame, shapely.geometry.polygon.Polygon, shapely.geometry.point.Point]]</code></td>
 <td>
 <p>One of Dict, FeatureCollection, Feature, List,
-gpd.GeoDataFrame, shapely.geometry.Polygon, shapely.geometry.Point. All
+GeoDataFrame, shapely.geometry.Polygon, shapely.geometry.Point. All
 assume EPSG 4326.</p>
 </td>
 <td><code>None</code></td>
@@ -871,9 +882,9 @@ into new workflows.</p>
             <span class="n">Dict</span><span class="p">,</span>
             <span class="n">Feature</span><span class="p">,</span>
             <span class="n">FeatureCollection</span><span class="p">,</span>
-            <span class="n">geojson</span><span class="o">.</span><span class="n">Polygon</span><span class="p">,</span>
+            <span class="n">geojson_Polygon</span><span class="p">,</span>
             <span class="n">List</span><span class="p">,</span>
-            <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">,</span>
+            <span class="n">GeoDataFrame</span><span class="p">,</span>
             <span class="n">Polygon</span><span class="p">,</span>
             <span class="n">Point</span><span class="p">,</span>
         <span class="p">]</span>
@@ -893,7 +904,7 @@ into new workflows.</p>
 
 <span class="sd">    Args:</span>
 <span class="sd">        geometry: One of Dict, FeatureCollection, Feature, List,</span>
-<span class="sd">            gpd.GeoDataFrame, shapely.geometry.Polygon, shapely.geometry.Point. All</span>
+<span class="sd">            GeoDataFrame, shapely.geometry.Polygon, shapely.geometry.Point. All</span>
 <span class="sd">            assume EPSG 4326.</span>
 <span class="sd">        geometry_operation: Desired operation, One of "bbox", "intersects", "contains".</span>
 <span class="sd">        limit: Maximum number of expected results.</span>
@@ -911,7 +922,7 @@ into new workflows.</p>
     <span class="n">data_block_name</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">input_parameters</span><span class="o">.</span><span class="n">keys</span><span class="p">())[</span><span class="mi">0</span><span class="p">]</span>
 
     <span class="k">if</span> <span class="n">order_ids</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="c1"># Needs to be handled in this function(not create_and_run_job) as it is only</span>
+        <span class="c1"># Needs to be handled in this function(not run_job) as it is only</span>
         <span class="c1"># relevant for the data block.</span>
         <span class="c1"># TODO: Check for order-id correct schema, should be handled on backend?</span>
         <span class="n">input_parameters</span><span class="p">[</span><span class="n">data_block_name</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"order_ids"</span><span class="p">:</span> <span class="n">order_ids</span><span class="p">}</span>
@@ -946,192 +957,6 @@ into new workflows.</p>
 </div>
 </div>
 <div class="doc doc-object doc-method">
-<h2 class="doc doc-heading" id="up42.workflow.Workflow.create_and_run_job">
-<code class="highlight language-python">
-create_and_run_job<span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_parameters</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">test_query</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">track_status</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> </code>
-<a class="headerlink" href="#up42.workflow.Workflow.create_and_run_job" title="Permanent link">¶</a></h2>
-<div class="doc doc-contents">
-<p>Creates and runs a new job.</p>
-<p><strong>Parameters:</strong></p>
-<table>
-<thead>
-<tr>
-<th>Name</th>
-<th>Type</th>
-<th>Description</th>
-<th>Default</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>input_parameters</code></td>
-<td><code>Union[Dict, str, pathlib.Path]</code></td>
-<td>
-<p>Either json string of workflow parameters or filepath to json.</p>
-</td>
-<td><code>None</code></td>
-</tr>
-<tr>
-<td><code>test_query</code></td>
-<td><code>bool</code></td>
-<td>
-<p>If set, runs a test query (search for available imagery based on your data parameters).</p>
-</td>
-<td><code>False</code></td>
-</tr>
-<tr>
-<td><code>track_status</code></td>
-<td><code>bool</code></td>
-<td>
-<p>Automatically attaches workflow.track_status which queries
-the job status every 30 seconds.</p>
-</td>
-<td><code>False</code></td>
-</tr>
-</tbody>
-</table>
-<p><strong>Returns:</strong></p>
-<table>
-<thead>
-<tr>
-<th>Type</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>Job</code></td>
-<td>
-<p>The spawned job object.</p>
-</td>
-</tr>
-</tbody>
-</table>
-<details class="quote">
-<summary>Source code in <code>up42/workflow.py</code></summary>
-<table class="highlighttable">
-<tr>
-<td class="linenos">
-<div class="linenodiv">
-<pre><span></span>313
-314
-315
-316
-317
-318
-319
-320
-321
-322
-323
-324
-325
-326
-327
-328
-329
-330
-331
-332
-333
-334
-335
-336
-337
-338
-339
-340
-341
-342
-343
-344
-345
-346
-347
-348
-349
-350
-351
-352
-353
-354
-355
-356
-357
-358
-359
-360
-361
-362
-363
-364
-365</pre>
-</div>
-</td>
-<td class="code">
-<div class="highlight">
-<pre><span></span><code><span class="k">def</span> <span class="nf">create_and_run_job</span><span class="p">(</span>
-    <span class="bp">self</span><span class="p">,</span>
-    <span class="n">input_parameters</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Dict</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="n">test_query</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
-    <span class="n">track_status</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">"Job"</span><span class="p">:</span>
-    <span class="sd">"""</span>
-<span class="sd">    Creates and runs a new job.</span>
-
-<span class="sd">    Args:</span>
-<span class="sd">        input_parameters: Either json string of workflow parameters or filepath to json.</span>
-<span class="sd">        test_query: If set, runs a test query (search for available imagery based on your data parameters).</span>
-<span class="sd">        track_status: Automatically attaches workflow.track_status which queries</span>
-<span class="sd">            the job status every 30 seconds.</span>
-
-<span class="sd">    Returns:</span>
-<span class="sd">        The spawned job object.</span>
-<span class="sd">    """</span>
-    <span class="k">if</span> <span class="n">input_parameters</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-            <span class="s2">"Select the job_parameters, use workflow.construct_parameters()!"</span>
-        <span class="p">)</span>
-
-    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">input_parameters</span><span class="p">,</span> <span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">)):</span>
-        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">input_parameters</span><span class="p">)</span> <span class="k">as</span> <span class="n">src</span><span class="p">:</span>
-            <span class="n">input_parameters</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">src</span><span class="p">)</span>
-        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">"Loading job parameters from json file."</span><span class="p">)</span>
-
-    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">"Selected input_parameters: </span><span class="si">%s</span><span class="s2">."</span><span class="p">,</span> <span class="n">input_parameters</span><span class="p">)</span>
-
-    <span class="k">if</span> <span class="n">test_query</span><span class="p">:</span>
-        <span class="c1"># TODO: Fix type union</span>
-        <span class="n">input_parameters</span> <span class="o">=</span> <span class="n">input_parameters</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>  <span class="c1"># type: ignore</span>
-        <span class="n">input_parameters</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">"config"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"mode"</span><span class="p">:</span> <span class="s2">"DRY_RUN"</span><span class="p">}})</span>  <span class="c1"># type: ignore</span>
-        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">"+++++++++++++++++++++++++++++++++"</span><span class="p">)</span>
-        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">"Running this job as Test Query..."</span><span class="p">)</span>
-        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">"+++++++++++++++++++++++++++++++++"</span><span class="p">)</span>
-
-    <span class="n">name</span> <span class="o">=</span> <span class="s2">"_py"</span>  <span class="c1"># Enables recognition of python API usage.</span>
-    <span class="n">url</span> <span class="o">=</span> <span class="p">(</span>
-        <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">auth</span><span class="o">.</span><span class="n">_endpoint</span><span class="p">()</span><span class="si">}</span><span class="s2">/projects/</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">project_id</span><span class="si">}</span><span class="s2">/"</span>
-        <span class="sa">f</span><span class="s2">"workflows/</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">workflow_id</span><span class="si">}</span><span class="s2">/jobs?name=</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">"</span>
-    <span class="p">)</span>
-    <span class="n">response_json</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">auth</span><span class="o">.</span><span class="n">_request</span><span class="p">(</span>
-        <span class="n">request_type</span><span class="o">=</span><span class="s2">"POST"</span><span class="p">,</span> <span class="n">url</span><span class="o">=</span><span class="n">url</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">input_parameters</span>
-    <span class="p">)</span>
-    <span class="n">job_json</span> <span class="o">=</span> <span class="n">response_json</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span>
-    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">"Created and running new job: </span><span class="si">%s</span><span class="s2">."</span><span class="p">,</span> <span class="n">job_json</span><span class="p">[</span><span class="s2">"id"</span><span class="p">])</span>
-    <span class="n">job</span> <span class="o">=</span> <span class="n">Job</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">auth</span><span class="p">,</span> <span class="n">job_id</span><span class="o">=</span><span class="n">job_json</span><span class="p">[</span><span class="s2">"id"</span><span class="p">],</span> <span class="n">project_id</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">project_id</span><span class="p">,)</span>
-
-    <span class="k">if</span> <span class="n">track_status</span><span class="p">:</span>
-        <span class="n">job</span><span class="o">.</span><span class="n">track_status</span><span class="p">()</span>
-    <span class="k">return</span> <span class="n">job</span>
-</code></pre>
-</div>
-</td>
-</tr>
-</table>
-</details>
-</div>
-</div>
-<div class="doc doc-object doc-method">
 <h2 class="doc doc-heading" id="up42.workflow.Workflow.delete">
 <code class="highlight language-python">
 delete<span class="p">(</span><span class="bp">self</span><span class="p">)</span> </code>
@@ -1144,17 +969,17 @@ delete<span class="p">(</span><span class="bp">self</span><span class="p">)</spa
 <tr>
 <td class="linenos">
 <div class="linenodiv">
-<pre><span></span>411
-412
-413
-414
-415
-416
-417
-418
-419
-420
-421</pre>
+<pre><span></span>451
+452
+453
+454
+455
+456
+457
+458
+459
+460
+461</pre>
 </div>
 </td>
 <td class="code">
@@ -1297,33 +1122,33 @@ get_jobs<span class="p">(</span><span class="bp">self</span><span class="p">,</s
 <tr>
 <td class="linenos">
 <div class="linenodiv">
-<pre><span></span>367
-368
-369
-370
-371
-372
-373
-374
-375
-376
-377
-378
-379
-380
-381
-382
-383
-384
-385
-386
-387
-388
-389
-390
-391
-392
-393</pre>
+<pre><span></span>407
+408
+409
+410
+411
+412
+413
+414
+415
+416
+417
+418
+419
+420
+421
+422
+423
+424
+425
+426
+427
+428
+429
+430
+431
+432
+433</pre>
 </div>
 </td>
 <td class="code">
@@ -1544,6 +1369,229 @@ get_workflow_tasks<span class="p">(</span><span class="bp">self</span><span clas
 </div>
 </div>
 <div class="doc doc-object doc-method">
+<h2 class="doc doc-heading" id="up42.workflow.Workflow.run_job">
+<code class="highlight language-python">
+run_job<span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_parameters</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">track_status</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> </code>
+<a class="headerlink" href="#up42.workflow.Workflow.run_job" title="Permanent link">¶</a></h2>
+<div class="doc doc-contents">
+<p>Creates and runs a new job.</p>
+<p><strong>Parameters:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>input_parameters</code></td>
+<td><code>Union[Dict, str, pathlib.Path]</code></td>
+<td>
+<p>Either json string of workflow parameters or filepath to json.</p>
+</td>
+<td><code>None</code></td>
+</tr>
+<tr>
+<td><code>track_status</code></td>
+<td><code>bool</code></td>
+<td>
+<p>Automatically attaches workflow.track_status which queries
+the job status every 30 seconds.</p>
+</td>
+<td><code>False</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Returns:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Job</code></td>
+<td>
+<p>The spawned job object.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<details class="quote">
+<summary>Source code in <code>up42/workflow.py</code></summary>
+<table class="highlighttable">
+<tr>
+<td class="linenos">
+<div class="linenodiv">
+<pre><span></span>387
+388
+389
+390
+391
+392
+393
+394
+395
+396
+397
+398
+399
+400
+401
+402
+403
+404
+405</pre>
+</div>
+</td>
+<td class="code">
+<div class="highlight">
+<pre><span></span><code><span class="k">def</span> <span class="nf">run_job</span><span class="p">(</span>
+    <span class="bp">self</span><span class="p">,</span>
+    <span class="n">input_parameters</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Dict</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">track_status</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">"Job"</span><span class="p">:</span>
+    <span class="sd">"""</span>
+<span class="sd">    Creates and runs a new job.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        input_parameters: Either json string of workflow parameters or filepath to json.</span>
+<span class="sd">        track_status: Automatically attaches workflow.track_status which queries</span>
+<span class="sd">            the job status every 30 seconds.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        The spawned job object.</span>
+<span class="sd">    """</span>
+    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_helper_run_job</span><span class="p">(</span>
+        <span class="n">input_parameters</span><span class="o">=</span><span class="n">input_parameters</span><span class="p">,</span> <span class="n">track_status</span><span class="o">=</span><span class="n">track_status</span>
+    <span class="p">)</span>
+</code></pre>
+</div>
+</td>
+</tr>
+</table>
+</details>
+</div>
+</div>
+<div class="doc doc-object doc-method">
+<h2 class="doc doc-heading" id="up42.workflow.Workflow.test_job">
+<code class="highlight language-python">
+test_job<span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_parameters</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">track_status</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> </code>
+<a class="headerlink" href="#up42.workflow.Workflow.test_job" title="Permanent link">¶</a></h2>
+<div class="doc doc-contents">
+<p>Create a run a new test job (Test Query). With this test query you will not be
+charged with any data or processing credits, but have a preview of the job result.</p>
+<p><strong>Parameters:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>input_parameters</code></td>
+<td><code>Union[Dict, str, pathlib.Path]</code></td>
+<td>
+<p>Either json string of workflow parameters or filepath to json.</p>
+</td>
+<td><code>None</code></td>
+</tr>
+<tr>
+<td><code>track_status</code></td>
+<td><code>bool</code></td>
+<td>
+<p>Automatically attaches workflow.track_status which queries
+the job status every 30 seconds.</p>
+</td>
+<td><code>False</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Returns:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Job</code></td>
+<td>
+<p>The spawned test job object.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<details class="quote">
+<summary>Source code in <code>up42/workflow.py</code></summary>
+<table class="highlighttable">
+<tr>
+<td class="linenos">
+<div class="linenodiv">
+<pre><span></span>366
+367
+368
+369
+370
+371
+372
+373
+374
+375
+376
+377
+378
+379
+380
+381
+382
+383
+384
+385</pre>
+</div>
+</td>
+<td class="code">
+<div class="highlight">
+<pre><span></span><code><span class="k">def</span> <span class="nf">test_job</span><span class="p">(</span>
+    <span class="bp">self</span><span class="p">,</span>
+    <span class="n">input_parameters</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Dict</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">track_status</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">"Job"</span><span class="p">:</span>
+    <span class="sd">"""</span>
+<span class="sd">    Create a run a new test job (Test Query). With this test query you will not be</span>
+<span class="sd">    charged with any data or processing credits, but have a preview of the job result.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        input_parameters: Either json string of workflow parameters or filepath to json.</span>
+<span class="sd">        track_status: Automatically attaches workflow.track_status which queries</span>
+<span class="sd">            the job status every 30 seconds.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        The spawned test job object.</span>
+<span class="sd">    """</span>
+    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_helper_run_job</span><span class="p">(</span>
+        <span class="n">input_parameters</span><span class="o">=</span><span class="n">input_parameters</span><span class="p">,</span> <span class="n">test_job</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">track_status</span><span class="o">=</span><span class="n">track_status</span>
+    <span class="p">)</span>
+</code></pre>
+</div>
+</td>
+</tr>
+</table>
+</details>
+</div>
+</div>
+<div class="doc doc-object doc-method">
 <h2 class="doc doc-heading" id="up42.workflow.Workflow.update_name">
 <code class="highlight language-python">
 update_name<span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> </code>
@@ -1585,21 +1633,21 @@ update_name<span class="p">(</span><span class="bp">self</span><span class="p">,
 <tr>
 <td class="linenos">
 <div class="linenodiv">
-<pre><span></span>395
-396
-397
-398
-399
-400
-401
-402
-403
-404
-405
-406
-407
-408
-409</pre>
+<pre><span></span>435
+436
+437
+438
+439
+440
+441
+442
+443
+444
+445
+446
+447
+448
+449</pre>
 </div>
 </td>
 <td class="code">
@@ -1692,14 +1740,14 @@ update_name<span class="p">(</span><span class="bp">self</span><span class="p">,
 </div>
 </footer>
 </div>
-<script src="../../assets/javascripts/vendor.36cbf620.min.js"></script>
-<script src="../../assets/javascripts/bundle.00c583dd.min.js"></script><script id="__lang" type="application/json">{"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents"}</script>
+<script src="../../assets/javascripts/vendor.c51dfa35.min.js"></script>
+<script src="../../assets/javascripts/bundle.eaaa3931.min.js"></script><script id="__lang" type="application/json">{"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents"}</script>
 <script>
         app = initialize({
           base: "../..",
           features: ["tabs"],
           search: Object.assign({
-            worker: "../../assets/javascripts/worker/search.7f7c8775.min.js"
+            worker: "../../assets/javascripts/worker/search.58d22e8e.min.js"
           }, typeof search !== "undefined" && search)
         })
       </script>

@@ -6,11 +6,12 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width,initial-scale=1" name="viewport"/>
 <meta content="UP42 Python SDK" name="description"/>
+<link href="https://up42.github.io/up42-py/cli/" rel="canonical"/>
 <link href="../assets/logo-up42.ico" rel="shortcut icon"/>
-<meta content="mkdocs-1.1, mkdocs-material-5.0.2" name="generator"/>
+<meta content="mkdocs-1.1, mkdocs-material-5.1.1" name="generator"/>
 <title>Command Line Interface - UP42 Python SDK</title>
-<link href="../assets/stylesheets/main.07c9fbf5.min.css" rel="stylesheet"/>
-<link href="../assets/stylesheets/palette.ecd4686e.min.css" rel="stylesheet"/>
+<link href="../assets/stylesheets/main.a676eddb.min.css" rel="stylesheet"/>
+<link href="../assets/stylesheets/palette.b302131d.min.css" rel="stylesheet"/>
 <meta content="#3f51b5" name="theme-color"/>
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
 <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&amp;display=fallback" rel="stylesheet"/>
@@ -33,7 +34,7 @@
 </div>
 <header class="md-header" data-md-component="header">
 <nav aria-label="Header" class="md-header-nav md-grid">
-<a aria-label="UP42 Python SDK" class="md-header-nav__button md-logo" href=".." title="UP42 Python SDK">
+<a aria-label="UP42 Python SDK" class="md-header-nav__button md-logo" href="https://up42.github.io/up42-py/" title="UP42 Python SDK">
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 
@@ -137,7 +138,7 @@
 <div class="md-sidebar__inner">
 <nav aria-label="Navigation" class="md-nav md-nav--primary" data-md-level="0">
 <label class="md-nav__title" for="__drawer">
-<a aria-label="UP42 Python SDK" class="md-nav__button md-logo" href=".." title="UP42 Python SDK">
+<a aria-label="UP42 Python SDK" class="md-nav__button md-logo" href="https://up42.github.io/up42-py/" title="UP42 Python SDK">
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 
@@ -459,8 +460,11 @@ config command.</p>
 <h2 id="jobs">Jobs<a class="headerlink" href="#jobs" title="Permanent link">¶</a></h2>
 <div class="highlight"><pre><span></span><code>up42 job -h
 </code></pre></div>
-<p>Create and run a new job with parameters defined in a json file (see <a href="../typical-usage/">typical usage</a> for an example):
-<div class="highlight"><pre><span></span><code>up42 workflow create-and-run-job input_parameters.json --track
+<p>First create and run a new test job with parameters defined in a json file (see <a href="../typical-usage/">typical usage</a> for an example):
+<div class="highlight"><pre><span></span><code>up42 workflow test-job input_parameters.json --track
+</code></pre></div></p>
+<p>Then run the actual job with parameters:
+<div class="highlight"><pre><span></span><code>up42 workflow run-job input_parameters.json --track
 </code></pre></div></p>
 <p>After running the command to persist the job you can download the quicklooks from
 job in current working directory (note that not all data blocks support quicklooks):
@@ -551,14 +555,14 @@ create a parameter configuration:
 </div>
 </footer>
 </div>
-<script src="../assets/javascripts/vendor.36cbf620.min.js"></script>
-<script src="../assets/javascripts/bundle.00c583dd.min.js"></script><script id="__lang" type="application/json">{"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents"}</script>
+<script src="../assets/javascripts/vendor.c51dfa35.min.js"></script>
+<script src="../assets/javascripts/bundle.eaaa3931.min.js"></script><script id="__lang" type="application/json">{"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents"}</script>
 <script>
         app = initialize({
           base: "..",
           features: ["tabs"],
           search: Object.assign({
-            worker: "../assets/javascripts/worker/search.7f7c8775.min.js"
+            worker: "../assets/javascripts/worker/search.58d22e8e.min.js"
           }, typeof search !== "undefined" && search)
         })
       </script>
