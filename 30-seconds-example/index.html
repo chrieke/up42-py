@@ -18,7 +18,7 @@
 <style>body,input{font-family:"Roboto",-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"Roboto Mono",SFMono-Regular,Consolas,Menlo,monospace}</style>
 <link href="../stylesheets/extra.css" rel="stylesheet"/>
 <link href="https://www.google-analytics.com" rel="preconnect dns-prefetch"/>
-<script>window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)},ga.l=+new Date,ga("create","UA-XXXXXXXX-X","auto"),ga("set","anonymizeIp",!0),ga("send","pageview"),document.addEventListener("DOMContentLoaded",function(){document.forms.search&&document.forms.search.query.addEventListener("blur",function(){if(this.value){var e=document.location.pathname;ga("send","pageview",e+"?q="+this.value)}})}),document.addEventListener("DOMContentSwitch",function(){ga("send","pageview")})</script>
+<script>window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)},ga.l=+new Date,ga("create","UA-132885718-1","auto"),ga("set","anonymizeIp",!0),ga("send","pageview"),document.addEventListener("DOMContentLoaded",function(){document.forms.search&&document.forms.search.query.addEventListener("blur",function(){if(this.value){var e=document.location.pathname;ga("send","pageview",e+"?q="+this.value)}})}),document.addEventListener("DOMContentSwitch",function(){ga("send","pageview")})</script>
 <script async="" src="https://www.google-analytics.com/analytics.js"></script>
 </head>
 <body data-md-color-accent="purple" data-md-color-primary="indigo" dir="ltr">
@@ -350,7 +350,8 @@ the results are downloaded and visualized.</p>
 <span class="n">workflow</span><span class="o">.</span><span class="n">add_workflow_tasks</span><span class="p">(</span><span class="n">input_tasks</span><span class="o">=</span><span class="n">input_tasks</span><span class="p">)</span>
 </code></pre></div>
 <div class="highlight"><pre><span></span><code><span class="c1"># Define the aoi and input parameters of the workflow to run it.</span>
-<span class="n">aoi</span> <span class="o">=</span> <span class="n">workflow</span><span class="o">.</span><span class="n">read_vector_file</span><span class="p">(</span><span class="s2">"data/aoi_berlin.geojson"</span><span class="p">,</span> <span class="n">as_dataframe</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">aoi</span> <span class="o">=</span> <span class="n">workflow</span><span class="o">.</span><span class="n">get_example_aoi</span><span class="p">(</span><span class="n">as_dataframe</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="c1">#aoi = workflow.read_vector_file("data/aoi_berlin.geojson", as_dataframe=True)</span>
 <span class="n">input_parameters</span> <span class="o">=</span> <span class="n">workflow</span><span class="o">.</span><span class="n">construct_parameters</span><span class="p">(</span><span class="n">geometry</span><span class="o">=</span><span class="n">aoi</span><span class="p">,</span> 
                                                  <span class="n">geometry_operation</span><span class="o">=</span><span class="s2">"bbox"</span><span class="p">,</span> 
                                                  <span class="n">start_date</span><span class="o">=</span><span class="s2">"2018-01-01"</span><span class="p">,</span>

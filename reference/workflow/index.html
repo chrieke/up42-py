@@ -18,7 +18,7 @@
 <style>body,input{font-family:"Roboto",-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"Roboto Mono",SFMono-Regular,Consolas,Menlo,monospace}</style>
 <link href="../../stylesheets/extra.css" rel="stylesheet"/>
 <link href="https://www.google-analytics.com" rel="preconnect dns-prefetch"/>
-<script>window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)},ga.l=+new Date,ga("create","UA-XXXXXXXX-X","auto"),ga("set","anonymizeIp",!0),ga("send","pageview"),document.addEventListener("DOMContentLoaded",function(){document.forms.search&&document.forms.search.query.addEventListener("blur",function(){if(this.value){var e=document.location.pathname;ga("send","pageview",e+"?q="+this.value)}})}),document.addEventListener("DOMContentSwitch",function(){ga("send","pageview")})</script>
+<script>window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)},ga.l=+new Date,ga("create","UA-132885718-1","auto"),ga("set","anonymizeIp",!0),ga("send","pageview"),document.addEventListener("DOMContentLoaded",function(){document.forms.search&&document.forms.search.query.addEventListener("blur",function(){if(this.value){var e=document.location.pathname;ga("send","pageview",e+"?q="+this.value)}})}),document.addEventListener("DOMContentSwitch",function(){ga("send","pageview")})</script>
 <script async="" src="https://www.google-analytics.com/analytics.js"></script>
 </head>
 <body data-md-color-accent="purple" data-md-color-primary="indigo" dir="ltr">
@@ -562,20 +562,22 @@ add_workflow_tasks<span class="p">(</span><span class="bp">self</span><span clas
 <tbody>
 <tr>
 <td><code>input_tasks</code></td>
-<td><code>Union[List, List[Dict]]</code></td>
+<td><code>Union[List[str], List[Dict]]</code></td>
 <td>
-<p>The input tasks, can be provided in the simplified (list of block ids,
-is automatically transformed to the full version) or full version
-(dict of block id, block name and parent block name).
-- Name is arbitrary but best use the block name. Always use :1 to be able to
-    identify the order when two times the same workflow task is used.
-- API by itself validates if the underlying block for the selected block-id is
-    available.</p>
+<p>The input tasks, specifying the blocks. Can be a list of the
+block ids, block names or block display names (The name shown on the
+<a href="https://marketplace.up42.com">marketplace</a>.</p>
 </td>
 <td><em>required</em></td>
 </tr>
 </tbody>
 </table>
+<div class="admonition info">
+<p class="admonition-title">Info</p>
+<p>Using block ids specifies a specific version of the block that will be added
+to the workflow. With block names or block display names, the most recent
+version of a block will always be added.</p>
+</div>
 <div class="admonition example">
 <p class="admonition-title">Example</p>
 <div class="highlight">
@@ -583,10 +585,20 @@ is automatically transformed to the full version) or full version
                       <span class="s1">'4ed70368-d4e1-4462-bef6-14e768049471'</span><span class="p">]</span>
 </code></pre>
 </div>
-</div>
-<div class="admonition example">
-<p class="admonition-title">Example</p>
 <div class="highlight">
+<pre><span></span><code><span class="n">input_tasks</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"sobloo-s2-l1c-aoiclipped"</span><span class="p">,</span> <span class="s2">"tiling"</span><span class="p">]</span>
+</code></pre>
+</div>
+<p>```python
+input_tasks = ["Sentinel-2 L1C MSI AOI clipped",
+               "Raster Tiling"]</p>
+</div>
+<p>Optional: The input_tasks can also be provided as the full, detailed workflow task
+definition (dict of block id, block name and parent block name). Always use :1
+to be able to identify the order when two times the same workflow task is used.
+The name is arbitrary, but best use the block name.</p>
+<p>Example:
+    <div class="highlight">
 <pre><span></span><code><span class="n">input_tasks_full</span> <span class="o">=</span> <span class="p">[{</span><span class="s1">'name'</span><span class="p">:</span> <span class="s1">'sobloo-s2-l1c-aoiclipped:1'</span><span class="p">,</span>
                      <span class="s1">'parentName'</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
                      <span class="s1">'blockId'</span><span class="p">:</span> <span class="s1">'a2daaab4-196d-4226-a018-a810444dcad1'</span><span class="p">},</span>
@@ -595,36 +607,14 @@ is automatically transformed to the full version) or full version
                      <span class="s1">'blockId'</span><span class="p">:</span> <span class="s1">'4ed70368-d4e1-4462-bef6-14e768049471'</span><span class="p">}]</span>
 </code></pre>
 </div>
-</div>
+</p>
 <details class="quote">
 <summary>Source code in <code>up42/workflow.py</code></summary>
 <table class="highlighttable">
 <tr>
 <td class="linenos">
 <div class="linenodiv">
-<pre><span></span>159
-160
-161
-162
-163
-164
-165
-166
-167
-168
-169
-170
-171
-172
-173
-174
-175
-176
-177
-178
-179
-180
-181
+<pre><span></span>181
 182
 183
 184
@@ -641,29 +631,80 @@ is automatically transformed to the full version) or full version
 195
 196
 197
-198</pre>
+198
+199
+200
+201
+202
+203
+204
+205
+206
+207
+208
+209
+210
+211
+212
+213
+214
+215
+216
+217
+218
+219
+220
+221
+222
+223
+224
+225
+226
+227
+228
+229
+230
+231
+232
+233
+234</pre>
 </div>
 </td>
 <td class="code">
 <div class="highlight">
-<pre><span></span><code><span class="k">def</span> <span class="nf">add_workflow_tasks</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_tasks</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">List</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">]])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<pre><span></span><code><span class="k">def</span> <span class="nf">add_workflow_tasks</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_tasks</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">]])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
     <span class="sd">"""</span>
 <span class="sd">    Adds or overwrites workflow tasks in a workflow on UP42.</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        input_tasks: The input tasks, can be provided in the simplified (list of block ids,</span>
-<span class="sd">            is automatically transformed to the full version) or full version</span>
-<span class="sd">            (dict of block id, block name and parent block name).</span>
-<span class="sd">            - Name is arbitrary but best use the block name. Always use :1 to be able to</span>
-<span class="sd">                identify the order when two times the same workflow task is used.</span>
-<span class="sd">            - API by itself validates if the underlying block for the selected block-id is</span>
-<span class="sd">                available.</span>
+<span class="sd">        input_tasks: The input tasks, specifying the blocks. Can be a list of the</span>
+<span class="sd">            block ids, block names or block display names (The name shown on the</span>
+<span class="sd">            [marketplace](https://marketplace.up42.com).</span>
+
+<span class="sd">    !!! Info</span>
+<span class="sd">        Using block ids specifies a specific version of the block that will be added</span>
+<span class="sd">        to the workflow. With block names or block display names, the most recent</span>
+<span class="sd">        version of a block will always be added.</span>
 
 <span class="sd">    Example:</span>
 <span class="sd">        ```python</span>
 <span class="sd">        input_tasks_simple = ['a2daaab4-196d-4226-a018-a810444dcad1',</span>
 <span class="sd">                              '4ed70368-d4e1-4462-bef6-14e768049471']</span>
 <span class="sd">        ```</span>
+
+<span class="sd">        ```python</span>
+<span class="sd">        input_tasks = ["sobloo-s2-l1c-aoiclipped", "tiling"]</span>
+<span class="sd">        ```</span>
+
+<span class="sd">        ```python</span>
+<span class="sd">        input_tasks = ["Sentinel-2 L1C MSI AOI clipped",</span>
+<span class="sd">                       "Raster Tiling"]</span>
+
+
+<span class="sd">    Optional: The input_tasks can also be provided as the full, detailed workflow task</span>
+<span class="sd">    definition (dict of block id, block name and parent block name). Always use :1</span>
+<span class="sd">    to be able to identify the order when two times the same workflow task is used.</span>
+<span class="sd">    The name is arbitrary, but best use the block name.</span>
 
 <span class="sd">    Example:</span>
 <span class="sd">        ```python</span>
@@ -675,7 +716,6 @@ is automatically transformed to the full version) or full version
 <span class="sd">                             'blockId': '4ed70368-d4e1-4462-bef6-14e768049471'}]</span>
 <span class="sd">        ```</span>
 <span class="sd">    """</span>
-    <span class="c1"># TODO: User should be able to only provide block task names or display name.</span>
     <span class="c1"># Construct proper task definition from simplified input.</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">input_tasks</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">input_tasks</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="nb">dict</span><span class="p">):</span>
         <span class="n">input_tasks</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_construct_full_workflow_tasks_dict</span><span class="p">(</span><span class="n">input_tasks</span><span class="p">)</span>
@@ -798,43 +838,7 @@ into new workflows.</p>
 <tr>
 <td class="linenos">
 <div class="linenodiv">
-<pre><span></span>239
-240
-241
-242
-243
-244
-245
-246
-247
-248
-249
-250
-251
-252
-253
-254
-255
-256
-257
-258
-259
-260
-261
-262
-263
-264
-265
-266
-267
-268
-269
-270
-271
-272
-273
-274
-275
+<pre><span></span>275
 276
 277
 278
@@ -870,7 +874,43 @@ into new workflows.</p>
 308
 309
 310
-311</pre>
+311
+312
+313
+314
+315
+316
+317
+318
+319
+320
+321
+322
+323
+324
+325
+326
+327
+328
+329
+330
+331
+332
+333
+334
+335
+336
+337
+338
+339
+340
+341
+342
+343
+344
+345
+346
+347</pre>
 </div>
 </td>
 <td class="code">
@@ -969,17 +1009,17 @@ delete<span class="p">(</span><span class="bp">self</span><span class="p">)</spa
 <tr>
 <td class="linenos">
 <div class="linenodiv">
-<pre><span></span>451
-452
-453
-454
-455
-456
-457
-458
-459
-460
-461</pre>
+<pre><span></span>487
+488
+489
+490
+491
+492
+493
+494
+495
+496
+497</pre>
 </div>
 </td>
 <td class="code">
@@ -1122,33 +1162,33 @@ get_jobs<span class="p">(</span><span class="bp">self</span><span class="p">,</s
 <tr>
 <td class="linenos">
 <div class="linenodiv">
-<pre><span></span>407
-408
-409
-410
-411
-412
-413
-414
-415
-416
-417
-418
-419
-420
-421
-422
-423
-424
-425
-426
-427
-428
-429
-430
-431
-432
-433</pre>
+<pre><span></span>443
+444
+445
+446
+447
+448
+449
+450
+451
+452
+453
+454
+455
+456
+457
+458
+459
+460
+461
+462
+463
+464
+465
+466
+467
+468
+469</pre>
 </div>
 </td>
 <td class="code">
@@ -1219,21 +1259,21 @@ make it easy to construct the desired parameters.</p>
 <tr>
 <td class="linenos">
 <div class="linenodiv">
-<pre><span></span>200
-201
-202
-203
-204
-205
-206
-207
-208
-209
-210
-211
-212
-213
-214</pre>
+<pre><span></span>236
+237
+238
+239
+240
+241
+242
+243
+244
+245
+246
+247
+248
+249
+250</pre>
 </div>
 </td>
 <td class="code">
@@ -1428,25 +1468,25 @@ the job status every 30 seconds.</p>
 <tr>
 <td class="linenos">
 <div class="linenodiv">
-<pre><span></span>387
-388
-389
-390
-391
-392
-393
-394
-395
-396
-397
-398
-399
-400
-401
-402
-403
-404
-405</pre>
+<pre><span></span>423
+424
+425
+426
+427
+428
+429
+430
+431
+432
+433
+434
+435
+436
+437
+438
+439
+440
+441</pre>
 </div>
 </td>
 <td class="code">
@@ -1539,26 +1579,26 @@ the job status every 30 seconds.</p>
 <tr>
 <td class="linenos">
 <div class="linenodiv">
-<pre><span></span>366
-367
-368
-369
-370
-371
-372
-373
-374
-375
-376
-377
-378
-379
-380
-381
-382
-383
-384
-385</pre>
+<pre><span></span>402
+403
+404
+405
+406
+407
+408
+409
+410
+411
+412
+413
+414
+415
+416
+417
+418
+419
+420
+421</pre>
 </div>
 </td>
 <td class="code">
@@ -1633,21 +1673,21 @@ update_name<span class="p">(</span><span class="bp">self</span><span class="p">,
 <tr>
 <td class="linenos">
 <div class="linenodiv">
-<pre><span></span>435
-436
-437
-438
-439
-440
-441
-442
-443
-444
-445
-446
-447
-448
-449</pre>
+<pre><span></span>471
+472
+473
+474
+475
+476
+477
+478
+479
+480
+481
+482
+483
+484
+485</pre>
 </div>
 </td>
 <td class="code">

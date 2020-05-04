@@ -18,7 +18,7 @@
 <style>body,input{font-family:"Roboto",-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"Roboto Mono",SFMono-Regular,Consolas,Menlo,monospace}</style>
 <link href="../../stylesheets/extra.css" rel="stylesheet"/>
 <link href="https://www.google-analytics.com" rel="preconnect dns-prefetch"/>
-<script>window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)},ga.l=+new Date,ga("create","UA-XXXXXXXX-X","auto"),ga("set","anonymizeIp",!0),ga("send","pageview"),document.addEventListener("DOMContentLoaded",function(){document.forms.search&&document.forms.search.query.addEventListener("blur",function(){if(this.value){var e=document.location.pathname;ga("send","pageview",e+"?q="+this.value)}})}),document.addEventListener("DOMContentSwitch",function(){ga("send","pageview")})</script>
+<script>window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)},ga.l=+new Date,ga("create","UA-132885718-1","auto"),ga("set","anonymizeIp",!0),ga("send","pageview"),document.addEventListener("DOMContentLoaded",function(){document.forms.search&&document.forms.search.query.addEventListener("blur",function(){if(this.value){var e=document.location.pathname;ga("send","pageview",e+"?q="+this.value)}})}),document.addEventListener("DOMContentSwitch",function(){ga("send","pageview")})</script>
 <script async="" src="https://www.google-analytics.com/analytics.js"></script>
 </head>
 <body data-md-color-accent="purple" data-md-color-primary="indigo" dir="ltr">
@@ -681,10 +681,7 @@ the server, includes all manifest.json and marketplace.json contents.</p>
 <tr>
 <td class="linenos">
 <div class="linenodiv">
-<pre><span></span>355
-356
-357
-358
+<pre><span></span>358
 359
 360
 361
@@ -700,7 +697,14 @@ the server, includes all manifest.json and marketplace.json contents.</p>
 371
 372
 373
-374</pre>
+374
+375
+376
+377
+378
+379
+380
+381</pre>
 </div>
 </td>
 <td class="code">
@@ -717,6 +721,10 @@ the server, includes all manifest.json and marketplace.json contents.</p>
 <span class="sd">    Returns:</span>
 <span class="sd">        A dict of the block details metadata for the specific block.</span>
 <span class="sd">    """</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">"auth"</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span>
+            <span class="s2">"Requires authentication with UP42, use up42.authenticate()!"</span>
+        <span class="p">)</span>
     <span class="n">url</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">auth</span><span class="o">.</span><span class="n">_endpoint</span><span class="p">()</span><span class="si">}</span><span class="s2">/blocks/</span><span class="si">{</span><span class="n">block_id</span><span class="si">}</span><span class="s2">"</span>  <span class="c1"># public blocks</span>
     <span class="n">response_json</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">auth</span><span class="o">.</span><span class="n">_request</span><span class="p">(</span><span class="n">request_type</span><span class="o">=</span><span class="s2">"GET"</span><span class="p">,</span> <span class="n">url</span><span class="o">=</span><span class="n">url</span><span class="p">)</span>
     <span class="n">details_json</span> <span class="o">=</span> <span class="n">response_json</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span>
@@ -852,7 +860,10 @@ dict.</p>
 350
 351
 352
-353</pre>
+353
+354
+355
+356</pre>
 </div>
 </td>
 <td class="code">
@@ -876,7 +887,10 @@ dict.</p>
         <span class="n">block_type</span> <span class="o">=</span> <span class="n">block_type</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
     <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
         <span class="k">pass</span>
-
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">"auth"</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span>
+            <span class="s2">"Requires authentication with UP42, use up42.authenticate()!"</span>
+        <span class="p">)</span>
     <span class="n">url</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">auth</span><span class="o">.</span><span class="n">_endpoint</span><span class="p">()</span><span class="si">}</span><span class="s2">/blocks"</span>
     <span class="n">response_json</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">auth</span><span class="o">.</span><span class="n">_request</span><span class="p">(</span><span class="n">request_type</span><span class="o">=</span><span class="s2">"GET"</span><span class="p">,</span> <span class="n">url</span><span class="o">=</span><span class="n">url</span><span class="p">)</span>
     <span class="n">public_blocks_json</span> <span class="o">=</span> <span class="n">response_json</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span>
@@ -1651,7 +1665,7 @@ for use as the aoi geometry in the workflow input parameters
     <span class="k">else</span><span class="p">:</span>
         <span class="n">df</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
 
-    <span class="k">if</span> <span class="n">df</span><span class="o">.</span><span class="n">crs</span> <span class="o">!=</span> <span class="s2">"epsg:4326"</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">df</span><span class="o">.</span><span class="n">crs</span><span class="o">.</span><span class="n">to_string</span><span class="p">()</span> <span class="o">!=</span> <span class="s2">"EPSG:4326"</span><span class="p">:</span>
         <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">to_crs</span><span class="p">(</span><span class="n">epsg</span><span class="o">=</span><span class="mi">4326</span><span class="p">)</span>
     <span class="n">df</span><span class="o">.</span><span class="n">geometry</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">buffer</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
     <span class="c1"># TODO: Explode multipolygons (if neccessary as union in aoi anyway most often).</span>
@@ -1764,14 +1778,7 @@ validate_manifest<span class="p">(</span><span class="bp">self</span><span class
 <tr>
 <td class="linenos">
 <div class="linenodiv">
-<pre><span></span>376
-377
-378
-379
-380
-381
-382
-383
+<pre><span></span>383
 384
 385
 386
@@ -1825,7 +1832,18 @@ validate_manifest<span class="p">(</span><span class="bp">self</span><span class
 434
 435
 436
-437</pre>
+437
+438
+439
+440
+441
+442
+443
+444
+445
+446
+447
+448</pre>
 </div>
 </td>
 <td class="code">
@@ -1886,6 +1904,10 @@ validate_manifest<span class="p">(</span><span class="bp">self</span><span class
             <span class="n">manifest_json</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">src</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">manifest_json</span> <span class="o">=</span> <span class="n">path_or_json</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">"auth"</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span>
+            <span class="s2">"Requires authentication with UP42, use up42.authenticate()!"</span>
+        <span class="p">)</span>
     <span class="n">url</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">auth</span><span class="o">.</span><span class="n">_endpoint</span><span class="p">()</span><span class="si">}</span><span class="s2">/validate-schema/block"</span>
     <span class="n">response_json</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">auth</span><span class="o">.</span><span class="n">_request</span><span class="p">(</span>
         <span class="n">request_type</span><span class="o">=</span><span class="s2">"POST"</span><span class="p">,</span> <span class="n">url</span><span class="o">=</span><span class="n">url</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">manifest_json</span>
