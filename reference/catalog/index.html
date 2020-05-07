@@ -9,7 +9,7 @@
 <link href="https://up42.github.io/up42-py/reference/catalog/" rel="canonical"/>
 <link href="../../assets/logo-up42.ico" rel="shortcut icon"/>
 <meta content="mkdocs-1.1, mkdocs-material-5.1.1" name="generator"/>
-<title>Project class - UP42 Python SDK</title>
+<title>Catalog - UP42 Python SDK</title>
 <link href="../../assets/stylesheets/main.a676eddb.min.css" rel="stylesheet"/>
 <link href="../../assets/stylesheets/palette.b302131d.min.css" rel="stylesheet"/>
 <meta content="#3f51b5" name="theme-color"/>
@@ -50,7 +50,7 @@
           </span>
 <span class="md-header-nav__topic md-ellipsis">
             
-              Project class
+              Catalog
             
           </span>
 </div>
@@ -96,11 +96,11 @@
 </nav>
 </header>
 <div class="md-container" data-md-component="container">
-<nav aria-label="Tabs" class="md-tabs" data-md-component="tabs">
+<nav aria-label="Tabs" class="md-tabs md-tabs--active" data-md-component="tabs">
 <div class="md-tabs__inner md-grid">
 <ul class="md-tabs__list">
 <li class="md-tabs__item">
-<a class="md-tabs__link md-tabs__link--active" href="../..">
+<a class="md-tabs__link" href="../..">
         Home
       </a>
 </li>
@@ -110,7 +110,7 @@
         </a>
 </li>
 <li class="md-tabs__item">
-<a class="md-tabs__link" href="../project/">
+<a class="md-tabs__link md-tabs__link--active" href="../project/">
           Code Reference
         </a>
 </li>
@@ -194,8 +194,8 @@
     </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="../../30-seconds-example/" title="30 Seconds Example">
-      30 Seconds Example
+<a class="md-nav__link" href="../../30-second-example/" title="30 Second Example">
+      30 Second Example
     </a>
 </li>
 <li class="md-nav__item">
@@ -216,8 +216,8 @@
 </ul>
 </nav>
 </li>
-<li class="md-nav__item md-nav__item--nested">
-<input class="md-nav__toggle md-toggle" data-md-toggle="nav-3" id="nav-3" type="checkbox"/>
+<li class="md-nav__item md-nav__item--active md-nav__item--nested">
+<input checked="" class="md-nav__toggle md-toggle" data-md-toggle="nav-3" id="nav-3" type="checkbox"/>
 <label class="md-nav__link" for="nav-3">
       Code Reference
       <span class="md-nav__icon md-icon">
@@ -251,6 +251,53 @@
 <a class="md-nav__link" href="../jobtask/" title="JobTask">
       JobTask
     </a>
+</li>
+<li class="md-nav__item md-nav__item--active">
+<input class="md-nav__toggle md-toggle" data-md-toggle="toc" id="__toc" type="checkbox"/>
+<label class="md-nav__link md-nav__link--active" for="__toc">
+        Catalog
+        <span class="md-nav__icon md-icon">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3,9H17V7H3V9M3,13H17V11H3V13M3,17H17V15H3V17M19,17H21V15H19V17M19,7V9H21V7H19M19,13H21V11H19V13Z"></path></svg>
+</span>
+</label>
+<a class="md-nav__link md-nav__link--active" href="./" title="Catalog">
+      Catalog
+    </a>
+<nav aria-label="Table of contents" class="md-nav md-nav--secondary">
+<label class="md-nav__title" for="__toc">
+<span class="md-nav__icon md-icon">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20,11V13H8L13.5,18.5L12.08,19.92L4.16,12L12.08,4.08L13.5,5.5L8,11H20Z"></path></svg>
+</span>
+      Table of contents
+    </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#up42.catalog.Catalog">
+    up42.catalog.Catalog
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#up42.catalog.Catalog.__init__">
+    __init__()
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#up42.catalog.Catalog.construct_parameters">
+    construct_parameters()
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#up42.catalog.Catalog.download_quicklooks">
+    download_quicklooks()
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#up42.catalog.Catalog.search">
+    search()
+  </a>
+</li>
+</ul>
+</nav>
 </li>
 <li class="md-nav__item">
 <a class="md-nav__link" href="../tools/" title="Tools">
@@ -1134,6 +1181,36 @@ the matching scenes.</p>
 </div>
 </main>
 <footer class="md-footer">
+<div class="md-footer-nav">
+<nav aria-label="Footer" class="md-footer-nav__inner md-grid">
+<a class="md-footer-nav__link md-footer-nav__link--prev" href="../jobtask/" rel="prev" title="JobTask">
+<div class="md-footer-nav__button md-icon">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20,11V13H8L13.5,18.5L12.08,19.92L4.16,12L12.08,4.08L13.5,5.5L8,11H20Z"></path></svg>
+</div>
+<div class="md-footer-nav__title">
+<div class="md-ellipsis">
+<span class="md-footer-nav__direction">
+                  Previous
+                </span>
+                JobTask
+              </div>
+</div>
+</a>
+<a class="md-footer-nav__link md-footer-nav__link--next" href="../tools/" rel="next" title="Tools">
+<div class="md-footer-nav__title">
+<div class="md-ellipsis">
+<span class="md-footer-nav__direction">
+                  Next
+                </span>
+                Tools
+              </div>
+</div>
+<div class="md-footer-nav__button md-icon">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M4,11V13H16L10.5,18.5L11.92,19.92L19.84,12L11.92,4.08L10.5,5.5L16,11H4Z"></path></svg>
+</div>
+</a>
+</nav>
+</div>
 <div class="md-footer-meta md-typeset">
 <div class="md-footer-meta__inner md-grid">
 <div class="md-footer-copyright">

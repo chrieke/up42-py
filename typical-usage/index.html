@@ -194,8 +194,8 @@
     </a>
 </li>
 <li class="md-nav__item">
-<a class="md-nav__link" href="../30-seconds-example/" title="30 Seconds Example">
-      30 Seconds Example
+<a class="md-nav__link" href="../30-second-example/" title="30 Second Example">
+      30 Second Example
     </a>
 </li>
 <li class="md-nav__item md-nav__item--active">
@@ -297,6 +297,11 @@
 <li class="md-nav__item">
 <a class="md-nav__link" href="../reference/jobtask/" title="JobTask">
       JobTask
+    </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../reference/catalog/" title="Catalog">
+      Catalog
     </a>
 </li>
 <li class="md-nav__item">
@@ -430,19 +435,19 @@
 <p>You can either create a new workflow, use project.get_workflows() to get all existing workflows within the project, or access an exisiting workflow directly via its workflow_id.</p>
 <p>Example: Sentinel 2 streaming &amp; sharpening filter</p>
 <p align="center">
-<img align="center" src="_assets/workflow.png" width="400"/>
+<img align="center" src="/assets/workflow.png" width="400"/>
 </p>
 <div class="highlight"><pre><span></span><code><span class="c1"># Create a new, empty workflow.</span>
-
-<span class="n">workflow</span> <span class="o">=</span> <span class="n">project</span><span class="o">.</span><span class="n">create_workflow</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">"30-seconds-workflow"</span><span class="p">,</span> <span class="n">use_existing</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">workflow</span> <span class="o">=</span> <span class="n">project</span><span class="o">.</span><span class="n">create_workflow</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">"30-seconds-workflow"</span><span class="p">,</span> 
+                                   <span class="n">use_existing</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="n">workflow</span>
 </code></pre></div>
 <div class="highlight"><pre><span></span><code><span class="c1"># Add workflow tasks - simple version. See above .get_blocks() result.</span>
-
-<span class="n">input_tasks</span><span class="o">=</span> <span class="p">[</span><span class="s2">"a2daaab4-196d-4226-a018-a810444dcad1"</span><span class="p">,</span> <span class="s2">"4ed70368-d4e1-4462-bef6-14e768049471"</span><span class="p">]</span>
+<span class="n">input_tasks</span><span class="o">=</span> <span class="p">[</span><span class="s1">'sobloo-s2-l1c-aoiclipped'</span><span class="p">,</span> <span class="s1">'sharpening'</span><span class="p">]</span>
 <span class="n">workflow</span><span class="o">.</span><span class="n">add_workflow_tasks</span><span class="p">(</span><span class="n">input_tasks</span><span class="o">=</span><span class="n">input_tasks</span><span class="p">)</span>
 </code></pre></div>
-<div class="highlight"><pre><span></span><code><span class="c1"># Alternative: Add workflow tasks - complex version, gives you more control about the block connections.</span>
+<div class="highlight"><pre><span></span><code><span class="c1"># Alternative: Add workflow tasks - complex version, gives you more control </span>
+<span class="c1"># about the block connections.</span>
 
 <span class="n">input_tasks</span> <span class="o">=</span> <span class="p">[</span>
     <span class="p">{</span>
@@ -460,7 +465,6 @@
 <span class="n">workflow</span><span class="o">.</span><span class="n">add_workflow_tasks</span><span class="p">(</span><span class="n">input_tasks</span><span class="o">=</span><span class="n">input_tasks</span><span class="p">)</span>
 </code></pre></div>
 <div class="highlight"><pre><span></span><code><span class="c1"># Check the added tasks.</span>
-
 <span class="n">workflow</span><span class="o">.</span><span class="n">get_workflow_tasks</span><span class="p">(</span><span class="n">basic</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </code></pre></div>
 <div class="highlight"><pre><span></span><code><span class="c1">#workflow.get_jobs()</span>
@@ -471,7 +475,8 @@
 <span class="n">workflow</span> <span class="o">=</span> <span class="n">all_workflows</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 <span class="n">workflow</span>
 </code></pre></div>
-<div class="highlight"><pre><span></span><code><span class="c1"># Alternative: Directly access the existing workflow the id (has to exist within the accessed project).</span>
+<div class="highlight"><pre><span></span><code><span class="c1"># Alternative: Directly access the existing workflow the id </span>
+<span class="c1"># (has to exist within the accessed project).</span>
 
 <span class="n">UP42_WORKFLOW_ID</span><span class="o">=</span><span class="s2">"7fb2ec8a-45be-41ad-a50f-98ba6b528b98"</span>
 <span class="n">workflow</span> <span class="o">=</span> <span class="n">up42</span><span class="o">.</span><span class="n">initialize_workflow</span><span class="p">(</span><span class="n">workflow_id</span><span class="o">=</span><span class="n">UP42_WORKFLOW_ID</span><span class="p">)</span>
@@ -490,7 +495,6 @@
 <span class="n">aoi</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
 </code></pre></div>
 <div class="highlight"><pre><span></span><code><span class="c1">#aoi = workflow.get_example_aoi(location="Berlin")</span>
-<span class="c1">#aoi</span>
 </code></pre></div>
 <div class="highlight"><pre><span></span><code><span class="c1">#workflow.draw_aoi()</span>
 </code></pre></div>
@@ -520,8 +524,9 @@ then the bounding box of the polygon will be selected.  </p>
   <span class="p">}</span>
 <span class="p">}</span>
 </code></pre></div>
-<div class="highlight"><pre><span></span><code><span class="n">input_parameters</span> <span class="o">=</span> <span class="n">workflow</span><span class="o">.</span><span class="n">construct_parameters</span><span class="p">(</span><span class="n">geometry</span><span class="o">=</span><span class="n">aoi</span><span class="p">,</span> <span class="n">geometry_operation</span><span class="o">=</span><span class="s2">"bbox"</span><span class="p">,</span> <span class="n">limit</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-<span class="n">input_parameters</span>
+<div class="highlight"><pre><span></span><code><span class="n">input_parameters</span> <span class="o">=</span> <span class="n">workflow</span><span class="o">.</span><span class="n">construct_parameters</span><span class="p">(</span><span class="n">geometry</span><span class="o">=</span><span class="n">aoi</span><span class="p">,</span> 
+                                                 <span class="n">geometry_operation</span><span class="o">=</span><span class="s2">"bbox"</span><span class="p">,</span> 
+                                                 <span class="n">limit</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 </code></pre></div>
 <div class="highlight"><pre><span></span><code><span class="c1"># Further update the input_parameters manually</span>
 <span class="n">input_parameters</span><span class="p">[</span><span class="s2">"sobloo-s2-l1c-aoiclipped:1"</span><span class="p">]</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">"max_cloud_cover"</span><span class="p">:</span><span class="mi">60</span><span class="p">})</span>
@@ -529,8 +534,10 @@ then the bounding box of the polygon will be selected.  </p>
 </code></pre></div>
 <h2 id="test-run-the-workflow-download-results">Test &amp; Run the workflow &amp; download results<a class="headerlink" href="#test-run-the-workflow-download-results" title="Permanent link">¶</a></h2>
 <div class="highlight"><pre><span></span><code><span class="c1"># Run a test job to query data availability and check the configuration.</span>
-<span class="c1"># With this test query you will not be charged with any data or processing credits, but have a preview of the job result.</span>
-<span class="n">test_job</span> <span class="o">=</span> <span class="n">workflow</span><span class="o">.</span><span class="n">test_job</span><span class="p">(</span><span class="n">input_parameters</span><span class="o">=</span><span class="n">input_parameters</span><span class="p">,</span> <span class="n">track_status</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="c1"># With this test query you will not be charged with any data or processing </span>
+<span class="c1"># credits, but have a preview of the job result.</span>
+<span class="n">test_job</span> <span class="o">=</span> <span class="n">workflow</span><span class="o">.</span><span class="n">test_job</span><span class="p">(</span><span class="n">input_parameters</span><span class="o">=</span><span class="n">input_parameters</span><span class="p">,</span> 
+                             <span class="n">track_status</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="n">test_results</span> <span class="o">=</span> <span class="n">test_job</span><span class="o">.</span><span class="n">get_results_json</span><span class="p">()</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">test_results</span><span class="p">)</span>
 </code></pre></div>
@@ -538,10 +545,10 @@ then the bounding box of the polygon will be selected.  </p>
 <span class="n">job</span> <span class="o">=</span> <span class="n">workflow</span><span class="o">.</span><span class="n">run_job</span><span class="p">(</span><span class="n">input_parameters</span><span class="o">=</span><span class="n">input_parameters</span><span class="p">,</span> <span class="n">track_status</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </code></pre></div>
 <p align="center">
-<img src="_assets/job_running.png" width="700"/>
+<img src="/assets/job_running.png" width="700"/>
 </p>
 <h2 id="download-display-results">Download &amp; Display results<a class="headerlink" href="#download-display-results" title="Permanent link">¶</a></h2>
-<div class="highlight"><pre><span></span><code><span class="c1"># Download job result (default downloads to Desktop). Only works after download is finished.</span>
+<div class="highlight"><pre><span></span><code><span class="c1"># Download job result.</span>
 <span class="n">results_fp</span> <span class="o">=</span> <span class="n">job</span><span class="o">.</span><span class="n">download_results</span><span class="p">()</span>
 </code></pre></div>
 <div class="highlight"><pre><span></span><code><span class="n">job</span><span class="o">.</span><span class="n">plot_results</span><span class="p">()</span>
@@ -557,7 +564,7 @@ then the bounding box of the polygon will be selected.  </p>
 <footer class="md-footer">
 <div class="md-footer-nav">
 <nav aria-label="Footer" class="md-footer-nav__inner md-grid">
-<a class="md-footer-nav__link md-footer-nav__link--prev" href="../30-seconds-example/" rel="prev" title="30 Seconds Example">
+<a class="md-footer-nav__link md-footer-nav__link--prev" href="../30-second-example/" rel="prev" title="30 Second Example">
 <div class="md-footer-nav__button md-icon">
 <svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20,11V13H8L13.5,18.5L12.08,19.92L4.16,12L12.08,4.08L13.5,5.5L8,11H20Z"></path></svg>
 </div>
@@ -566,7 +573,7 @@ then the bounding box of the polygon will be selected.  </p>
 <span class="md-footer-nav__direction">
                   Previous
                 </span>
-                30 Seconds Example
+                30 Second Example
               </div>
 </div>
 </a>
