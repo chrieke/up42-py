@@ -489,7 +489,9 @@ They can be accessed from every object and also from the imported up42 package d
 <tr>
 <td class="linenos">
 <div class="linenodiv">
-<pre><span></span>31
+<pre><span></span>29
+30
+31
 32
 33
 34
@@ -499,9 +501,7 @@ They can be accessed from every object and also from the imported up42 package d
 38
 39
 40
-41
-42
-43</pre>
+41</pre>
 </div>
 </td>
 <td class="code">
@@ -543,7 +543,9 @@ read_aoi_file().</p>
 <tr>
 <td class="linenos">
 <div class="linenodiv">
-<pre><span></span>124
+<pre><span></span>122
+123
+124
 125
 126
 127
@@ -573,9 +575,7 @@ read_aoi_file().</p>
 151
 152
 153
-154
-155
-156</pre>
+154</pre>
 </div>
 </td>
 <td class="code">
@@ -681,30 +681,30 @@ the server, includes all manifest.json and marketplace.json contents.</p>
 <tr>
 <td class="linenos">
 <div class="linenodiv">
-<pre><span></span>358
-359
-360
-361
-362
-363
-364
-365
-366
-367
-368
-369
-370
-371
-372
-373
-374
-375
-376
-377
-378
-379
-380
-381</pre>
+<pre><span></span>316
+317
+318
+319
+320
+321
+322
+323
+324
+325
+326
+327
+328
+329
+330
+331
+332
+333
+334
+335
+336
+337
+338
+339</pre>
 </div>
 </td>
 <td class="code">
@@ -809,7 +809,49 @@ dict.</p>
 <tr>
 <td class="linenos">
 <div class="linenodiv">
-<pre><span></span>302
+<pre><span></span>260
+261
+262
+263
+264
+265
+266
+267
+268
+269
+270
+271
+272
+273
+274
+275
+276
+277
+278
+279
+280
+281
+282
+283
+284
+285
+286
+287
+288
+289
+290
+291
+292
+293
+294
+295
+296
+297
+298
+299
+300
+301
+302
 303
 304
 305
@@ -821,49 +863,7 @@ dict.</p>
 311
 312
 313
-314
-315
-316
-317
-318
-319
-320
-321
-322
-323
-324
-325
-326
-327
-328
-329
-330
-331
-332
-333
-334
-335
-336
-337
-338
-339
-340
-341
-342
-343
-344
-345
-346
-347
-348
-349
-350
-351
-352
-353
-354
-355
-356</pre>
+314</pre>
 </div>
 </td>
 <td class="code">
@@ -991,7 +991,9 @@ get_example_aoi<span class="p">(</span><span class="bp">self</span><span class="
 <tr>
 <td class="linenos">
 <div class="linenodiv">
-<pre><span></span> 89
+<pre><span></span> 87
+ 88
+ 89
  90
  91
  92
@@ -1021,9 +1023,7 @@ get_example_aoi<span class="p">(</span><span class="bp">self</span><span class="
 116
 117
 118
-119
-120
-121</pre>
+119</pre>
 </div>
 </td>
 <td class="code">
@@ -1131,7 +1131,9 @@ Legend entries are sorted and this determines plotting order.</p>
 <tr>
 <td class="linenos">
 <div class="linenodiv">
-<pre><span></span>158
+<pre><span></span>156
+157
+158
 159
 160
 161
@@ -1170,9 +1172,7 @@ Legend entries are sorted and this determines plotting order.</p>
 194
 195
 196
-197
-198
-199</pre>
+197</pre>
 </div>
 </td>
 <td class="code">
@@ -1230,7 +1230,7 @@ Legend entries are sorted and this determines plotting order.</p>
 <div class="doc doc-object doc-method">
 <h2 class="doc doc-heading" id="up42.tools.Tools.plot_quicklooks">
 <code class="highlight language-python">
-plot_quicklooks<span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">8</span><span class="p">),</span> <span class="n">filepaths</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> </code>
+plot_quicklooks<span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">8</span><span class="p">),</span> <span class="n">filepaths</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">titles</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> </code>
 <a class="headerlink" href="#up42.tools.Tools.plot_quicklooks" title="Permanent link">¶</a></h2>
 <div class="doc doc-contents">
 <p>Plots the downloaded quicklooks (filepaths saved to self.quicklooks of the
@@ -1254,6 +1254,23 @@ respective object, e.g. job, catalog).</p>
 </td>
 <td><code>(8, 8)</code></td>
 </tr>
+<tr>
+<td><code>filepaths</code></td>
+<td><code>List</code></td>
+<td>
+<p>Paths to images to plot. Optional, by default picks up the last
+downloaded results.</p>
+</td>
+<td><code>None</code></td>
+</tr>
+<tr>
+<td><code>titles</code></td>
+<td><code>List[str]</code></td>
+<td>
+<p>List of titles for the subplots, optional.</p>
+</td>
+<td><code>None</code></td>
+</tr>
 </tbody>
 </table>
 <details class="quote">
@@ -1262,7 +1279,9 @@ respective object, e.g. job, catalog).</p>
 <tr>
 <td class="linenos">
 <div class="linenodiv">
-<pre><span></span>201
+<pre><span></span>199
+200
+201
 202
 203
 204
@@ -1291,26 +1310,16 @@ respective object, e.g. job, catalog).</p>
 227
 228
 229
-230
-231
-232
-233
-234
-235
-236
-237
-238
-239
-240
-241
-242
-243</pre>
+230</pre>
 </div>
 </td>
 <td class="code">
 <div class="highlight">
 <pre><span></span><code><span class="k">def</span> <span class="nf">plot_quicklooks</span><span class="p">(</span>
-    <span class="bp">self</span><span class="p">,</span> <span class="n">figsize</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">8</span><span class="p">),</span> <span class="n">filepaths</span><span class="p">:</span> <span class="n">List</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="bp">self</span><span class="p">,</span>
+    <span class="n">figsize</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">8</span><span class="p">),</span>
+    <span class="n">filepaths</span><span class="p">:</span> <span class="n">List</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">titles</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
     <span class="sd">"""</span>
 <span class="sd">    Plots the downloaded quicklooks (filepaths saved to self.quicklooks of the</span>
@@ -1318,40 +1327,26 @@ respective object, e.g. job, catalog).</p>
 
 <span class="sd">    Args:</span>
 <span class="sd">        figsize: matplotlib figure size.</span>
+<span class="sd">        filepaths: Paths to images to plot. Optional, by default picks up the last</span>
+<span class="sd">            downloaded results.</span>
+<span class="sd">        titles: List of titles for the subplots, optional.</span>
+
 <span class="sd">    """</span>
-    <span class="c1"># TODO: Remove empty axes &amp; give title option.</span>
     <span class="k">if</span> <span class="n">filepaths</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">quicklooks</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="s2">"You first need to download the quicklooks via .download_quicklooks()."</span>
-            <span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"You first need to download the quicklooks!"</span><span class="p">)</span>
         <span class="n">filepaths</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">quicklooks</span>
 
-    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">filepaths</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
-        <span class="n">nrows</span><span class="p">,</span> <span class="n">ncols</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">ncols</span> <span class="o">=</span> <span class="mi">2</span>
-        <span class="n">nrows</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">filepaths</span><span class="p">)</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="n">ncols</span><span class="p">)))</span>
-
+    <span class="n">plot_file_format</span> <span class="o">=</span> <span class="p">[</span><span class="s2">".jpg"</span><span class="p">,</span> <span class="s2">".jpeg"</span><span class="p">,</span> <span class="s2">".png"</span><span class="p">]</span>
     <span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span>
         <span class="s2">"ignore"</span><span class="p">,</span> <span class="n">category</span><span class="o">=</span><span class="n">rasterio</span><span class="o">.</span><span class="n">errors</span><span class="o">.</span><span class="n">NotGeoreferencedWarning</span>
     <span class="p">)</span>
-
-    <span class="n">_</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">nrows</span><span class="o">=</span><span class="n">nrows</span><span class="p">,</span> <span class="n">ncols</span><span class="o">=</span><span class="n">ncols</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="n">figsize</span><span class="p">)</span>
-    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">filepaths</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
-        <span class="n">axs</span> <span class="o">=</span> <span class="n">axs</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">axs</span> <span class="o">=</span> <span class="p">[</span><span class="n">axs</span><span class="p">]</span>
-    <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">fp</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">filepaths</span><span class="p">):</span>
-        <span class="k">with</span> <span class="n">rasterio</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">fp</span><span class="p">)</span> <span class="k">as</span> <span class="n">src</span><span class="p">:</span>
-            <span class="n">show</span><span class="p">(</span>
-                <span class="n">src</span><span class="o">.</span><span class="n">read</span><span class="p">(),</span>
-                <span class="n">transform</span><span class="o">=</span><span class="n">src</span><span class="o">.</span><span class="n">transform</span><span class="p">,</span>
-                <span class="n">title</span><span class="o">=</span><span class="n">Path</span><span class="p">(</span><span class="n">fp</span><span class="p">)</span><span class="o">.</span><span class="n">stem</span><span class="p">,</span>
-                <span class="n">ax</span><span class="o">=</span><span class="n">axs</span><span class="p">[</span><span class="n">idx</span><span class="p">],</span>
-            <span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+    <span class="n">_plot_images</span><span class="p">(</span>
+        <span class="n">plot_file_format</span><span class="o">=</span><span class="n">plot_file_format</span><span class="p">,</span>
+        <span class="n">figsize</span><span class="o">=</span><span class="n">figsize</span><span class="p">,</span>
+        <span class="n">filepaths</span><span class="o">=</span><span class="n">filepaths</span><span class="p">,</span>
+        <span class="n">titles</span><span class="o">=</span><span class="n">titles</span><span class="p">,</span>
+    <span class="p">)</span>
 </code></pre>
 </div>
 </td>
@@ -1366,7 +1361,7 @@ respective object, e.g. job, catalog).</p>
 plot_results<span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">8</span><span class="p">),</span> <span class="n">filepaths</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">titles</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> </code>
 <a class="headerlink" href="#up42.tools.Tools.plot_results" title="Permanent link">¶</a></h2>
 <div class="doc doc-contents">
-<p>Plots the downloaded data.</p>
+<p>Plots the downloaded results data.</p>
 <p><strong>Parameters:</strong></p>
 <table>
 <thead>
@@ -1390,7 +1385,16 @@ plot_results<span class="p">(</span><span class="bp">self</span><span class="p">
 <td><code>filepaths</code></td>
 <td><code>List[Union[str, pathlib.Path]]</code></td>
 <td>
-<p>Paths to images to plot. Optional, by default picks up the downloaded results.</p>
+<p>Paths to images to plot. Optional, by default picks up the last
+downloaded results.</p>
+</td>
+<td><code>None</code></td>
+</tr>
+<tr>
+<td><code>titles</code></td>
+<td><code>List[str]</code></td>
+<td>
+<p>Optional list of titles for the subplots.</p>
 </td>
 <td><code>None</code></td>
 </tr>
@@ -1402,7 +1406,20 @@ plot_results<span class="p">(</span><span class="bp">self</span><span class="p">
 <tr>
 <td class="linenos">
 <div class="linenodiv">
-<pre><span></span>245
+<pre><span></span>232
+233
+234
+235
+236
+237
+238
+239
+240
+241
+242
+243
+244
+245
 246
 247
 248
@@ -1415,49 +1432,7 @@ plot_results<span class="p">(</span><span class="bp">self</span><span class="p">
 255
 256
 257
-258
-259
-260
-261
-262
-263
-264
-265
-266
-267
-268
-269
-270
-271
-272
-273
-274
-275
-276
-277
-278
-279
-280
-281
-282
-283
-284
-285
-286
-287
-288
-289
-290
-291
-292
-293
-294
-295
-296
-297
-298
-299
-300</pre>
+258</pre>
 </div>
 </td>
 <td class="code">
@@ -1469,55 +1444,26 @@ plot_results<span class="p">(</span><span class="bp">self</span><span class="p">
     <span class="n">titles</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
     <span class="sd">"""</span>
-<span class="sd">    Plots the downloaded data.</span>
+<span class="sd">    Plots the downloaded results data.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        figsize: matplotlib figure size.</span>
-<span class="sd">        filepaths: Paths to images to plot. Optional, by default picks up the downloaded results.</span>
+<span class="sd">        filepaths: Paths to images to plot. Optional, by default picks up the last</span>
+<span class="sd">            downloaded results.</span>
+<span class="sd">        titles: Optional list of titles for the subplots.</span>
 <span class="sd">    """</span>
-    <span class="c1"># TODO: Handle more bands.</span>
-    <span class="c1"># TODO: add histogram equalization? But requires skimage dependency.</span>
     <span class="k">if</span> <span class="n">filepaths</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">results</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"You first need to download the results."</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"You first need to download the results!"</span><span class="p">)</span>
         <span class="n">filepaths</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">results</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">filepaths</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
-        <span class="n">filepaths</span> <span class="o">=</span> <span class="p">[</span><span class="n">filepaths</span><span class="p">]</span>
-    <span class="n">filepaths</span> <span class="o">=</span> <span class="p">[</span><span class="n">Path</span><span class="p">(</span><span class="n">path</span><span class="p">)</span> <span class="k">for</span> <span class="n">path</span> <span class="ow">in</span> <span class="n">filepaths</span><span class="p">]</span>
 
     <span class="n">plot_file_format</span> <span class="o">=</span> <span class="p">[</span><span class="s2">".tif"</span><span class="p">]</span>  <span class="c1"># TODO: Add other fileformats.</span>
-    <span class="n">imagepaths</span> <span class="o">=</span> <span class="p">[</span>
-        <span class="n">path</span> <span class="k">for</span> <span class="n">path</span> <span class="ow">in</span> <span class="n">filepaths</span> <span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="n">path</span><span class="o">.</span><span class="n">suffix</span><span class="p">)</span> <span class="ow">in</span> <span class="n">plot_file_format</span>  <span class="c1"># type: ignore</span>
-    <span class="p">]</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">imagepaths</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-            <span class="sa">f</span><span class="s2">"Only results of the formats </span><span class="si">{</span><span class="n">plot_file_format</span><span class="si">}</span><span class="s2"> can "</span>
-            <span class="s2">"currently be plotted."</span>
-        <span class="p">)</span>
-
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">titles</span><span class="p">:</span>
-        <span class="n">titles</span> <span class="o">=</span> <span class="p">[</span><span class="n">Path</span><span class="p">(</span><span class="n">fp</span><span class="p">)</span><span class="o">.</span><span class="n">stem</span> <span class="k">for</span> <span class="n">fp</span> <span class="ow">in</span> <span class="n">imagepaths</span><span class="p">]</span>
-
-    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">imagepaths</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
-        <span class="n">nrows</span><span class="p">,</span> <span class="n">ncols</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">ncols</span> <span class="o">=</span> <span class="mi">3</span>
-        <span class="n">nrows</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">imagepaths</span><span class="p">)</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="n">ncols</span><span class="p">)))</span>
-
-    <span class="n">_</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">nrows</span><span class="o">=</span><span class="n">nrows</span><span class="p">,</span> <span class="n">ncols</span><span class="o">=</span><span class="n">ncols</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="n">figsize</span><span class="p">)</span>
-    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">imagepaths</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
-        <span class="n">axs</span> <span class="o">=</span> <span class="n">axs</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">axs</span> <span class="o">=</span> <span class="p">[</span><span class="n">axs</span><span class="p">]</span>
-    <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="p">(</span><span class="n">fp</span><span class="p">,</span> <span class="n">title</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">imagepaths</span><span class="p">,</span> <span class="n">titles</span><span class="p">)):</span>
-        <span class="k">with</span> <span class="n">rasterio</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">fp</span><span class="p">)</span> <span class="k">as</span> <span class="n">src</span><span class="p">:</span>
-            <span class="n">img_array</span> <span class="o">=</span> <span class="n">src</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
-            <span class="n">show</span><span class="p">(</span>
-                <span class="n">img_array</span><span class="p">,</span> <span class="n">transform</span><span class="o">=</span><span class="n">src</span><span class="o">.</span><span class="n">transform</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="n">title</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axs</span><span class="p">[</span><span class="n">idx</span><span class="p">],</span>
-            <span class="p">)</span>
-        <span class="n">axs</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">.</span><span class="n">set_axis_off</span><span class="p">()</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+    <span class="n">_plot_images</span><span class="p">(</span>
+        <span class="n">plot_file_format</span><span class="o">=</span><span class="n">plot_file_format</span><span class="p">,</span>
+        <span class="n">figsize</span><span class="o">=</span><span class="n">figsize</span><span class="p">,</span>
+        <span class="n">filepaths</span><span class="o">=</span><span class="n">filepaths</span><span class="p">,</span>
+        <span class="n">titles</span><span class="o">=</span><span class="n">titles</span><span class="p">,</span>
+    <span class="p">)</span>
 </code></pre>
 </div>
 </td>
@@ -1588,7 +1534,9 @@ for use as the aoi geometry in the workflow input parameters
 <tr>
 <td class="linenos">
 <div class="linenodiv">
-<pre><span></span>46
+<pre><span></span>44
+45
+46
 47
 48
 49
@@ -1627,9 +1575,7 @@ for use as the aoi geometry in the workflow input parameters
 82
 83
 84
-85
-86
-87</pre>
+85</pre>
 </div>
 </td>
 <td class="code">
@@ -1778,7 +1724,49 @@ validate_manifest<span class="p">(</span><span class="bp">self</span><span class
 <tr>
 <td class="linenos">
 <div class="linenodiv">
-<pre><span></span>383
+<pre><span></span>341
+342
+343
+344
+345
+346
+347
+348
+349
+350
+351
+352
+353
+354
+355
+356
+357
+358
+359
+360
+361
+362
+363
+364
+365
+366
+367
+368
+369
+370
+371
+372
+373
+374
+375
+376
+377
+378
+379
+380
+381
+382
+383
 384
 385
 386
@@ -1801,49 +1789,7 @@ validate_manifest<span class="p">(</span><span class="bp">self</span><span class
 403
 404
 405
-406
-407
-408
-409
-410
-411
-412
-413
-414
-415
-416
-417
-418
-419
-420
-421
-422
-423
-424
-425
-426
-427
-428
-429
-430
-431
-432
-433
-434
-435
-436
-437
-438
-439
-440
-441
-442
-443
-444
-445
-446
-447
-448</pre>
+406</pre>
 </div>
 </td>
 <td class="code">

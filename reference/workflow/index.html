@@ -1009,17 +1009,17 @@ delete<span class="p">(</span><span class="bp">self</span><span class="p">)</spa
 <tr>
 <td class="linenos">
 <div class="linenodiv">
-<pre><span></span>487
-488
-489
-490
-491
-492
-493
-494
-495
-496
-497</pre>
+<pre><span></span>503
+504
+505
+506
+507
+508
+509
+510
+511
+512
+513</pre>
 </div>
 </td>
 <td class="code">
@@ -1117,7 +1117,7 @@ will provide the compatible blocks for the last workflow task in the workflow.</
 get_jobs<span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">return_json</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> </code>
 <a class="headerlink" href="#up42.workflow.Workflow.get_jobs" title="Permanent link">¶</a></h2>
 <div class="doc doc-contents">
-<p>Get all jobs in the specific project as job objects or json.</p>
+<p>Get all jobs associated with the workflow as job objects or json.</p>
 <p><strong>Parameters:</strong></p>
 <table>
 <thead>
@@ -1162,18 +1162,7 @@ get_jobs<span class="p">(</span><span class="bp">self</span><span class="p">,</s
 <tr>
 <td class="linenos">
 <div class="linenodiv">
-<pre><span></span>443
-444
-445
-446
-447
-448
-449
-450
-451
-452
-453
-454
+<pre><span></span>454
 455
 456
 457
@@ -1188,14 +1177,30 @@ get_jobs<span class="p">(</span><span class="bp">self</span><span class="p">,</s
 466
 467
 468
-469</pre>
+469
+470
+471
+472
+473
+474
+475
+476
+477
+478
+479
+480
+481
+482
+483
+484
+485</pre>
 </div>
 </td>
 <td class="code">
 <div class="highlight">
 <pre><span></span><code><span class="k">def</span> <span class="nf">get_jobs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">return_json</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="s2">"Job"</span><span class="p">],</span> <span class="n">Dict</span><span class="p">]:</span>
     <span class="sd">"""</span>
-<span class="sd">    Get all jobs in the specific project as job objects or json.</span>
+<span class="sd">    Get all jobs associated with the workflow as job objects or json.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        return_json: If true, returns the job info jsons instead of job objects.</span>
@@ -1206,18 +1211,23 @@ get_jobs<span class="p">(</span><span class="bp">self</span><span class="p">,</s
     <span class="n">url</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">auth</span><span class="o">.</span><span class="n">_endpoint</span><span class="p">()</span><span class="si">}</span><span class="s2">/projects/</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">project_id</span><span class="si">}</span><span class="s2">/jobs"</span>
     <span class="n">response_json</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">auth</span><span class="o">.</span><span class="n">_request</span><span class="p">(</span><span class="n">request_type</span><span class="o">=</span><span class="s2">"GET"</span><span class="p">,</span> <span class="n">url</span><span class="o">=</span><span class="n">url</span><span class="p">)</span>
     <span class="n">jobs_json</span> <span class="o">=</span> <span class="n">response_json</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span>
+
+    <span class="n">jobs_workflow_json</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">j</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">jobs_json</span> <span class="k">if</span> <span class="n">j</span><span class="p">[</span><span class="s2">"workflowId"</span><span class="p">]</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">workflow_id</span>
+    <span class="p">]</span>
+
     <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
         <span class="s2">"Got </span><span class="si">%s</span><span class="s2"> jobs for workflow </span><span class="si">%s</span><span class="s2"> in project </span><span class="si">%s</span><span class="s2">."</span><span class="p">,</span>
-        <span class="nb">len</span><span class="p">(</span><span class="n">jobs_json</span><span class="p">),</span>
+        <span class="nb">len</span><span class="p">(</span><span class="n">jobs_workflow_json</span><span class="p">),</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">workflow_id</span><span class="p">,</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">project_id</span><span class="p">,</span>
     <span class="p">)</span>
     <span class="k">if</span> <span class="n">return_json</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">jobs_json</span>
+        <span class="k">return</span> <span class="n">jobs_workflow_json</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">jobs</span> <span class="o">=</span> <span class="p">[</span>
             <span class="n">Job</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">auth</span><span class="p">,</span> <span class="n">job_id</span><span class="o">=</span><span class="n">job</span><span class="p">[</span><span class="s2">"id"</span><span class="p">],</span> <span class="n">project_id</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">project_id</span><span class="p">)</span>
-            <span class="k">for</span> <span class="n">job</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">jobs_json</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">job</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">jobs_workflow_json</span><span class="p">)</span>
         <span class="p">]</span>
         <span class="k">return</span> <span class="n">jobs</span>
 </code></pre>
@@ -1411,7 +1421,7 @@ get_workflow_tasks<span class="p">(</span><span class="bp">self</span><span clas
 <div class="doc doc-object doc-method">
 <h2 class="doc doc-heading" id="up42.workflow.Workflow.run_job">
 <code class="highlight language-python">
-run_job<span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_parameters</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">track_status</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> </code>
+run_job<span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_parameters</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">track_status</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> </code>
 <a class="headerlink" href="#up42.workflow.Workflow.run_job" title="Permanent link">¶</a></h2>
 <div class="doc doc-contents">
 <p>Creates and runs a new job.</p>
@@ -1443,6 +1453,14 @@ the job status every 30 seconds.</p>
 </td>
 <td><code>False</code></td>
 </tr>
+<tr>
+<td><code>name</code></td>
+<td><code>str</code></td>
+<td>
+<p>The job name. Optional, by default the workflow name is assigned.</p>
+</td>
+<td><code>None</code></td>
+</tr>
 </tbody>
 </table>
 <p><strong>Returns:</strong></p>
@@ -1468,16 +1486,7 @@ the job status every 30 seconds.</p>
 <tr>
 <td class="linenos">
 <div class="linenodiv">
-<pre><span></span>423
-424
-425
-426
-427
-428
-429
-430
-431
-432
+<pre><span></span>432
 433
 434
 435
@@ -1486,7 +1495,18 @@ the job status every 30 seconds.</p>
 438
 439
 440
-441</pre>
+441
+442
+443
+444
+445
+446
+447
+448
+449
+450
+451
+452</pre>
 </div>
 </td>
 <td class="code">
@@ -1495,6 +1515,7 @@ the job status every 30 seconds.</p>
     <span class="bp">self</span><span class="p">,</span>
     <span class="n">input_parameters</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Dict</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">track_status</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">"Job"</span><span class="p">:</span>
     <span class="sd">"""</span>
 <span class="sd">    Creates and runs a new job.</span>
@@ -1503,12 +1524,13 @@ the job status every 30 seconds.</p>
 <span class="sd">        input_parameters: Either json string of workflow parameters or filepath to json.</span>
 <span class="sd">        track_status: Automatically attaches workflow.track_status which queries</span>
 <span class="sd">            the job status every 30 seconds.</span>
+<span class="sd">        name: The job name. Optional, by default the workflow name is assigned.</span>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        The spawned job object.</span>
 <span class="sd">    """</span>
     <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_helper_run_job</span><span class="p">(</span>
-        <span class="n">input_parameters</span><span class="o">=</span><span class="n">input_parameters</span><span class="p">,</span> <span class="n">track_status</span><span class="o">=</span><span class="n">track_status</span>
+        <span class="n">input_parameters</span><span class="o">=</span><span class="n">input_parameters</span><span class="p">,</span> <span class="n">track_status</span><span class="o">=</span><span class="n">track_status</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">name</span>
     <span class="p">)</span>
 </code></pre>
 </div>
@@ -1521,7 +1543,7 @@ the job status every 30 seconds.</p>
 <div class="doc doc-object doc-method">
 <h2 class="doc doc-heading" id="up42.workflow.Workflow.test_job">
 <code class="highlight language-python">
-test_job<span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_parameters</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">track_status</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> </code>
+test_job<span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_parameters</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">track_status</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> </code>
 <a class="headerlink" href="#up42.workflow.Workflow.test_job" title="Permanent link">¶</a></h2>
 <div class="doc doc-contents">
 <p>Create a run a new test job (Test Query). With this test query you will not be
@@ -1554,6 +1576,14 @@ the job status every 30 seconds.</p>
 </td>
 <td><code>False</code></td>
 </tr>
+<tr>
+<td><code>name</code></td>
+<td><code>str</code></td>
+<td>
+<p>The job name. Optional, by default the workflow name is assigned.</p>
+</td>
+<td><code>None</code></td>
+</tr>
 </tbody>
 </table>
 <p><strong>Returns:</strong></p>
@@ -1579,11 +1609,7 @@ the job status every 30 seconds.</p>
 <tr>
 <td class="linenos">
 <div class="linenodiv">
-<pre><span></span>402
-403
-404
-405
-406
+<pre><span></span>406
 407
 408
 409
@@ -1598,7 +1624,16 @@ the job status every 30 seconds.</p>
 418
 419
 420
-421</pre>
+421
+422
+423
+424
+425
+426
+427
+428
+429
+430</pre>
 </div>
 </td>
 <td class="code">
@@ -1607,6 +1642,7 @@ the job status every 30 seconds.</p>
     <span class="bp">self</span><span class="p">,</span>
     <span class="n">input_parameters</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Dict</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">track_status</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">"Job"</span><span class="p">:</span>
     <span class="sd">"""</span>
 <span class="sd">    Create a run a new test job (Test Query). With this test query you will not be</span>
@@ -1616,12 +1652,16 @@ the job status every 30 seconds.</p>
 <span class="sd">        input_parameters: Either json string of workflow parameters or filepath to json.</span>
 <span class="sd">        track_status: Automatically attaches workflow.track_status which queries</span>
 <span class="sd">            the job status every 30 seconds.</span>
+<span class="sd">        name: The job name. Optional, by default the workflow name is assigned.</span>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        The spawned test job object.</span>
 <span class="sd">    """</span>
     <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_helper_run_job</span><span class="p">(</span>
-        <span class="n">input_parameters</span><span class="o">=</span><span class="n">input_parameters</span><span class="p">,</span> <span class="n">test_job</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">track_status</span><span class="o">=</span><span class="n">track_status</span>
+        <span class="n">input_parameters</span><span class="o">=</span><span class="n">input_parameters</span><span class="p">,</span>
+        <span class="n">test_job</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">track_status</span><span class="o">=</span><span class="n">track_status</span><span class="p">,</span>
+        <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span>
     <span class="p">)</span>
 </code></pre>
 </div>
@@ -1673,21 +1713,21 @@ update_name<span class="p">(</span><span class="bp">self</span><span class="p">,
 <tr>
 <td class="linenos">
 <div class="linenodiv">
-<pre><span></span>471
-472
-473
-474
-475
-476
-477
-478
-479
-480
-481
-482
-483
-484
-485</pre>
+<pre><span></span>487
+488
+489
+490
+491
+492
+493
+494
+495
+496
+497
+498
+499
+500
+501</pre>
 </div>
 </td>
 <td class="code">

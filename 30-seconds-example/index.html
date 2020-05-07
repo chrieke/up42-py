@@ -344,9 +344,8 @@ the results are downloaded and visualized.</p>
 <div class="highlight"><pre><span></span><code><span class="c1"># Add blocks/tasks to the workflow.</span>
 <span class="n">workflow</span> <span class="o">=</span> <span class="n">project</span><span class="o">.</span><span class="n">create_workflow</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">"30-seconds-workflow"</span><span class="p">,</span> 
                                    <span class="n">use_existing</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="n">blocks</span> <span class="o">=</span> <span class="n">up42</span><span class="o">.</span><span class="n">get_blocks</span><span class="p">(</span><span class="n">basic</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="n">input_tasks</span><span class="o">=</span> <span class="p">[</span><span class="n">blocks</span><span class="p">[</span><span class="s1">'sobloo-s2-l1c-aoiclipped'</span><span class="p">],</span> 
-              <span class="n">blocks</span><span class="p">[</span><span class="s1">'sharpening'</span><span class="p">]]</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">up42</span><span class="o">.</span><span class="n">get_blocks</span><span class="p">(</span><span class="n">basic</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+<span class="n">input_tasks</span><span class="o">=</span> <span class="p">[</span><span class="s1">'sobloo-s2-l1c-aoiclipped'</span><span class="p">,</span> <span class="s1">'sharpening'</span><span class="p">]</span>
 <span class="n">workflow</span><span class="o">.</span><span class="n">add_workflow_tasks</span><span class="p">(</span><span class="n">input_tasks</span><span class="o">=</span><span class="n">input_tasks</span><span class="p">)</span>
 </code></pre></div>
 <div class="highlight"><pre><span></span><code><span class="c1"># Define the aoi and input parameters of the workflow to run it.</span>

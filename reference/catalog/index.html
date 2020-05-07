@@ -1,0 +1,1177 @@
+
+<!DOCTYPE html>
+
+<html class="no-js" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1" name="viewport"/>
+<meta content="UP42 Python SDK" name="description"/>
+<link href="https://up42.github.io/up42-py/reference/catalog/" rel="canonical"/>
+<link href="../../assets/logo-up42.ico" rel="shortcut icon"/>
+<meta content="mkdocs-1.1, mkdocs-material-5.1.1" name="generator"/>
+<title>Project class - UP42 Python SDK</title>
+<link href="../../assets/stylesheets/main.a676eddb.min.css" rel="stylesheet"/>
+<link href="../../assets/stylesheets/palette.b302131d.min.css" rel="stylesheet"/>
+<meta content="#3f51b5" name="theme-color"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&amp;display=fallback" rel="stylesheet"/>
+<style>body,input{font-family:"Roboto",-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"Roboto Mono",SFMono-Regular,Consolas,Menlo,monospace}</style>
+<link href="../../stylesheets/extra.css" rel="stylesheet"/>
+<link href="https://www.google-analytics.com" rel="preconnect dns-prefetch"/>
+<script>window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)},ga.l=+new Date,ga("create","UA-132885718-1","auto"),ga("set","anonymizeIp",!0),ga("send","pageview"),document.addEventListener("DOMContentLoaded",function(){document.forms.search&&document.forms.search.query.addEventListener("blur",function(){if(this.value){var e=document.location.pathname;ga("send","pageview",e+"?q="+this.value)}})}),document.addEventListener("DOMContentSwitch",function(){ga("send","pageview")})</script>
+<script async="" src="https://www.google-analytics.com/analytics.js"></script>
+</head>
+<body data-md-color-accent="purple" data-md-color-primary="indigo" dir="ltr">
+<input autocomplete="off" class="md-toggle" data-md-toggle="drawer" id="__drawer" type="checkbox"/>
+<input autocomplete="off" class="md-toggle" data-md-toggle="search" id="__search" type="checkbox"/>
+<label class="md-overlay" for="__drawer"></label>
+<div data-md-component="skip">
+<a class="md-skip" href="#project-class">
+          Skip to content
+        </a>
+</div>
+<div data-md-component="announce">
+</div>
+<header class="md-header" data-md-component="header">
+<nav aria-label="Header" class="md-header-nav md-grid">
+<a aria-label="UP42 Python SDK" class="md-header-nav__button md-logo" href="https://up42.github.io/up42-py/" title="UP42 Python SDK">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+
+<svg height="300" preserveaspectratio="xMidYMid meet" version="1.1" viewbox="0 0 300 300" width="300" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><defs><path d="M0 0L301.5 0L301.5 300L0 300L0 0Z" id="a1GmkaXFhc"></path><path d="M46.9 105.6C46.9 142.93 46.9 163.67 46.9 167.82C46.9 177.98 53.89 183.69 64.36 183.69C74.84 183.69 81.82 178.3 81.82 167.82C81.82 163.67 81.82 142.93 81.82 105.6L105.95 105.6C105.95 142.93 105.95 163.67 105.95 167.82C105.95 190.04 89.44 205.6 64.36 205.6C39.28 205.6 22.46 190.04 22.46 167.82C22.46 163.67 22.46 142.93 22.46 105.6L46.9 105.6Z" id="ePubGLbJJ"></path><path d="M164.89 105.6C184.57 105.6 197.8 119.79 197.8 139.79C197.8 159.79 184.57 174.63 164.89 174.63C163.73 174.63 157.93 174.63 147.48 174.63L147.48 205.6L122.64 205.6L122.64 105.6C147.99 105.6 162.08 105.6 164.89 105.6ZM172.64 140.11C172.64 132.37 168.44 126.56 160.06 126.56C159.22 126.56 155.02 126.56 147.48 126.56L147.48 153.66L159.73 153.66C168.34 149.79 172.64 145.27 172.64 140.11Z" id="e3xlgi979P"></path><path d="M228.42 85.15L237.44 85.15L237.44 118.88L245.01 118.88L245.01 125.37L237.44 125.37L237.44 140.15L229.68 140.15L229.68 125.55L202.63 125.55L202.45 120.5L228.42 85.15ZM229.5 118.7C229.5 106.79 229.5 100.18 229.5 98.86C229.5 96.33 229.86 93.45 229.86 93.45C229.85 93.45 229.7 93.45 229.68 93.45C228.96 95.07 227.88 96.52 226.98 97.96C225.92 99.35 220.63 106.32 211.11 118.88L211.11 118.88L229.5 118.88L229.5 118.7Z" id="c1yTzdREXX"></path><path d="M276.4 101.25C276.4 95.94 272.34 92.23 266.5 92.23C259.25 92.23 255.36 99.13 255.36 99.13C254.8 98.75 250.27 95.78 249.7 95.41C253.24 89.05 259.78 85.15 267.03 85.15C277.11 85.15 284.36 91.34 284.36 100.72C284.36 118.4 258.19 121.23 258.01 133.61C259.83 133.61 268.91 133.61 285.25 133.61L285.25 140.15C264.03 140.15 252.24 140.15 249.88 140.15C249.7 138.56 249.53 137.15 249.53 135.91C249.53 116.63 276.4 113.8 276.4 101.25Z" id="d2t6xtf3zG"></path></defs><g><g><g><use fill="#242c5c" fill-opacity="1" opacity="1" xlink:href="#a1GmkaXFhc"></use></g><g><use fill="#ffffff" fill-opacity="1" opacity="1" xlink:href="#ePubGLbJJ"></use><g><use fill-opacity="0" opacity="1" stroke="#ffffff" stroke-opacity="1" stroke-width="1" xlink:href="#ePubGLbJJ"></use></g></g><g><use fill="#ffffff" fill-opacity="1" opacity="1" xlink:href="#e3xlgi979P"></use><g><use fill-opacity="0" opacity="1" stroke="#ffffff" stroke-opacity="1" stroke-width="1" xlink:href="#e3xlgi979P"></use></g></g><g><use fill="#ffffff" fill-opacity="1" opacity="1" xlink:href="#c1yTzdREXX"></use><g><use fill-opacity="0" opacity="1" stroke="#ffffff" stroke-opacity="1" stroke-width="1" xlink:href="#c1yTzdREXX"></use></g></g><g><use fill="#ffffff" fill-opacity="1" opacity="1" xlink:href="#d2t6xtf3zG"></use><g><use fill-opacity="0" opacity="1" stroke="#ffffff" stroke-opacity="1" stroke-width="1" xlink:href="#d2t6xtf3zG"></use></g></g></g></g></svg>
+</a>
+<label class="md-header-nav__button md-icon" for="__drawer">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3,6H21V8H3V6M3,11H21V13H3V11M3,16H21V18H3V16Z"></path></svg>
+</label>
+<div class="md-header-nav__title" data-md-component="header-title">
+<div class="md-header-nav__ellipsis">
+<span class="md-header-nav__topic md-ellipsis">
+            UP42 Python SDK
+          </span>
+<span class="md-header-nav__topic md-ellipsis">
+            
+              Project class
+            
+          </span>
+</div>
+</div>
+<label class="md-header-nav__button md-icon" for="__search">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.5,3A6.5,6.5 0 0,1 16,9.5C16,11.11 15.41,12.59 14.44,13.73L14.71,14H15.5L20.5,19L19,20.5L14,15.5V14.71L13.73,14.44C12.59,15.41 11.11,16 9.5,16A6.5,6.5 0 0,1 3,9.5A6.5,6.5 0 0,1 9.5,3M9.5,5C7,5 5,7 5,9.5C5,12 7,14 9.5,14C12,14 14,12 14,9.5C14,7 12,5 9.5,5Z"></path></svg>
+</label>
+<div class="md-search" data-md-component="search" role="dialog">
+<label class="md-search__overlay" for="__search"></label>
+<div class="md-search__inner" role="search">
+<form class="md-search__form" name="search">
+<input aria-label="Search" autocapitalize="off" autocomplete="off" autocorrect="off" class="md-search__input" data-md-component="search-query" data-md-state="active" name="query" placeholder="Search" spellcheck="false" type="text"/>
+<label class="md-search__icon md-icon" for="__search">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.5,3A6.5,6.5 0 0,1 16,9.5C16,11.11 15.41,12.59 14.44,13.73L14.71,14H15.5L20.5,19L19,20.5L14,15.5V14.71L13.73,14.44C12.59,15.41 11.11,16 9.5,16A6.5,6.5 0 0,1 3,9.5A6.5,6.5 0 0,1 9.5,3M9.5,5C7,5 5,7 5,9.5C5,12 7,14 9.5,14C12,14 14,12 14,9.5C14,7 12,5 9.5,5Z"></path></svg>
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20,11V13H8L13.5,18.5L12.08,19.92L4.16,12L12.08,4.08L13.5,5.5L8,11H20Z"></path></svg>
+</label>
+<button aria-label="Clear" class="md-search__icon md-icon" data-md-component="search-reset" tabindex="-1" type="reset">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z"></path></svg>
+</button>
+</form>
+<div class="md-search__output">
+<div class="md-search__scrollwrap" data-md-scrollfix="">
+<div class="md-search-result" data-md-component="search-result">
+<div class="md-search-result__meta">
+            Type to start searching
+          </div>
+<ol class="md-search-result__list"></ol>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="md-header-nav__source">
+<a class="md-source" href="https://github.com/up42/up42-py" title="Go to repository">
+<div class="md-source__icon md-icon">
+<svg viewbox="0 0 448 512" xmlns="http://www.w3.org/2000/svg"><path d="M439.55 236.05L244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"></path></svg>
+</div>
+<div class="md-source__repository">
+    up42-py
+  </div>
+</a>
+</div>
+</nav>
+</header>
+<div class="md-container" data-md-component="container">
+<nav aria-label="Tabs" class="md-tabs" data-md-component="tabs">
+<div class="md-tabs__inner md-grid">
+<ul class="md-tabs__list">
+<li class="md-tabs__item">
+<a class="md-tabs__link md-tabs__link--active" href="../..">
+        Home
+      </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../../installation/">
+          Guides
+        </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../project/">
+          Code Reference
+        </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../../examples/examples-intro/">
+          Examples
+        </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../../support-faq/">
+          Support &amp; FAQ
+        </a>
+</li>
+</ul>
+</div>
+</nav>
+<style>
+    .md-header{position:initial; padding-top: 0.4rem;}
+    .md-tabs{position:initial; padding-top: 0.4rem;}
+  </style>
+<main class="md-main" data-md-component="main">
+<div class="md-main__inner md-grid">
+<div class="md-sidebar md-sidebar--primary" data-md-component="navigation">
+<div class="md-sidebar__scrollwrap">
+<div class="md-sidebar__inner">
+<nav aria-label="Navigation" class="md-nav md-nav--primary" data-md-level="0">
+<label class="md-nav__title" for="__drawer">
+<a aria-label="UP42 Python SDK" class="md-nav__button md-logo" href="https://up42.github.io/up42-py/" title="UP42 Python SDK">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+
+<svg height="300" preserveaspectratio="xMidYMid meet" version="1.1" viewbox="0 0 300 300" width="300" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><defs><path d="M0 0L301.5 0L301.5 300L0 300L0 0Z" id="a1GmkaXFhc"></path><path d="M46.9 105.6C46.9 142.93 46.9 163.67 46.9 167.82C46.9 177.98 53.89 183.69 64.36 183.69C74.84 183.69 81.82 178.3 81.82 167.82C81.82 163.67 81.82 142.93 81.82 105.6L105.95 105.6C105.95 142.93 105.95 163.67 105.95 167.82C105.95 190.04 89.44 205.6 64.36 205.6C39.28 205.6 22.46 190.04 22.46 167.82C22.46 163.67 22.46 142.93 22.46 105.6L46.9 105.6Z" id="ePubGLbJJ"></path><path d="M164.89 105.6C184.57 105.6 197.8 119.79 197.8 139.79C197.8 159.79 184.57 174.63 164.89 174.63C163.73 174.63 157.93 174.63 147.48 174.63L147.48 205.6L122.64 205.6L122.64 105.6C147.99 105.6 162.08 105.6 164.89 105.6ZM172.64 140.11C172.64 132.37 168.44 126.56 160.06 126.56C159.22 126.56 155.02 126.56 147.48 126.56L147.48 153.66L159.73 153.66C168.34 149.79 172.64 145.27 172.64 140.11Z" id="e3xlgi979P"></path><path d="M228.42 85.15L237.44 85.15L237.44 118.88L245.01 118.88L245.01 125.37L237.44 125.37L237.44 140.15L229.68 140.15L229.68 125.55L202.63 125.55L202.45 120.5L228.42 85.15ZM229.5 118.7C229.5 106.79 229.5 100.18 229.5 98.86C229.5 96.33 229.86 93.45 229.86 93.45C229.85 93.45 229.7 93.45 229.68 93.45C228.96 95.07 227.88 96.52 226.98 97.96C225.92 99.35 220.63 106.32 211.11 118.88L211.11 118.88L229.5 118.88L229.5 118.7Z" id="c1yTzdREXX"></path><path d="M276.4 101.25C276.4 95.94 272.34 92.23 266.5 92.23C259.25 92.23 255.36 99.13 255.36 99.13C254.8 98.75 250.27 95.78 249.7 95.41C253.24 89.05 259.78 85.15 267.03 85.15C277.11 85.15 284.36 91.34 284.36 100.72C284.36 118.4 258.19 121.23 258.01 133.61C259.83 133.61 268.91 133.61 285.25 133.61L285.25 140.15C264.03 140.15 252.24 140.15 249.88 140.15C249.7 138.56 249.53 137.15 249.53 135.91C249.53 116.63 276.4 113.8 276.4 101.25Z" id="d2t6xtf3zG"></path></defs><g><g><g><use fill="#242c5c" fill-opacity="1" opacity="1" xlink:href="#a1GmkaXFhc"></use></g><g><use fill="#ffffff" fill-opacity="1" opacity="1" xlink:href="#ePubGLbJJ"></use><g><use fill-opacity="0" opacity="1" stroke="#ffffff" stroke-opacity="1" stroke-width="1" xlink:href="#ePubGLbJJ"></use></g></g><g><use fill="#ffffff" fill-opacity="1" opacity="1" xlink:href="#e3xlgi979P"></use><g><use fill-opacity="0" opacity="1" stroke="#ffffff" stroke-opacity="1" stroke-width="1" xlink:href="#e3xlgi979P"></use></g></g><g><use fill="#ffffff" fill-opacity="1" opacity="1" xlink:href="#c1yTzdREXX"></use><g><use fill-opacity="0" opacity="1" stroke="#ffffff" stroke-opacity="1" stroke-width="1" xlink:href="#c1yTzdREXX"></use></g></g><g><use fill="#ffffff" fill-opacity="1" opacity="1" xlink:href="#d2t6xtf3zG"></use><g><use fill-opacity="0" opacity="1" stroke="#ffffff" stroke-opacity="1" stroke-width="1" xlink:href="#d2t6xtf3zG"></use></g></g></g></g></svg>
+</a>
+    UP42 Python SDK
+  </label>
+<div class="md-nav__source">
+<a class="md-source" href="https://github.com/up42/up42-py" title="Go to repository">
+<div class="md-source__icon md-icon">
+<svg viewbox="0 0 448 512" xmlns="http://www.w3.org/2000/svg"><path d="M439.55 236.05L244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"></path></svg>
+</div>
+<div class="md-source__repository">
+    up42-py
+  </div>
+</a>
+</div>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../.." title="Home">
+      Home
+    </a>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle" data-md-toggle="nav-2" id="nav-2" type="checkbox"/>
+<label class="md-nav__link" for="nav-2">
+      Guides
+      <span class="md-nav__icon md-icon">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M8.59,16.58L13.17,12L8.59,7.41L10,6L16,12L10,18L8.59,16.58Z"></path></svg>
+</span>
+</label>
+<nav aria-label="Guides" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="nav-2">
+<span class="md-nav__icon md-icon">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20,11V13H8L13.5,18.5L12.08,19.92L4.16,12L12.08,4.08L13.5,5.5L8,11H20Z"></path></svg>
+</span>
+        Guides
+      </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../installation/" title="Installation">
+      Installation
+    </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../authentication/" title="Authentication">
+      Authentication
+    </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../structure/" title="Structure">
+      Structure
+    </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../30-seconds-example/" title="30 Seconds Example">
+      30 Seconds Example
+    </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../typical-usage/" title="Typical Usage">
+      Typical Usage
+    </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../catalog/" title="Catalog Search">
+      Catalog Search
+    </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../cli/" title="Command Line Interface">
+      Command Line Interface
+    </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle" data-md-toggle="nav-3" id="nav-3" type="checkbox"/>
+<label class="md-nav__link" for="nav-3">
+      Code Reference
+      <span class="md-nav__icon md-icon">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M8.59,16.58L13.17,12L8.59,7.41L10,6L16,12L10,18L8.59,16.58Z"></path></svg>
+</span>
+</label>
+<nav aria-label="Code Reference" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="nav-3">
+<span class="md-nav__icon md-icon">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20,11V13H8L13.5,18.5L12.08,19.92L4.16,12L12.08,4.08L13.5,5.5L8,11H20Z"></path></svg>
+</span>
+        Code Reference
+      </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../project/" title="Project">
+      Project
+    </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../workflow/" title="Workflow">
+      Workflow
+    </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../job/" title="Job">
+      Job
+    </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../jobtask/" title="JobTask">
+      JobTask
+    </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../tools/" title="Tools">
+      Tools
+    </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle" data-md-toggle="nav-4" id="nav-4" type="checkbox"/>
+<label class="md-nav__link" for="nav-4">
+      Examples
+      <span class="md-nav__icon md-icon">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M8.59,16.58L13.17,12L8.59,7.41L10,6L16,12L10,18L8.59,16.58Z"></path></svg>
+</span>
+</label>
+<nav aria-label="Examples" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="nav-4">
+<span class="md-nav__icon md-icon">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20,11V13H8L13.5,18.5L12.08,19.92L4.16,12L12.08,4.08L13.5,5.5L8,11H20Z"></path></svg>
+</span>
+        Examples
+      </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../examples/examples-intro/" title="Examples">
+      Examples
+    </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../examples/airport-monitoring/" title="Airport monitoring">
+      Airport monitoring
+    </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle" data-md-toggle="nav-5" id="nav-5" type="checkbox"/>
+<label class="md-nav__link" for="nav-5">
+      Support &amp; FAQ
+      <span class="md-nav__icon md-icon">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M8.59,16.58L13.17,12L8.59,7.41L10,6L16,12L10,18L8.59,16.58Z"></path></svg>
+</span>
+</label>
+<nav aria-label="Support &amp; FAQ" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="nav-5">
+<span class="md-nav__icon md-icon">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20,11V13H8L13.5,18.5L12.08,19.92L4.16,12L12.08,4.08L13.5,5.5L8,11H20Z"></path></svg>
+</span>
+        Support &amp; FAQ
+      </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../support-faq/" title="FAQ">
+      FAQ
+    </a>
+</li>
+</ul>
+</nav>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+</div>
+<div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
+<div class="md-sidebar__scrollwrap">
+<div class="md-sidebar__inner">
+<nav aria-label="Table of contents" class="md-nav md-nav--secondary">
+<label class="md-nav__title" for="__toc">
+<span class="md-nav__icon md-icon">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20,11V13H8L13.5,18.5L12.08,19.92L4.16,12L12.08,4.08L13.5,5.5L8,11H20Z"></path></svg>
+</span>
+      Table of contents
+    </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#up42.catalog.Catalog">
+    up42.catalog.Catalog
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#up42.catalog.Catalog.__init__">
+    __init__()
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#up42.catalog.Catalog.construct_parameters">
+    construct_parameters()
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#up42.catalog.Catalog.download_quicklooks">
+    download_quicklooks()
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#up42.catalog.Catalog.search">
+    search()
+  </a>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+</div>
+<div class="md-content">
+<article class="md-content__inner md-typeset">
+<h1 id="project-class">Project class<a class="headerlink" href="#project-class" title="Permanent link">¶</a></h1>
+<div class="doc doc-object doc-class">
+<h2 class="hidden-toc" href="#up42.catalog.Catalog" id="up42.catalog.Catalog" style="visibility: hidden; width: 0; height: 0;">
+<a class="headerlink" href="#up42.catalog.Catalog" title="Permanent link">¶</a></h2>
+<div class="doc doc-contents first">
+<div class="doc doc-children">
+<div class="doc doc-object doc-method">
+<h2 class="doc doc-heading" id="up42.catalog.Catalog.__init__">
+<code class="highlight language-python">
+__init__<span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">auth</span><span class="p">)</span> </code>
+<span class="doc doc-properties">
+<small class="doc doc-property doc-property-special"><code>special</code></small>
+</span>
+<a class="headerlink" href="#up42.catalog.Catalog.__init__" title="Permanent link">¶</a></h2>
+<div class="doc doc-contents">
+<p>The Catalog class enables access to the UP42 catalog search. You can search
+for satellite image scenes for different sensors and criteria like cloud cover etc.</p>
+<p>Public Methods:
+    construct_parameters, search, download_quicklooks</p>
+<details class="quote">
+<summary>Source code in <code>up42/catalog.py</code></summary>
+<table class="highlighttable">
+<tr>
+<td class="linenos">
+<div class="linenodiv">
+<pre><span></span>54
+55
+56
+57
+58
+59
+60
+61
+62</pre>
+</div>
+</td>
+<td class="code">
+<div class="highlight">
+<pre><span></span><code><span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">auth</span><span class="p">:</span> <span class="n">Auth</span><span class="p">):</span>
+    <span class="sd">"""The Catalog class enables access to the UP42 catalog search. You can search</span>
+<span class="sd">    for satellite image scenes for different sensors and criteria like cloud cover etc.</span>
+
+<span class="sd">    Public Methods:</span>
+<span class="sd">        construct_parameters, search, download_quicklooks</span>
+<span class="sd">    """</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">auth</span> <span class="o">=</span> <span class="n">auth</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">quicklooks</span> <span class="o">=</span> <span class="kc">None</span>
+</code></pre>
+</div>
+</td>
+</tr>
+</table>
+</details>
+</div>
+</div>
+<div class="doc doc-object doc-method">
+<h2 class="doc doc-heading" id="up42.catalog.Catalog.construct_parameters">
+<code class="highlight language-python">
+construct_parameters<span class="p">(</span><span class="n">geometry</span><span class="p">,</span> <span class="n">start_date</span><span class="o">=</span><span class="s1">'2020-01-01'</span><span class="p">,</span> <span class="n">end_date</span><span class="o">=</span><span class="s1">'2020-01-30'</span><span class="p">,</span> <span class="n">sensors</span><span class="o">=</span><span class="p">[</span><span class="s1">'pleiades'</span><span class="p">,</span> <span class="s1">'spot'</span><span class="p">,</span> <span class="s1">'sentinel1'</span><span class="p">,</span> <span class="s1">'sentinel2'</span><span class="p">,</span> <span class="s1">'sentinel3'</span><span class="p">,</span> <span class="s1">'sentinel5p'</span><span class="p">],</span> <span class="n">limit</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">max_cloudcover</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">sortby</span><span class="o">=</span><span class="s1">'cloudCoverage'</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> </code>
+<span class="doc doc-properties">
+<small class="doc doc-property doc-property-staticmethod"><code>staticmethod</code></small>
+</span>
+<a class="headerlink" href="#up42.catalog.Catalog.construct_parameters" title="Permanent link">¶</a></h2>
+<div class="doc doc-contents">
+<p>Follows STAC principles and property names.</p>
+<p><strong>Parameters:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>geometry</code></td>
+<td><code>Union[Dict, geojson.feature.Feature, geojson.feature.FeatureCollection, List, geopandas.geodataframe.GeoDataFrame, shapely.geometry.point.Point, shapely.geometry.polygon.Polygon]</code></td>
+<td>
+<p>The search geometry, one of Dict, Feature, FeatureCollection,
+List, GeoDataFrame, Point, Polygon.</p>
+</td>
+<td><em>required</em></td>
+</tr>
+<tr>
+<td><code>start_date</code></td>
+<td><code>str</code></td>
+<td>
+<p>Query period starting day, format "2020-01-01".</p>
+</td>
+<td><code>'2020-01-01'</code></td>
+</tr>
+<tr>
+<td><code>end_date</code></td>
+<td><code>str</code></td>
+<td>
+<p>Query period ending day, format "2020-01-01".</p>
+</td>
+<td><code>'2020-01-30'</code></td>
+</tr>
+<tr>
+<td><code>sensors</code></td>
+<td><code>List[str]</code></td>
+<td>
+<p>The satellite sensor(s) to search for, one or multiple of
+["pleiades", "spot", "sentinel1", "sentinel2", "sentinel3", "sentinel5p"]</p>
+</td>
+<td><code>['pleiades', 'spot', 'sentinel1', 'sentinel2', 'sentinel3', 'sentinel5p']</code></td>
+</tr>
+<tr>
+<td><code>limit</code></td>
+<td><code>int</code></td>
+<td>
+<p>The maximum number of search results to return.</p>
+</td>
+<td><code>1</code></td>
+</tr>
+<tr>
+<td><code>max_cloudcover</code></td>
+<td><code>float</code></td>
+<td>
+<p>Maximum cloudcover % - 100 will return all scenes, 8.4 will return all
+scenes with 8.4 or less cloudcover.</p>
+</td>
+<td><code>100</code></td>
+</tr>
+<tr>
+<td><code>sortby</code></td>
+<td><code>str</code></td>
+<td>
+<p>The property to sort by, "cloudCoverage", "acquisitionDate",
+"acquisitionIdentifier", "incidenceAngle", "snowCover"</p>
+</td>
+<td><code>'cloudCoverage'</code></td>
+</tr>
+<tr>
+<td><code>ascending</code></td>
+<td><code>bool</code></td>
+<td>
+<p>Ascending sort order by default, descending if False.</p>
+</td>
+<td><code>True</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Returns:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Dict</code></td>
+<td>
+<p>The constructed parameters dictionary.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<details class="quote">
+<summary>Source code in <code>up42/catalog.py</code></summary>
+<table class="highlighttable">
+<tr>
+<td class="linenos">
+<div class="linenodiv">
+<pre><span></span> 68
+ 69
+ 70
+ 71
+ 72
+ 73
+ 74
+ 75
+ 76
+ 77
+ 78
+ 79
+ 80
+ 81
+ 82
+ 83
+ 84
+ 85
+ 86
+ 87
+ 88
+ 89
+ 90
+ 91
+ 92
+ 93
+ 94
+ 95
+ 96
+ 97
+ 98
+ 99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143</pre>
+</div>
+</td>
+<td class="code">
+<div class="highlight">
+<pre><span></span><code><span class="nd">@staticmethod</span>
+<span class="k">def</span> <span class="nf">construct_parameters</span><span class="p">(</span>
+    <span class="n">geometry</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span>
+        <span class="n">Dict</span><span class="p">,</span> <span class="n">Feature</span><span class="p">,</span> <span class="n">FeatureCollection</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">GeoDataFrame</span><span class="p">,</span> <span class="n">Point</span><span class="p">,</span> <span class="n">Polygon</span><span class="p">,</span>
+    <span class="p">],</span>
+    <span class="n">start_date</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"2020-01-01"</span><span class="p">,</span>
+    <span class="n">end_date</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"2020-01-30"</span><span class="p">,</span>
+    <span class="n">sensors</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="s2">"pleiades"</span><span class="p">,</span>
+        <span class="s2">"spot"</span><span class="p">,</span>
+        <span class="s2">"sentinel1"</span><span class="p">,</span>
+        <span class="s2">"sentinel2"</span><span class="p">,</span>
+        <span class="s2">"sentinel3"</span><span class="p">,</span>
+        <span class="s2">"sentinel5p"</span><span class="p">,</span>
+    <span class="p">],</span>
+    <span class="n">limit</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="n">max_cloudcover</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">100</span><span class="p">,</span>
+    <span class="n">sortby</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"cloudCoverage"</span><span class="p">,</span>
+    <span class="n">ascending</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
+    <span class="sd">"""</span>
+<span class="sd">    Follows STAC principles and property names.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        geometry: The search geometry, one of Dict, Feature, FeatureCollection,</span>
+<span class="sd">            List, GeoDataFrame, Point, Polygon.</span>
+<span class="sd">        start_date: Query period starting day, format "2020-01-01".</span>
+<span class="sd">        end_date: Query period ending day, format "2020-01-01".</span>
+<span class="sd">        sensors: The satellite sensor(s) to search for, one or multiple of</span>
+<span class="sd">            ["pleiades", "spot", "sentinel1", "sentinel2", "sentinel3", "sentinel5p"]</span>
+<span class="sd">        limit: The maximum number of search results to return.</span>
+<span class="sd">        max_cloudcover: Maximum cloudcover % - 100 will return all scenes, 8.4 will return all</span>
+<span class="sd">            scenes with 8.4 or less cloudcover.</span>
+<span class="sd">        sortby: The property to sort by, "cloudCoverage", "acquisitionDate",</span>
+<span class="sd">            "acquisitionIdentifier", "incidenceAngle", "snowCover"</span>
+<span class="sd">        ascending: Ascending sort order by default, descending if False.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        The constructed parameters dictionary.</span>
+<span class="sd">    """</span>
+    <span class="n">datetime</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">start_date</span><span class="si">}</span><span class="s2">T00:00:00Z/</span><span class="si">{</span><span class="n">end_date</span><span class="si">}</span><span class="s2">T00:00:00Z"</span>
+    <span class="n">block_filters</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">sensor</span> <span class="ow">in</span> <span class="n">sensors</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">sensor</span> <span class="ow">not</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">supported_sensors</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">"Currently only these sensors are supported: "</span>
+                <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="n">supported_sensors</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span><span class="si">}</span><span class="s2">"</span>
+            <span class="p">)</span>
+        <span class="n">block_filters</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">supported_sensors</span><span class="p">[</span><span class="n">sensor</span><span class="p">][</span><span class="s2">"blocks"</span><span class="p">])</span>
+    <span class="n">query_filters</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">"cloudCoverage"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"lte"</span><span class="p">:</span> <span class="n">max_cloudcover</span><span class="p">},</span>
+        <span class="s2">"dataBlock"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"in"</span><span class="p">:</span> <span class="n">block_filters</span><span class="p">},</span>
+    <span class="p">}</span>
+
+    <span class="k">if</span> <span class="n">ascending</span><span class="p">:</span>
+        <span class="n">sort_order</span> <span class="o">=</span> <span class="s2">"asc"</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">sort_order</span> <span class="o">=</span> <span class="s2">"desc"</span>
+
+    <span class="n">aoi_fc</span> <span class="o">=</span> <span class="n">any_vector_to_fc</span><span class="p">(</span><span class="n">vector</span><span class="o">=</span><span class="n">geometry</span><span class="p">,)</span>
+    <span class="n">aoi_geometry</span> <span class="o">=</span> <span class="n">fc_to_query_geometry</span><span class="p">(</span>
+        <span class="n">fc</span><span class="o">=</span><span class="n">aoi_fc</span><span class="p">,</span>
+        <span class="n">geometry_operation</span><span class="o">=</span><span class="s2">"intersects"</span><span class="p">,</span>
+        <span class="n">squash_multiple_features</span><span class="o">=</span><span class="s2">"footprint"</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="c1"># TODO: cc also contains nan with sentinel 1 etc. ignore?</span>
+    <span class="n">search_paramaters</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">"datetime"</span><span class="p">:</span> <span class="n">datetime</span><span class="p">,</span>
+        <span class="s2">"intersects"</span><span class="p">:</span> <span class="n">aoi_geometry</span><span class="p">,</span>
+        <span class="s2">"limit"</span><span class="p">:</span> <span class="n">limit</span><span class="p">,</span>
+        <span class="s2">"query"</span><span class="p">:</span> <span class="n">query_filters</span><span class="p">,</span>
+        <span class="s2">"sortby"</span><span class="p">:</span> <span class="p">[{</span><span class="s2">"field"</span><span class="p">:</span> <span class="sa">f</span><span class="s2">"properties.</span><span class="si">{</span><span class="n">sortby</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span> <span class="s2">"direction"</span><span class="p">:</span> <span class="n">sort_order</span><span class="p">}],</span>
+    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="n">search_paramaters</span>
+</code></pre>
+</div>
+</td>
+</tr>
+</table>
+</details>
+</div>
+</div>
+<div class="doc doc-object doc-method">
+<h2 class="doc doc-heading" id="up42.catalog.Catalog.download_quicklooks">
+<code class="highlight language-python">
+download_quicklooks<span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">image_ids</span><span class="p">,</span> <span class="n">sensor</span><span class="p">,</span> <span class="n">output_directory</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> </code>
+<a class="headerlink" href="#up42.catalog.Catalog.download_quicklooks" title="Permanent link">¶</a></h2>
+<div class="doc doc-contents">
+<p>Gets the quicklooks of scenes from a single sensor. After download, can
+be plotted via catalog.plot_quicklooks().</p>
+<p><strong>Parameters:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>image_ids</code></td>
+<td><code>List[str]</code></td>
+<td>
+<p>provider image_id in the form "6dffb8be-c2ab-46e3-9c1c-6958a54e4527"</p>
+</td>
+<td><em>required</em></td>
+</tr>
+<tr>
+<td><code>sensors</code></td>
+<td><code></code></td>
+<td>
+<p>The satellite sensor(s) to search for, one of
+"pleiades", "spot", "sentinel1", "sentinel2", "sentinel3", "sentinel5p".</p>
+</td>
+<td><em>required</em></td>
+</tr>
+<tr>
+<td><code>output_directory</code></td>
+<td><code>Optional[Union[str, pathlib.Path]]</code></td>
+<td>
+<p>The file output directory, defaults to the current working
+directory.</p>
+</td>
+<td><code>None</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Returns:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>List[str]</code></td>
+<td>
+<p>List of quicklook image output file paths.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<details class="quote">
+<summary>Source code in <code>up42/catalog.py</code></summary>
+<table class="highlighttable">
+<tr>
+<td class="linenos">
+<div class="linenodiv">
+<pre><span></span>213
+214
+215
+216
+217
+218
+219
+220
+221
+222
+223
+224
+225
+226
+227
+228
+229
+230
+231
+232
+233
+234
+235
+236
+237
+238
+239
+240
+241
+242
+243
+244
+245
+246
+247
+248
+249
+250
+251
+252
+253
+254
+255
+256
+257
+258
+259
+260
+261
+262
+263
+264
+265
+266
+267
+268
+269
+270
+271
+272
+273
+274
+275
+276</pre>
+</div>
+</td>
+<td class="code">
+<div class="highlight">
+<pre><span></span><code><span class="k">def</span> <span class="nf">download_quicklooks</span><span class="p">(</span>
+    <span class="bp">self</span><span class="p">,</span>
+    <span class="n">image_ids</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+    <span class="n">sensor</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">output_directory</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+    <span class="sd">"""</span>
+<span class="sd">    Gets the quicklooks of scenes from a single sensor. After download, can</span>
+<span class="sd">    be plotted via catalog.plot_quicklooks().</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        image_ids: provider image_id in the form "6dffb8be-c2ab-46e3-9c1c-6958a54e4527"</span>
+<span class="sd">        sensors: The satellite sensor(s) to search for, one of</span>
+<span class="sd">            "pleiades", "spot", "sentinel1", "sentinel2", "sentinel3", "sentinel5p".</span>
+<span class="sd">        output_directory: The file output directory, defaults to the current working</span>
+<span class="sd">            directory.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        List of quicklook image output file paths.</span>
+<span class="sd">    """</span>
+    <span class="k">if</span> <span class="n">sensor</span> <span class="ow">not</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">supported_sensors</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">"Currently only these sensors are supported: "</span>
+            <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="n">supported_sensors</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span><span class="si">}</span><span class="s2">"</span>
+        <span class="p">)</span>
+    <span class="n">provider</span> <span class="o">=</span> <span class="n">supported_sensors</span><span class="p">[</span><span class="n">sensor</span><span class="p">][</span><span class="s2">"provider"</span><span class="p">]</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+        <span class="s2">"Getting quicklooks from provider </span><span class="si">%s</span><span class="s2"> for image_ids: </span><span class="si">%s</span><span class="s2">"</span><span class="p">,</span> <span class="n">provider</span><span class="p">,</span> <span class="n">image_ids</span>
+    <span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">output_directory</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">output_directory</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">Path</span><span class="o">.</span><span class="n">cwd</span><span class="p">()</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">"project_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">auth</span><span class="o">.</span><span class="n">project_id</span><span class="si">}</span><span class="s2">"</span> <span class="o">/</span> <span class="s2">"catalog"</span>
+        <span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">output_directory</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">output_directory</span><span class="p">)</span>
+    <span class="n">output_directory</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">"Download directory: </span><span class="si">%s</span><span class="s2">"</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">output_directory</span><span class="p">))</span>
+
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">image_ids</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="n">image_ids</span> <span class="o">=</span> <span class="p">[</span><span class="n">image_ids</span><span class="p">]</span>
+
+    <span class="n">out_paths</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">image_id</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">image_ids</span><span class="p">):</span>
+        <span class="n">out_path</span> <span class="o">=</span> <span class="n">output_directory</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">"quicklook_</span><span class="si">{</span><span class="n">image_id</span><span class="si">}</span><span class="s2">.jpg"</span>
+        <span class="n">out_paths</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">out_path</span><span class="p">))</span>
+
+        <span class="n">url</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">auth</span><span class="o">.</span><span class="n">_endpoint</span><span class="p">()</span><span class="si">}</span><span class="s2">/catalog/</span><span class="si">{</span><span class="n">provider</span><span class="si">}</span><span class="s2">/image/</span><span class="si">{</span><span class="n">image_id</span><span class="si">}</span><span class="s2">/quicklook"</span>
+        <span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">auth</span><span class="o">.</span><span class="n">_request</span><span class="p">(</span>
+                <span class="n">request_type</span><span class="o">=</span><span class="s2">"GET"</span><span class="p">,</span> <span class="n">url</span><span class="o">=</span><span class="n">url</span><span class="p">,</span> <span class="n">return_text</span><span class="o">=</span><span class="kc">False</span>
+            <span class="p">)</span>
+            <span class="n">response</span><span class="o">.</span><span class="n">raise_for_status</span><span class="p">()</span>
+        <span class="k">except</span> <span class="n">HTTPError</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">SystemExit</span><span class="p">(</span><span class="n">err</span><span class="p">)</span>
+
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">out_path</span><span class="p">,</span> <span class="s2">"wb"</span><span class="p">)</span> <span class="k">as</span> <span class="n">dst</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">chunk</span> <span class="ow">in</span> <span class="n">response</span><span class="p">:</span>
+                <span class="n">dst</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">chunk</span><span class="p">)</span>
+
+    <span class="bp">self</span><span class="o">.</span><span class="n">quicklooks</span> <span class="o">=</span> <span class="n">out_paths</span>  <span class="c1"># pylint: disable=attribute-defined-outside-init</span>
+    <span class="k">return</span> <span class="n">out_paths</span>
+</code></pre>
+</div>
+</td>
+</tr>
+</table>
+</details>
+</div>
+</div>
+<div class="doc doc-object doc-method">
+<h2 class="doc doc-heading" id="up42.catalog.Catalog.search">
+<code class="highlight language-python">
+search<span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">search_paramaters</span><span class="p">,</span> <span class="n">as_dataframe</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> </code>
+<a class="headerlink" href="#up42.catalog.Catalog.search" title="Permanent link">¶</a></h2>
+<div class="doc doc-contents">
+<p>Searches the catalog for the the search parameters and returns the metadata of
+the matching scenes.</p>
+<p><strong>Parameters:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>search_params</code></td>
+<td><code></code></td>
+<td>
+<p>The catalog search parameters, see example.</p>
+</td>
+<td><em>required</em></td>
+</tr>
+<tr>
+<td><code>as_dataframe</code></td>
+<td><code>bool</code></td>
+<td>
+<p>return type, GeoDataFrame if True (default), FeatureCollection if False.</p>
+</td>
+<td><code>True</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Returns:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Union[geopandas.geodataframe.GeoDataFrame, Dict]</code></td>
+<td>
+<p>The search results as a GeoDataFrame, optionally as json dict.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<div class="highlight">
+<pre><span></span><code>    <span class="n">search_paramaters</span><span class="o">=</span><span class="p">{</span>
+        <span class="s2">"datetime"</span><span class="p">:</span> <span class="s2">"2019-01-01T00:00:00Z/2019-01-15T00:00:00Z"</span><span class="p">,</span>
+        <span class="s2">"intersects"</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">"type"</span><span class="p">:</span> <span class="s2">"Polygon"</span><span class="p">,</span>
+            <span class="s2">"coordinates"</span><span class="p">:</span> <span class="p">[[[</span><span class="mf">13.32113746</span><span class="p">,</span><span class="mf">52.73971768</span><span class="p">],[</span><span class="mf">13.15981158</span><span class="p">,</span><span class="mf">52.2092959</span><span class="p">],</span>
+            <span class="p">[</span><span class="mf">13.62204483</span><span class="p">,</span><span class="mf">52.15632025</span><span class="p">],[</span><span class="mf">13.78859517</span><span class="p">,</span><span class="mf">52.68655119</span><span class="p">],[</span><span class="mf">13.32113746</span><span class="p">,</span>
+            <span class="mf">52.73971768</span><span class="p">]]]},</span>
+        <span class="s2">"limit"</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+        <span class="s2">"sortby"</span><span class="p">:</span> <span class="p">[{</span><span class="s2">"field"</span> <span class="p">:</span> <span class="s2">"properties.cloudCoverage"</span><span class="p">,</span><span class="s2">"direction"</span> <span class="p">:</span> <span class="s2">"asc"</span><span class="p">}]</span>
+        <span class="p">}</span>
+</code></pre>
+</div>
+</div>
+<details class="quote">
+<summary>Source code in <code>up42/catalog.py</code></summary>
+<table class="highlighttable">
+<tr>
+<td class="linenos">
+<div class="linenodiv">
+<pre><span></span>145
+146
+147
+148
+149
+150
+151
+152
+153
+154
+155
+156
+157
+158
+159
+160
+161
+162
+163
+164
+165
+166
+167
+168
+169
+170
+171
+172
+173
+174
+175
+176
+177
+178
+179
+180
+181
+182
+183
+184
+185
+186
+187
+188
+189
+190
+191
+192
+193
+194
+195
+196
+197
+198
+199
+200
+201
+202
+203
+204
+205
+206
+207
+208
+209
+210
+211</pre>
+</div>
+</td>
+<td class="code">
+<div class="highlight">
+<pre><span></span><code><span class="k">def</span> <span class="nf">search</span><span class="p">(</span>
+    <span class="bp">self</span><span class="p">,</span> <span class="n">search_paramaters</span><span class="p">:</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">as_dataframe</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">GeoDataFrame</span><span class="p">,</span> <span class="n">Dict</span><span class="p">]:</span>
+    <span class="sd">"""</span>
+<span class="sd">    Searches the catalog for the the search parameters and returns the metadata of</span>
+<span class="sd">    the matching scenes.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        search_params: The catalog search parameters, see example.</span>
+<span class="sd">        as_dataframe: return type, GeoDataFrame if True (default), FeatureCollection if False.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        The search results as a GeoDataFrame, optionally as json dict.</span>
+
+<span class="sd">    Example:</span>
+<span class="sd">        ```python</span>
+<span class="sd">            search_paramaters={</span>
+<span class="sd">                "datetime": "2019-01-01T00:00:00Z/2019-01-15T00:00:00Z",</span>
+<span class="sd">                "intersects": {</span>
+<span class="sd">                    "type": "Polygon",</span>
+<span class="sd">                    "coordinates": [[[13.32113746,52.73971768],[13.15981158,52.2092959],</span>
+<span class="sd">                    [13.62204483,52.15632025],[13.78859517,52.68655119],[13.32113746,</span>
+<span class="sd">                    52.73971768]]]},</span>
+<span class="sd">                "limit": 1,</span>
+<span class="sd">                "sortby": [{"field" : "properties.cloudCoverage","direction" : "asc"}]</span>
+<span class="sd">                }</span>
+<span class="sd">        ```</span>
+<span class="sd">    """</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">"Searching catalog with: </span><span class="si">%r</span><span class="s2">"</span><span class="p">,</span> <span class="n">search_paramaters</span><span class="p">)</span>
+    <span class="n">url</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">auth</span><span class="o">.</span><span class="n">_endpoint</span><span class="p">()</span><span class="si">}</span><span class="s2">/catalog/stac/search"</span>
+    <span class="n">response_json</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">auth</span><span class="o">.</span><span class="n">_request</span><span class="p">(</span><span class="s2">"POST"</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="n">search_paramaters</span><span class="p">)</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">"</span><span class="si">%d</span><span class="s2"> results returned."</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">response_json</span><span class="p">[</span><span class="s2">"features"</span><span class="p">]))</span>
+    <span class="n">dst_crs</span> <span class="o">=</span> <span class="s2">"EPSG:4326"</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">GeoDataFrame</span><span class="o">.</span><span class="n">from_features</span><span class="p">(</span><span class="n">response_json</span><span class="p">,</span> <span class="n">crs</span><span class="o">=</span><span class="n">dst_crs</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">df</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">as_dataframe</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">df</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">df</span><span class="o">.</span><span class="n">__geo_interface__</span>
+
+    <span class="c1"># Filter to actual geometries intersecting the aoi (Sobloo search uses a rectangular</span>
+    <span class="c1"># bounds geometry, can contain scenes that touch the aoi bbox, but not the aoi.</span>
+    <span class="c1"># So number returned images not consistent with set limit.</span>
+    <span class="c1"># TODO: Resolve on backend</span>
+    <span class="n">geometry</span> <span class="o">=</span> <span class="n">search_paramaters</span><span class="p">[</span><span class="s2">"intersects"</span><span class="p">]</span>
+    <span class="n">poly</span> <span class="o">=</span> <span class="n">shape</span><span class="p">(</span><span class="n">geometry</span><span class="p">)</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="o">.</span><span class="n">intersects</span><span class="p">(</span><span class="n">poly</span><span class="p">)]</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
+
+    <span class="c1"># Make scene_id more easily accessible</span>
+    <span class="c1"># TODO: Add by default to results, independent of sensor.</span>
+    <span class="k">def</span> <span class="nf">_get_scene_id</span><span class="p">(</span><span class="n">row</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">row</span><span class="p">[</span><span class="s2">"providerName"</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"oneatlas"</span><span class="p">:</span>
+            <span class="n">row</span><span class="p">[</span><span class="s2">"scene_id"</span><span class="p">]</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="s2">"providerProperties"</span><span class="p">][</span><span class="s2">"parentIdentifier"</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="n">row</span><span class="p">[</span><span class="s2">"providerName"</span><span class="p">]</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">"sobloo-radar"</span><span class="p">,</span> <span class="s2">"sobloo-image"</span><span class="p">]:</span>
+            <span class="n">row</span><span class="p">[</span><span class="s2">"scene_id"</span><span class="p">]</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="s2">"providerProperties"</span><span class="p">][</span><span class="s2">"identification"</span><span class="p">][</span>
+                <span class="s2">"externalId"</span>
+            <span class="p">]</span>
+        <span class="k">return</span> <span class="n">row</span>
+
+    <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">_get_scene_id</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">df</span><span class="o">.</span><span class="n">crs</span> <span class="o">=</span> <span class="n">dst_crs</span>  <span class="c1"># apply resets the crs</span>
+
+    <span class="k">if</span> <span class="n">as_dataframe</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">df</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">df</span><span class="o">.</span><span class="n">__geo_interface__</span>
+</code></pre>
+</div>
+</td>
+</tr>
+</table>
+</details>
+</div>
+</div>
+</div>
+</div>
+</div>
+</article>
+</div>
+</div>
+</main>
+<footer class="md-footer">
+<div class="md-footer-meta md-typeset">
+<div class="md-footer-meta__inner md-grid">
+<div class="md-footer-copyright">
+<div class="md-footer-copyright__highlight">
+            UP42 2020
+          </div>
+        
+        Made with
+        <a href="https://squidfunk.github.io/mkdocs-material/" rel="noopener" target="_blank">
+          Material for MkDocs
+        </a>
+</div>
+<div class="md-footer-social">
+<a class="md-footer-social__link" href="https://github.com/up42" rel="noopener" target="_blank" title="github.com">
+<svg viewbox="0 0 480 512" xmlns="http://www.w3.org/2000/svg"><path d="M186.1 328.7c0 20.9-10.9 55.1-36.7 55.1s-36.7-34.2-36.7-55.1 10.9-55.1 36.7-55.1 36.7 34.2 36.7 55.1zM480 278.2c0 31.9-3.2 65.7-17.5 95-37.9 76.6-142.1 74.8-216.7 74.8-75.8 0-186.2 2.7-225.6-74.8-14.6-29-20.2-63.1-20.2-95 0-41.9 13.9-81.5 41.5-113.6-5.2-15.8-7.7-32.4-7.7-48.8 0-21.5 4.9-32.3 14.6-51.8 45.3 0 74.3 9 108.8 36 29-6.9 58.8-10 88.7-10 27 0 54.2 2.9 80.4 9.2 34-26.7 63-35.2 107.8-35.2 9.8 19.5 14.6 30.3 14.6 51.8 0 16.4-2.6 32.7-7.7 48.2 27.5 32.4 39 72.3 39 114.2zm-64.3 50.5c0-43.9-26.7-82.6-73.5-82.6-18.9 0-37 3.4-56 6-14.9 2.3-29.8 3.2-45.1 3.2-15.2 0-30.1-.9-45.1-3.2-18.7-2.6-37-6-56-6-46.8 0-73.5 38.7-73.5 82.6 0 87.8 80.4 101.3 150.4 101.3h48.2c70.3 0 150.6-13.4 150.6-101.3zm-82.6-55.1c-25.8 0-36.7 34.2-36.7 55.1s10.9 55.1 36.7 55.1 36.7-34.2 36.7-55.1-10.9-55.1-36.7-55.1z"></path></svg>
+</a>
+<a class="md-footer-social__link" href="https://twitter.com/up42official" rel="noopener" target="_blank" title="twitter.com">
+<svg viewbox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"><path d="M459.37 151.716c.325 4.548.325 9.097.325 13.645 0 138.72-105.583 298.558-298.558 298.558-59.452 0-114.68-17.219-161.137-47.106 8.447.974 16.568 1.299 25.34 1.299 49.055 0 94.213-16.568 130.274-44.832-46.132-.975-84.792-31.188-98.112-72.772 6.498.974 12.995 1.624 19.818 1.624 9.421 0 18.843-1.3 27.614-3.573-48.081-9.747-84.143-51.98-84.143-102.985v-1.299c13.969 7.797 30.214 12.67 47.431 13.319-28.264-18.843-46.781-51.005-46.781-87.391 0-19.492 5.197-37.36 14.294-52.954 51.655 63.675 129.3 105.258 216.365 109.807-1.624-7.797-2.599-15.918-2.599-24.04 0-57.828 46.782-104.934 104.934-104.934 30.213 0 57.502 12.67 76.67 33.137 23.715-4.548 46.456-13.32 66.599-25.34-7.798 24.366-24.366 44.833-46.132 57.827 21.117-2.273 41.584-8.122 60.426-16.243-14.292 20.791-32.161 39.308-52.628 54.253z"></path></svg>
+</a>
+<a class="md-footer-social__link" href="https://www.linkedin.com/company/up42/" rel="noopener" target="_blank" title="www.linkedin.com">
+<svg viewbox="0 0 448 512" xmlns="http://www.w3.org/2000/svg"><path d="M416 32H31.9C14.3 32 0 46.5 0 64.3v383.4C0 465.5 14.3 480 31.9 480H416c17.6 0 32-14.5 32-32.3V64.3c0-17.8-14.4-32.3-32-32.3zM135.4 416H69V202.2h66.5V416zm-33.2-243c-21.3 0-38.5-17.3-38.5-38.5S80.9 96 102.2 96c21.2 0 38.5 17.3 38.5 38.5 0 21.3-17.2 38.5-38.5 38.5zm282.1 243h-66.4V312c0-24.8-.5-56.7-34.5-56.7-34.6 0-39.9 27-39.9 54.9V416h-66.4V202.2h63.7v29.2h.9c8.9-16.8 30.6-34.5 62.9-34.5 67.2 0 79.7 44.3 79.7 101.9V416z"></path></svg>
+</a>
+</div>
+</div>
+</div>
+</footer>
+</div>
+<script src="../../assets/javascripts/vendor.c51dfa35.min.js"></script>
+<script src="../../assets/javascripts/bundle.eaaa3931.min.js"></script><script id="__lang" type="application/json">{"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents"}</script>
+<script>
+        app = initialize({
+          base: "../..",
+          features: ["tabs"],
+          search: Object.assign({
+            worker: "../../assets/javascripts/worker/search.58d22e8e.min.js"
+          }, typeof search !== "undefined" && search)
+        })
+      </script>
+<script src="../../stylesheets/extra.js"></script>
+</body>
+</html>

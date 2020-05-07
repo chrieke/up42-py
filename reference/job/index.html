@@ -316,16 +316,6 @@
     map_results()
   </a>
 </li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#up42.job.Job.track_status">
-    track_status()
-  </a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#up42.job.Job.upload_results_to_bucket">
-    upload_results_to_bucket()
-  </a>
-</li>
 </ul>
 </nav>
 </li>
@@ -466,16 +456,6 @@
     map_results()
   </a>
 </li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#up42.job.Job.track_status">
-    track_status()
-  </a>
-</li>
-<li class="md-nav__item">
-<a class="md-nav__link" href="#up42.job.Job.upload_results_to_bucket">
-    upload_results_to_bucket()
-  </a>
-</li>
 </ul>
 </nav>
 </div>
@@ -510,8 +490,7 @@ Jobs (Workflows that have been run as Jobs).</p>
 <tr>
 <td class="linenos">
 <div class="linenodiv">
-<pre><span></span>32
-33
+<pre><span></span>33
 34
 35
 36
@@ -529,7 +508,8 @@ Jobs (Workflows that have been run as Jobs).</p>
 48
 49
 50
-51</pre>
+51
+52</pre>
 </div>
 </td>
 <td class="code">
@@ -575,11 +555,11 @@ cancel_job<span class="p">(</span><span class="bp">self</span><span class="p">)<
 <tr>
 <td class="linenos">
 <div class="linenodiv">
-<pre><span></span>119
-120
+<pre><span></span>120
 121
 122
-123</pre>
+123
+124</pre>
 </div>
 </td>
 <td class="code">
@@ -611,8 +591,7 @@ download_quicklooks<span class="p">(</span><span class="bp">self</span><span cla
 <tr>
 <td class="linenos">
 <div class="linenodiv">
-<pre><span></span>125
-126
+<pre><span></span>126
 127
 128
 129
@@ -625,7 +604,11 @@ download_quicklooks<span class="p">(</span><span class="bp">self</span><span cla
 136
 137
 138
-139</pre>
+139
+140
+141
+142
+143</pre>
 </div>
 </td>
 <td class="code">
@@ -639,7 +622,10 @@ download_quicklooks<span class="p">(</span><span class="bp">self</span><span cla
 <span class="sd">    After download, can be plotted via job.plot_quicklooks().</span>
 <span class="sd">    """</span>
     <span class="c1"># Currently only the first/data task produces quicklooks.</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">CRITICAL</span><span class="p">)</span>
     <span class="n">data_task</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_jobtasks</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">)</span>
+
     <span class="n">out_paths</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">data_task</span><span class="o">.</span><span class="n">download_quicklooks</span><span class="p">(</span>  <span class="c1"># type: ignore</span>
         <span class="n">output_directory</span><span class="o">=</span><span class="n">output_directory</span>
     <span class="p">)</span>  <span class="c1"># type: ignore</span>
@@ -705,11 +691,7 @@ directory.</p>
 <tr>
 <td class="linenos">
 <div class="linenodiv">
-<pre><span></span>174
-175
-176
-177
-178
+<pre><span></span>178
 179
 180
 181
@@ -736,7 +718,11 @@ directory.</p>
 202
 203
 204
-205</pre>
+205
+206
+207
+208
+209</pre>
 </div>
 </td>
 <td class="code">
@@ -832,25 +818,7 @@ get_jobtasks<span class="p">(</span><span class="bp">self</span><span class="p">
 <tr>
 <td class="linenos">
 <div class="linenodiv">
-<pre><span></span>394
-395
-396
-397
-398
-399
-400
-401
-402
-403
-404
-405
-406
-407
-408
-409
-410
-411
-412
+<pre><span></span>412
 413
 414
 415
@@ -864,7 +832,25 @@ get_jobtasks<span class="p">(</span><span class="bp">self</span><span class="p">
 423
 424
 425
-426</pre>
+426
+427
+428
+429
+430
+431
+432
+433
+434
+435
+436
+437
+438
+439
+440
+441
+442
+443
+444</pre>
 </div>
 </td>
 <td class="code">
@@ -941,26 +927,26 @@ in a dictionary of strings.</p>
 <tr>
 <td class="linenos">
 <div class="linenodiv">
-<pre><span></span>428
-429
-430
-431
-432
-433
-434
-435
-436
-437
-438
-439
-440
-441
-442
-443
-444
-445
-446
-447</pre>
+<pre><span></span>446
+447
+448
+449
+450
+451
+452
+453
+454
+455
+456
+457
+458
+459
+460
+461
+462
+463
+464
+465</pre>
 </div>
 </td>
 <td class="code">
@@ -1052,25 +1038,7 @@ get_logs<span class="p">(</span><span class="bp">self</span><span class="p">,</s
 <tr>
 <td class="linenos">
 <div class="linenodiv">
-<pre><span></span>353
-354
-355
-356
-357
-358
-359
-360
-361
-362
-363
-364
-365
-366
-367
-368
-369
-370
-371
+<pre><span></span>371
 372
 373
 374
@@ -1091,7 +1059,25 @@ get_logs<span class="p">(</span><span class="bp">self</span><span class="p">,</s
 389
 390
 391
-392</pre>
+392
+393
+394
+395
+396
+397
+398
+399
+400
+401
+402
+403
+404
+405
+406
+407
+408
+409
+410</pre>
 </div>
 </td>
 <td class="code">
@@ -1195,11 +1181,7 @@ get_results_json<span class="p">(</span><span class="bp">self</span><span class=
 <tr>
 <td class="linenos">
 <div class="linenodiv">
-<pre><span></span>141
-142
-143
-144
-145
+<pre><span></span>145
 146
 147
 148
@@ -1217,7 +1199,11 @@ get_results_json<span class="p">(</span><span class="bp">self</span><span class=
 160
 161
 162
-163</pre>
+163
+164
+165
+166
+167</pre>
 </div>
 </td>
 <td class="code">
@@ -1283,8 +1269,7 @@ get_status<span class="p">(</span><span class="bp">self</span><span class="p">)<
 <tr>
 <td class="linenos">
 <div class="linenodiv">
-<pre><span></span>66
-67
+<pre><span></span>67
 68
 69
 70
@@ -1294,7 +1279,8 @@ get_status<span class="p">(</span><span class="bp">self</span><span class="p">)<
 74
 75
 76
-77</pre>
+77
+78</pre>
 </div>
 </td>
 <td class="code">
@@ -1322,25 +1308,47 @@ get_status<span class="p">(</span><span class="bp">self</span><span class="p">)<
 <div class="doc doc-object doc-method">
 <h2 class="doc doc-heading" id="up42.job.Job.map_results">
 <code class="highlight language-python">
-map_results<span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name_column</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">info_columns</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> </code>
+map_results<span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">show_images</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">name_column</span><span class="o">=</span><span class="s1">'uid'</span><span class="p">)</span> </code>
 <a class="headerlink" href="#up42.job.Job.map_results" title="Permanent link">¶</a></h2>
 <div class="doc doc-contents">
-<p>Displays data.json, and if available, one or multiple results geotiffs</p>
-<div class="admonition info_columns">
-<p class="admonition-title">Additional columns that are shown when a feature is</p>
-<p>clicked.</p>
-</div>
+<p>Displays data.json, and if available, one or multiple results geotiffs.</p>
+<p><strong>Parameters:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>show_images</code></td>
+<td><code></code></td>
+<td>
+<p>Shows images if True (default), only features if False.</p>
+</td>
+<td><code>True</code></td>
+</tr>
+<tr>
+<td><code>name_column</code></td>
+<td><code>str</code></td>
+<td>
+<p>Name of the column that provides the Feature/Layer name.</p>
+</td>
+<td><code>'uid'</code></td>
+</tr>
+</tbody>
+</table>
+<h1 id="todo-make-generic-with-scene_id-column-integrated">TODO: Make generic with scene_id column integrated.<a class="headerlink" href="#todo-make-generic-with-scene_id-column-integrated" title="Permanent link">¶</a></h1>
 <details class="quote">
 <summary>Source code in <code>up42/job.py</code></summary>
 <table class="highlighttable">
 <tr>
 <td class="linenos">
 <div class="linenodiv">
-<pre><span></span>231
-232
-233
-234
-235
+<pre><span></span>235
 236
 237
 238
@@ -1456,26 +1464,43 @@ map_results<span class="p">(</span><span class="bp">self</span><span class="p">,
 348
 349
 350
-351</pre>
+351
+352
+353
+354
+355
+356
+357
+358
+359
+360
+361
+362
+363
+364
+365
+366
+367
+368
+369</pre>
 </div>
 </td>
 <td class="code">
 <div class="highlight">
-<pre><span></span><code><span class="k">def</span> <span class="nf">map_results</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name_column</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">info_columns</span><span class="p">:</span> <span class="n">List</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<pre><span></span><code><span class="k">def</span> <span class="nf">map_results</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">show_images</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">name_column</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"uid"</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
     <span class="sd">"""</span>
-<span class="sd">    Displays data.json, and if available, one or multiple results geotiffs</span>
+<span class="sd">    Displays data.json, and if available, one or multiple results geotiffs.</span>
 
-<span class="sd">    name_column: Name of the column that provides the layer name.</span>
-<span class="sd">    info_columns: Additional columns that are shown when a feature is</span>
-<span class="sd">        clicked.</span>
+<span class="sd">    Args:</span>
+<span class="sd">        show_images: Shows images if True (default), only features if False.</span>
+<span class="sd">        name_column: Name of the column that provides the Feature/Layer name.</span>
+<span class="sd">    # TODO: Make generic with scene_id column integrated.</span>
 <span class="sd">    """</span>
-    <span class="n">df</span><span class="p">:</span> <span class="n">GeoDataFrame</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_results_json</span><span class="p">(</span><span class="n">as_dataframe</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
-    <span class="c1"># TODO: centroid of total_bounds</span>
-    <span class="n">centroid</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">centroid</span>
+    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">results</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s2">"You first need to download the results via job.download_results()!"</span>
+        <span class="p">)</span>
 
-    <span class="n">m</span> <span class="o">=</span> <span class="n">folium_base_map</span><span class="p">(</span><span class="n">lat</span><span class="o">=</span><span class="n">centroid</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">lon</span><span class="o">=</span><span class="n">centroid</span><span class="o">.</span><span class="n">x</span><span class="p">,)</span>
-
-    <span class="c1"># Add features from data.json.</span>
     <span class="k">def</span> <span class="nf">_style_function</span><span class="p">(</span><span class="n">feature</span><span class="p">):</span>  <span class="c1"># pylint: disable=unused-argument</span>
         <span class="k">return</span> <span class="p">{</span>
             <span class="s2">"fillColor"</span><span class="p">:</span> <span class="s2">"#5288c4"</span><span class="p">,</span>
@@ -1492,79 +1517,94 @@ map_results<span class="p">(</span><span class="bp">self</span><span class="p">,
             <span class="s2">"dashArray"</span><span class="p">:</span> <span class="s2">"5, 5"</span><span class="p">,</span>
         <span class="p">}</span>
 
-    <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>  <span class="c1"># type: ignore</span>
-        <span class="k">try</span><span class="p">:</span>
-            <span class="n">layer_name</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="n">name_column</span><span class="p">]</span>
-        <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
-            <span class="n">layer_name</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"Layer </span><span class="si">{</span><span class="n">index</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s2">"</span>
+    <span class="c1"># Add feature to map.</span>
+    <span class="n">df</span><span class="p">:</span> <span class="n">GeoDataFrame</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_results_json</span><span class="p">(</span><span class="n">as_dataframe</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
+    <span class="n">centroid</span> <span class="o">=</span> <span class="n">box</span><span class="p">(</span><span class="o">*</span><span class="n">df</span><span class="o">.</span><span class="n">total_bounds</span><span class="p">)</span><span class="o">.</span><span class="n">centroid</span>
+    <span class="n">m</span> <span class="o">=</span> <span class="n">folium_base_map</span><span class="p">(</span><span class="n">lat</span><span class="o">=</span><span class="n">centroid</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">lon</span><span class="o">=</span><span class="n">centroid</span><span class="o">.</span><span class="n">x</span><span class="p">,)</span>
 
+    <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>  <span class="c1"># type: ignore</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">feature_name</span> <span class="o">=</span> <span class="n">row</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">name_column</span><span class="p">]</span>
+        <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+            <span class="n">feature_name</span> <span class="o">=</span> <span class="s2">""</span>
+        <span class="n">layer_name</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"Feature </span><span class="si">{</span><span class="n">idx</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s2"> - </span><span class="si">{</span><span class="n">feature_name</span><span class="si">}</span><span class="s2">"</span>
         <span class="n">f</span> <span class="o">=</span> <span class="n">folium</span><span class="o">.</span><span class="n">GeoJson</span><span class="p">(</span>
             <span class="n">row</span><span class="p">[</span><span class="s2">"geometry"</span><span class="p">],</span>
-            <span class="n">name</span><span class="o">=</span><span class="n">layer_name</span><span class="p">,</span>  <span class="c1"># ('{}{}'.format(row['dep'], row['dest'])),</span>
+            <span class="n">name</span><span class="o">=</span><span class="n">layer_name</span><span class="p">,</span>
             <span class="n">style_function</span><span class="o">=</span><span class="n">_style_function</span><span class="p">,</span>
             <span class="n">highlight_function</span><span class="o">=</span><span class="n">_highlight_function</span><span class="p">,</span>
         <span class="p">)</span>
-
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">info_columns</span><span class="p">:</span>
-            <span class="n">folium</span><span class="o">.</span><span class="n">Popup</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">layer_name</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span><span class="o">.</span><span class="n">add_to</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">info_columns</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
-                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"Provide a list!"</span><span class="p">)</span>
-            <span class="n">infos</span> <span class="o">=</span> <span class="p">[</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">row</span><span class="p">[</span><span class="n">info_col</span><span class="p">]</span><span class="si">}</span><span class="se">\n</span><span class="s2">"</span> <span class="k">for</span> <span class="n">info_col</span> <span class="ow">in</span> <span class="n">info_columns</span><span class="p">]</span>
-            <span class="n">infos</span> <span class="o">=</span> <span class="s2">""</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">infos</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
-            <span class="n">folium</span><span class="o">.</span><span class="n">Popup</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">layer_name</span><span class="si">}</span><span class="se">\n</span><span class="si">{</span><span class="n">infos</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span><span class="o">.</span><span class="n">add_to</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+        <span class="n">folium</span><span class="o">.</span><span class="n">Popup</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">layer_name</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">row</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="s1">'geometry'</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">to_json</span><span class="p">()</span><span class="si">}</span><span class="s2">"</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">add_to</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
         <span class="n">f</span><span class="o">.</span><span class="n">add_to</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
-    <span class="c1"># Same: folium.GeoJson(df, name=name_column, style_function=style_function,</span>
-    <span class="c1"># highlight_function=highlight_function).add_to(map)</span>
+        <span class="c1"># Same: folium.GeoJson(df, name=name_column, style_function=style_function,</span>
+        <span class="c1"># highlight_function=highlight_function).add_to(map)</span>
 
-    <span class="c1"># TODO: Not ideal, our streaming images are webmercator, folium requires wgs 84.0</span>
-    <span class="c1"># TODO: Switch to ipyleaflet!</span>
-    <span class="c1"># This requires reprojecting on the user pc, not via the api.</span>
-    <span class="c1"># Reproject raster and add to map</span>
-    <span class="n">dst_crs</span> <span class="o">=</span> <span class="s2">"EPSG:4326"</span>
-    <span class="n">results</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Path</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">results</span>
-    <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">raster_fp</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">results</span><span class="p">):</span>
+    <span class="c1"># Add image to map.</span>
+    <span class="k">if</span> <span class="n">show_images</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">results</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">plot_file_format</span> <span class="o">=</span> <span class="p">[</span><span class="s2">".tif"</span><span class="p">]</span>
+        <span class="n">plottable_images</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">path</span> <span class="k">for</span> <span class="n">path</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">results</span> <span class="k">if</span> <span class="n">Path</span><span class="p">(</span><span class="n">path</span><span class="p">)</span><span class="o">.</span><span class="n">suffix</span> <span class="ow">in</span> <span class="n">plot_file_format</span>
+        <span class="p">]</span>
 
-        <span class="k">with</span> <span class="n">rasterio</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">raster_fp</span><span class="p">)</span> <span class="k">as</span> <span class="n">src</span><span class="p">:</span>
-            <span class="n">dst_profile</span> <span class="o">=</span> <span class="n">src</span><span class="o">.</span><span class="n">meta</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-            <span class="k">if</span> <span class="n">src</span><span class="o">.</span><span class="n">crs</span> <span class="o">!=</span> <span class="n">dst_crs</span><span class="p">:</span>
-                <span class="n">transform</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">height</span> <span class="o">=</span> <span class="n">calculate_default_transform</span><span class="p">(</span>
-                    <span class="n">src</span><span class="o">.</span><span class="n">crs</span><span class="p">,</span> <span class="n">dst_crs</span><span class="p">,</span> <span class="n">src</span><span class="o">.</span><span class="n">width</span><span class="p">,</span> <span class="n">src</span><span class="o">.</span><span class="n">height</span><span class="p">,</span> <span class="o">*</span><span class="n">src</span><span class="o">.</span><span class="n">bounds</span>
+        <span class="k">if</span> <span class="n">plottable_images</span><span class="p">:</span>
+            <span class="n">dst_crs</span> <span class="o">=</span> <span class="s2">"EPSG:4326"</span>
+            <span class="n">filepaths</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Path</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">results</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">feature_names</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">name_column</span><span class="p">]</span><span class="o">.</span><span class="n">to_list</span><span class="p">()</span>
+            <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+                <span class="n">feature_names</span> <span class="o">=</span> <span class="p">[</span><span class="s2">""</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])]</span>
+            <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="p">(</span><span class="n">raster_fp</span><span class="p">,</span> <span class="n">feature_name</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span>
+                <span class="nb">zip</span><span class="p">(</span><span class="n">filepaths</span><span class="p">,</span> <span class="n">feature_names</span><span class="p">)</span>
+            <span class="p">):</span>
+                <span class="c1"># TODO: Not ideal, streaming images are webmercator, folium requires wgs 84.0</span>
+                <span class="c1"># TODO: Switch to ipyleaflet!</span>
+                <span class="c1"># This requires reprojecting on the user pc, not via the api.</span>
+                <span class="c1"># Reproject raster and add to map</span>
+                <span class="k">with</span> <span class="n">rasterio</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">raster_fp</span><span class="p">)</span> <span class="k">as</span> <span class="n">src</span><span class="p">:</span>
+                    <span class="n">dst_profile</span> <span class="o">=</span> <span class="n">src</span><span class="o">.</span><span class="n">meta</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+                    <span class="k">if</span> <span class="n">src</span><span class="o">.</span><span class="n">crs</span> <span class="o">==</span> <span class="n">dst_crs</span><span class="p">:</span>
+                        <span class="n">dst_array</span> <span class="o">=</span> <span class="n">src</span><span class="o">.</span><span class="n">read</span><span class="p">()[:</span><span class="mi">3</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span>
+                        <span class="n">minx</span><span class="p">,</span> <span class="n">miny</span><span class="p">,</span> <span class="n">maxx</span><span class="p">,</span> <span class="n">maxy</span> <span class="o">=</span> <span class="n">src</span><span class="o">.</span><span class="n">bounds</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">transform</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">height</span> <span class="o">=</span> <span class="n">calculate_default_transform</span><span class="p">(</span>
+                            <span class="n">src</span><span class="o">.</span><span class="n">crs</span><span class="p">,</span> <span class="n">dst_crs</span><span class="p">,</span> <span class="n">src</span><span class="o">.</span><span class="n">width</span><span class="p">,</span> <span class="n">src</span><span class="o">.</span><span class="n">height</span><span class="p">,</span> <span class="o">*</span><span class="n">src</span><span class="o">.</span><span class="n">bounds</span>
+                        <span class="p">)</span>
+                        <span class="n">dst_profile</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
+                            <span class="p">{</span>
+                                <span class="s2">"crs"</span><span class="p">:</span> <span class="n">dst_crs</span><span class="p">,</span>
+                                <span class="s2">"transform"</span><span class="p">:</span> <span class="n">transform</span><span class="p">,</span>
+                                <span class="s2">"width"</span><span class="p">:</span> <span class="n">width</span><span class="p">,</span>
+                                <span class="s2">"height"</span><span class="p">:</span> <span class="n">height</span><span class="p">,</span>
+                            <span class="p">}</span>
+                        <span class="p">)</span>
+
+                        <span class="k">with</span> <span class="n">MemoryFile</span><span class="p">()</span> <span class="k">as</span> <span class="n">memfile</span><span class="p">:</span>
+                            <span class="k">with</span> <span class="n">memfile</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="o">**</span><span class="n">dst_profile</span><span class="p">)</span> <span class="k">as</span> <span class="n">mem</span><span class="p">:</span>
+                                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">src</span><span class="o">.</span><span class="n">count</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+                                    <span class="n">reproject</span><span class="p">(</span>
+                                        <span class="n">source</span><span class="o">=</span><span class="n">rasterio</span><span class="o">.</span><span class="n">band</span><span class="p">(</span><span class="n">src</span><span class="p">,</span> <span class="n">i</span><span class="p">),</span>
+                                        <span class="n">destination</span><span class="o">=</span><span class="n">rasterio</span><span class="o">.</span><span class="n">band</span><span class="p">(</span><span class="n">mem</span><span class="p">,</span> <span class="n">i</span><span class="p">),</span>
+                                        <span class="n">src_transform</span><span class="o">=</span><span class="n">src</span><span class="o">.</span><span class="n">transform</span><span class="p">,</span>
+                                        <span class="n">src_crs</span><span class="o">=</span><span class="n">src</span><span class="o">.</span><span class="n">crs</span><span class="p">,</span>
+                                        <span class="n">dst_transform</span><span class="o">=</span><span class="n">transform</span><span class="p">,</span>
+                                        <span class="n">dst_crs</span><span class="o">=</span><span class="n">dst_crs</span><span class="p">,</span>
+                                        <span class="n">resampling</span><span class="o">=</span><span class="n">Resampling</span><span class="o">.</span><span class="n">nearest</span><span class="p">,</span>
+                                    <span class="p">)</span>
+
+                                <span class="n">dst_array</span> <span class="o">=</span> <span class="n">mem</span><span class="o">.</span><span class="n">read</span><span class="p">()[:</span><span class="mi">3</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span>
+                                <span class="n">minx</span><span class="p">,</span> <span class="n">miny</span><span class="p">,</span> <span class="n">maxx</span><span class="p">,</span> <span class="n">maxy</span> <span class="o">=</span> <span class="n">mem</span><span class="o">.</span><span class="n">bounds</span>
+
+                <span class="c1"># TODO: Make band configuration available</span>
+                <span class="n">m</span><span class="o">.</span><span class="n">add_child</span><span class="p">(</span>
+                    <span class="n">folium</span><span class="o">.</span><span class="n">raster_layers</span><span class="o">.</span><span class="n">ImageOverlay</span><span class="p">(</span>
+                        <span class="n">np</span><span class="o">.</span><span class="n">moveaxis</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span><span class="n">dst_array</span><span class="p">),</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span>
+                        <span class="n">bounds</span><span class="o">=</span><span class="p">[[</span><span class="n">miny</span><span class="p">,</span> <span class="n">minx</span><span class="p">],</span> <span class="p">[</span><span class="n">maxy</span><span class="p">,</span> <span class="n">maxx</span><span class="p">]],</span>  <span class="c1"># different order.</span>
+                        <span class="n">name</span><span class="o">=</span><span class="sa">f</span><span class="s2">"Image </span><span class="si">{</span><span class="n">idx</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s2"> - </span><span class="si">{</span><span class="n">feature_name</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span>
+                    <span class="p">)</span>
                 <span class="p">)</span>
-                <span class="n">dst_profile</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
-                    <span class="p">{</span>
-                        <span class="s2">"crs"</span><span class="p">:</span> <span class="n">dst_crs</span><span class="p">,</span>
-                        <span class="s2">"transform"</span><span class="p">:</span> <span class="n">transform</span><span class="p">,</span>
-                        <span class="s2">"width"</span><span class="p">:</span> <span class="n">width</span><span class="p">,</span>
-                        <span class="s2">"height"</span><span class="p">:</span> <span class="n">height</span><span class="p">,</span>
-                    <span class="p">}</span>
-                <span class="p">)</span>
-
-                <span class="k">with</span> <span class="n">MemoryFile</span><span class="p">()</span> <span class="k">as</span> <span class="n">memfile</span><span class="p">:</span>
-                    <span class="k">with</span> <span class="n">memfile</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="o">**</span><span class="n">dst_profile</span><span class="p">)</span> <span class="k">as</span> <span class="n">mem</span><span class="p">:</span>
-                        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">src</span><span class="o">.</span><span class="n">count</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
-                            <span class="n">reproject</span><span class="p">(</span>
-                                <span class="n">source</span><span class="o">=</span><span class="n">rasterio</span><span class="o">.</span><span class="n">band</span><span class="p">(</span><span class="n">src</span><span class="p">,</span> <span class="n">i</span><span class="p">),</span>
-                                <span class="n">destination</span><span class="o">=</span><span class="n">rasterio</span><span class="o">.</span><span class="n">band</span><span class="p">(</span><span class="n">mem</span><span class="p">,</span> <span class="n">i</span><span class="p">),</span>
-                                <span class="n">src_transform</span><span class="o">=</span><span class="n">src</span><span class="o">.</span><span class="n">transform</span><span class="p">,</span>
-                                <span class="n">src_crs</span><span class="o">=</span><span class="n">src</span><span class="o">.</span><span class="n">crs</span><span class="p">,</span>
-                                <span class="n">dst_transform</span><span class="o">=</span><span class="n">transform</span><span class="p">,</span>
-                                <span class="n">dst_crs</span><span class="o">=</span><span class="n">dst_crs</span><span class="p">,</span>
-                                <span class="n">resampling</span><span class="o">=</span><span class="n">Resampling</span><span class="o">.</span><span class="n">nearest</span><span class="p">,</span>
-                            <span class="p">)</span>
-
-                        <span class="c1"># TODO: What if more bands than 3-4?</span>
-                        <span class="n">dst_array</span> <span class="o">=</span> <span class="n">mem</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
-                        <span class="n">minx</span><span class="p">,</span> <span class="n">miny</span><span class="p">,</span> <span class="n">maxx</span><span class="p">,</span> <span class="n">maxy</span> <span class="o">=</span> <span class="n">mem</span><span class="o">.</span><span class="n">bounds</span>
-
-        <span class="n">dst_array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">moveaxis</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span><span class="n">dst_array</span><span class="p">),</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
-        <span class="n">m</span><span class="o">.</span><span class="n">add_child</span><span class="p">(</span>
-            <span class="n">folium</span><span class="o">.</span><span class="n">raster_layers</span><span class="o">.</span><span class="n">ImageOverlay</span><span class="p">(</span>
-                <span class="n">dst_array</span><span class="p">,</span>
-                <span class="n">bounds</span><span class="o">=</span><span class="p">[[</span><span class="n">miny</span><span class="p">,</span> <span class="n">minx</span><span class="p">],</span> <span class="p">[</span><span class="n">maxy</span><span class="p">,</span> <span class="n">maxx</span><span class="p">]],</span>  <span class="c1"># andere reihenfolge.</span>
-                <span class="n">name</span><span class="o">=</span><span class="sa">f</span><span class="s2">"Image - </span><span class="si">{</span><span class="n">idx</span><span class="si">}</span><span class="s2"> - </span><span class="si">{</span><span class="n">raster_fp</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span>
-            <span class="p">)</span>
-        <span class="p">)</span>
 
     <span class="c1"># Collapse layer control with too many features.</span>
     <span class="k">if</span> <span class="n">df</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">4</span><span class="p">:</span>  <span class="c1"># pylint: disable=simplifiable-if-statement  #type: ignore</span>
@@ -1626,8 +1666,7 @@ time interval given in report_time argument.</p>
 <tr>
 <td class="linenos">
 <div class="linenodiv">
-<pre><span></span> 79
- 80
+<pre><span></span> 80
  81
  82
  83
@@ -1664,7 +1703,8 @@ time interval given in report_time argument.</p>
 114
 115
 116
-117</pre>
+117
+118</pre>
 </div>
 </td>
 <td class="code">
@@ -1729,11 +1769,7 @@ upload_results_to_bucket<span class="p">(</span><span class="bp">self</span><spa
 <tr>
 <td class="linenos">
 <div class="linenodiv">
-<pre><span></span>207
-208
-209
-210
-211
+<pre><span></span>211
 212
 213
 214
@@ -1751,7 +1787,11 @@ upload_results_to_bucket<span class="p">(</span><span class="bp">self</span><spa
 226
 227
 228
-229</pre>
+229
+230
+231
+232
+233</pre>
 </div>
 </td>
 <td class="code">
