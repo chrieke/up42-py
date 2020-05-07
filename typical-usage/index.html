@@ -434,9 +434,7 @@
 <h2 id="create-or-access-the-workflow">Create or access the workflow<a class="headerlink" href="#create-or-access-the-workflow" title="Permanent link">¶</a></h2>
 <p>You can either create a new workflow, use project.get_workflows() to get all existing workflows within the project, or access an exisiting workflow directly via its workflow_id.</p>
 <p>Example: Sentinel 2 streaming &amp; sharpening filter</p>
-<p align="center">
-<img align="center" src="/assets/workflow.png" width="400"/>
-</p>
+<p><img alt="" src="../assets/workflow.png"/></p>
 <div class="highlight"><pre><span></span><code><span class="c1"># Create a new, empty workflow.</span>
 <span class="n">workflow</span> <span class="o">=</span> <span class="n">project</span><span class="o">.</span><span class="n">create_workflow</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">"30-seconds-workflow"</span><span class="p">,</span> 
                                    <span class="n">use_existing</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -544,9 +542,7 @@ then the bounding box of the polygon will be selected.  </p>
 <div class="highlight"><pre><span></span><code><span class="c1"># Run the actual workflow.</span>
 <span class="n">job</span> <span class="o">=</span> <span class="n">workflow</span><span class="o">.</span><span class="n">run_job</span><span class="p">(</span><span class="n">input_parameters</span><span class="o">=</span><span class="n">input_parameters</span><span class="p">,</span> <span class="n">track_status</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </code></pre></div>
-<p align="center">
-<img src="/assets/job_running.png" width="700"/>
-</p>
+<p><img alt="" src="../assets/job_running.png"/></p>
 <h2 id="download-display-results">Download &amp; Display results<a class="headerlink" href="#download-display-results" title="Permanent link">¶</a></h2>
 <div class="highlight"><pre><span></span><code><span class="c1"># Download job result.</span>
 <span class="n">results_fp</span> <span class="o">=</span> <span class="n">job</span><span class="o">.</span><span class="n">download_results</span><span class="p">()</span>
