@@ -2,8 +2,9 @@
 
 ## Hierachy
 
-- The Python SDK uses six object classes, representing the **hierarchical structure of UP42**:
+- The Python SDK uses seven object classes, representing the **hierarchical structure of UP42**:
     - **Project > Workflow > Job > JobTask**
+    - **JobCollection**
     - **Catalog**
     - **Tools**
 - Each object can **spawn elements of one level below**, e.g.
@@ -14,75 +15,90 @@
 
 ## Functionality
 
-An overview of the the **functionality** of each object 
-(also see the [code reference](https://up42.github.io/up42-py/reference/project/)):
+An overview of the **functionality** of each object 
+(also see the [**code reference**](https://sdk.up42.com/reference/project/)):
 
 !!! example "Available Functionality"
+    === "up42"
+        - `.initialize_project()`
+        - `.initalize_workflow()`
+        - `.initalize_job()`
+        - `.initalize_jobtask()`
+        - `.initalize_catalog()`
+       
+    
     === "Project"
     
-        - `.get_workflows()`
         - `.create_workflow()`
+        - `.get_workflows()`
         - `.get_jobs()`
         - `.get_project_settings()`
         - `.update_project_settings()`
-        - `.update_project_settings()`
     
     === "Workflow"
-
+        
         - `.add_workflow_tasks()`
-        - `.get_parameters_info()`
         - `.construct_parameters()`
-        - `.get_jobs()`
         - `.test_job()`
         - `.run_job()`
+        - `.construct_parameters_parallel()
+        - `.test_jobs_parallel()`
+        - `.run_jobs_parallel()`
+        - `.get_jobs()`
         - `.get_workflow_tasks()`
-        - `.add_workflow_tasks()`
+        - `.get_compatible_blocks()
+        - `.get_parameters_info()`
         - `.update_name()`
         - `.delete()`
         
     === "Job"
     
-        - `.get_status()`
-        - `.track_status()`
-        - `.cancel_job()`
-        - `.get_results()`
-        - `.get_logs()`
-        - `.get_quicklooks()`
         - `.download_results()`
         - `.plot_results()`
         - `.map_results()`
+        - `.get_status()`
+        - `.track_status()`
+        - `.cancel_job()`
+        - `.get_results_json()`
+        - `.get_logs()`
+        - `.download_quicklooks()`
         - `.upload_results_to_bucket()`
         - `.get_jobtasks()`
-        - `.get_jobtasks_results()`
+        - `.get_jobtasks_results_json()`
         
     === "JobTask"
     
         - `.get_results_json()`
         - `.download_results()`
-        - `.get_quicklooks()`
-
+        - `.download_quicklooks()`
+        
+    === "JobCollection"
+    
+        - `.download_results()`
+        - `.get_jobs_infos()`
+        - `.get_jobs_status()`
+        - `.apply()`
+        
     === "Catalog"
         - `.construct_parameters()`
         - `.search()`
         - `.download_quicklooks()`
         
     === "Tools"
+        - `.get_blocks()`
+        - `.get_block_details()`
         - `.read_vector_file()`
         - `.get_example_aoi()`
         - `.draw_aoi()`
         - `.plot_coverage()`
         - `.plot_quicklooks()`
         - `.plot_results()`
-        - `.get_blocks()`
-        - `.get_block_details()`
         - `.validate_manifest()`
-        - `.initialize_project()`
         
         
 ## Object Initialization
 
-Here is how **initialize** each object directly, i.e. when it already exists on UP42 and 
-you want to directly access it:
+If a workflow etc. already exists on UP42, you can **initialize** and access it directly using its `id`:
 
 !!! example "Initialize Object"
     === "Project"

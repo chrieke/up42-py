@@ -7,14 +7,14 @@ from geojson import FeatureCollection
 from geopandas import GeoDataFrame
 
 # pylint: disable=wrong-import-position
-from .tools import Tools
-from .auth import Auth
-from .project import Project
-from .workflow import Workflow
-from .job import Job
-from .jobtask import JobTask
-from .catalog import Catalog
-from .utils import get_logger
+from up42.tools import Tools
+from up42.auth import Auth
+from up42.project import Project
+from up42.workflow import Workflow
+from up42.job import Job
+from up42.jobtask import JobTask
+from up42.catalog import Catalog
+from up42.utils import get_logger
 
 logger = get_logger(__name__, level=logging.INFO)
 
@@ -23,58 +23,95 @@ warnings.simplefilter(action="ignore", category=FutureWarning)
 _auth = None
 
 
-def authenticate(cfg_file=None, project_id=None, project_api_key=None, **kwargs):
+def authenticate(
+    cfg_file: Union[str, Path] = None,
+    project_id: str = None,
+    project_api_key: str = None,
+    **kwargs,
+):
     global _auth  # pylint: disable=global-statement
     _auth = Auth(
         cfg_file=cfg_file,
         project_id=project_id,
         project_api_key=project_api_key,
-        **kwargs
+        **kwargs,
     )
 
 
 def initialize_project() -> "Project":
-    """Directly returns the correct Project object (has to exist on UP42)."""
+    """
+    Returns the correct Project object (has to exist on UP42).
+    """
     if _auth is None:
         raise RuntimeError("Not authenticated, call up42.authenticate() first")
-    logger.info("Working on Project with project_id %s", _auth.project_id)
-    return Project(auth=_auth, project_id=_auth.project_id)
+    project = Project(auth=_auth, project_id=str(_auth.project_id))
+    logger.info(f"Initialized {project}")
+    return project
 
 
 def initialize_catalog() -> "Catalog":
-    """Directly returns a Catalog object."""
+    """
+    Returns a Catalog object for using the catalog search.
+    """
     if _auth is None:
         raise RuntimeError("Not authenticated, call up42.authenticate() first")
     return Catalog(auth=_auth)
 
 
-def initialize_workflow(workflow_id) -> "Workflow":
-    """Directly returns a Workflow object (has to exist on UP42)."""
+def initialize_workflow(workflow_id: str) -> "Workflow":
+    """
+    Returns a Workflow object (has to exist on UP42).
+
+    Args:
+        workflow_id: The UP42 workflow_id
+    """
     if _auth is None:
         raise RuntimeError("Not authenticated, call up42.authenticate() first")
-    return Workflow(auth=_auth, workflow_id=workflow_id, project_id=_auth.project_id)
-
-
-def initialize_job(job_id, order_ids: List[str] = None) -> "Job":
-    """Directly returns a Job object (has to exist on UP42)."""
-    if _auth is None:
-        raise RuntimeError("Not authenticated, call up42.authenticate() first")
-    return Job(
-        auth=_auth, job_id=job_id, project_id=_auth.project_id, order_ids=order_ids
+    workflow = Workflow(
+        auth=_auth, workflow_id=workflow_id, project_id=str(_auth.project_id)
     )
+    logger.info(f"Initialized {workflow}")
+    return workflow
+
+
+def initialize_job(job_id: str) -> "Job":
+    """
+    Returns a Job object (has to exist on UP42).
+
+    Args:
+        job_id: The UP42 job_id
+    """
+    if _auth is None:
+        raise RuntimeError("Not authenticated, call up42.authenticate() first")
+    job = Job(auth=_auth, job_id=job_id, project_id=str(_auth.project_id))
+    logger.info(f"Initialized {job}")
+    return job
 
 
 def initialize_jobtask(jobtask_id, job_id) -> "JobTask":
-    """Directly returns a JobTask object (has to exist on UP42)."""
+    """
+    Returns a JobTask object (has to exist on UP42).
+
+    Args:
+        jobtask_id: The UP42 jobtask_id
+        job_id: The UP42 job_id
+    """
     if _auth is None:
         raise RuntimeError("Not authenticated, call up42.authenticate() first")
-    return JobTask(
-        auth=_auth, jobtask_id=jobtask_id, job_id=job_id, project_id=_auth.project_id
+    jobtask = JobTask(
+        auth=_auth,
+        jobtask_id=jobtask_id,
+        job_id=job_id,
+        project_id=str(_auth.project_id),
     )
+    logger.info(f"Initialized {jobtask}")
+    return jobtask
 
 
 def get_blocks(
-    block_type=None, basic: bool = True, as_dataframe=False,
+    block_type=None,
+    basic: bool = True,
+    as_dataframe=False,
 ):
     tools = Tools(auth=_auth)
     return tools.get_blocks(block_type, basic, as_dataframe)
@@ -135,6 +172,12 @@ def plot_results(
 
 
 def settings(log=True):
+    """
+    Configures settings about logging etc. when using the up42-py package.
+
+    Args:
+        log: Activates/deactivates logging, default True is activated logging.
+    """
     if log:
         logger.info(
             "Logging enabled (default) - use up42.settings(log=False) to disable."

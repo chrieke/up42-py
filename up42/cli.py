@@ -4,13 +4,13 @@ from pathlib import Path
 from datetime import datetime, timedelta
 import click
 
-from .auth import Auth
-from .tools import Tools
-from .project import Project
-from .workflow import Workflow
-from .job import Job
-from .catalog import Catalog
-from .utils import get_logger
+from up42.auth import Auth
+from up42.tools import Tools
+from up42.project import Project
+from up42.workflow import Workflow
+from up42.job import Job
+from up42.catalog import Catalog
+from up42.utils import get_logger
 
 logger = get_logger(__name__)
 
@@ -18,9 +18,6 @@ CONTEXT_SETTINGS = dict(help_option_names=["-h", "--help"], show_default=True)
 
 # To activate bash autocompletion
 # eval "$(_UP42_COMPLETE=source_bash up42)"
-
-# For usage of fstrings
-# pylint: disable=logging-format-interpolation
 
 
 def pprint_json(obj, indent=2):
@@ -60,7 +57,7 @@ def cfg_default(defult_path="./config.json"):
 )
 @click.option("--env", default="com")
 @click.pass_context
-def main(ctx, project_id, project_api_key, cfg_file, env):
+def up42(ctx, project_id, project_api_key, cfg_file, env):
     ctx.ensure_object(dict)
     if project_id and project_api_key:
         ctx.obj = Auth(project_id=project_id, project_api_key=project_api_key, env=env)
@@ -68,7 +65,7 @@ def main(ctx, project_id, project_api_key, cfg_file, env):
         ctx.obj = Auth(cfg_file=cfg_file, env=env)
 
 
-COMMAND = main.command(context_settings=CONTEXT_SETTINGS)
+COMMAND = up42.command(context_settings=CONTEXT_SETTINGS)
 
 
 @COMMAND
@@ -193,7 +190,7 @@ def validate_manifest(auth, manifest_json):
 
 
 # Project
-@main.group()
+@up42.group()
 @click.pass_context
 def project(ctx):
     """
@@ -272,7 +269,7 @@ def update_project_settings(
 def workflows_from_context():
     class OptionChoiceFromContext(click.Option):
         def full_process_value(self, ctx, value):
-            workflow_names = [wkf.info["name"] for wkf in ctx.obj.get_workflows()]
+            workflow_names = [wkf._info["name"] for wkf in ctx.obj.get_workflows()]
             self.type = click.Choice(workflow_names)
             return super(OptionChoiceFromContext, self).full_process_value(ctx, value)
 
@@ -300,7 +297,7 @@ def workflow_from_name(project, workflow_name):
 
 
 # Workflows
-@main.group()
+@up42.group()
 @click.pass_context
 @click.option(
     "-wid",
@@ -325,9 +322,9 @@ def workflow(ctx, workflow_id):
 COMMAND_WORKFLOW = workflow.command(context_settings=CONTEXT_SETTINGS)
 
 
-@workflow.command("get-info", context_settings=CONTEXT_SETTINGS)
+@workflow.command("info", context_settings=CONTEXT_SETTINGS)
 @click.pass_obj
-def workflow_get_info(workflow):
+def workflow_info(workflow):
     """
     Get information about the workflow.
     """
@@ -344,21 +341,23 @@ def workflow_get_info(workflow):
     required=True,
 )
 @click.option(
-    "--description", type=str, help="An optional description for the workflow.",
+    "--description",
+    type=str,
+    help="An optional description for the workflow.",
 )
 @click.pass_context
 def update_name(ctx, name, description):
     """
     Update the workflow name.
     """
-    logger.info("Current info: {}".format(ctx.obj.info))
+    logger.info("Current info: {}".format(ctx.obj._info))
     if click.confirm(
-        f"Are you sure you want to change the name '{ctx.obj.info.get('name')}' to '{name}'?",
+        f"Are you sure you want to change the name '{ctx.obj._info.get('name')}' to '{name}'?",
         abort=True,
     ):
         ctx.obj.update_name(name, description)
         ctx.obj = Workflow(ctx.obj.auth, ctx.obj.project_id, ctx.obj.workflow_id)
-        logger.info("New info: {}".format(ctx.obj.info))
+        logger.info("New info: {}".format(ctx.obj._info))
 
 
 @COMMAND_WORKFLOW
@@ -367,9 +366,9 @@ def delete(workflow):
     """
     Delete the workflow.
     """
-    logger.info("Current info: {}".format(workflow.info))
+    logger.info("Current info: {}".format(workflow._info))
     if click.confirm(
-        f"Are you sure you want to delete workflow '{workflow.info.get('name')}'?",
+        f"Are you sure you want to delete workflow '{workflow._info.get('name')}'?",
         abort=True,
     ):
         workflow.delete()
@@ -468,7 +467,7 @@ def run_job(workflow, input_parameters_json, track):
 
 
 # Jobs
-@main.group()
+@up42.group()
 @click.pass_context
 @click.option(
     "-jid",
@@ -493,13 +492,13 @@ def job(ctx, job_id):
 COMMAND_JOB = job.command(context_settings=CONTEXT_SETTINGS)
 
 
-@job.command("get-info", context_settings=CONTEXT_SETTINGS)
+@job.command("info", context_settings=CONTEXT_SETTINGS)
 @click.pass_obj
-def job_get_info(job):
+def job_info(job):
     """
     Get information about the job.
     """
-    logger.info(pprint_json(job.info))
+    logger.info(pprint_json(job._info))
 
 
 @COMMAND_JOB
@@ -508,7 +507,7 @@ def cancel_job(job):
     """
     Cancel a job that is running.
     """
-    job.get_status()
+    logger.info(job.status)
     if click.confirm("Are you sure you want to cancel job with job id '{job.job_id}'?"):
         job.cancel_job()
 
@@ -581,7 +580,7 @@ def get_status(job):
     """
     Get the job status.
     """
-    logger.info(job.get_status())
+    logger.info(job.status)
 
 
 @COMMAND_JOB
@@ -603,7 +602,7 @@ def track_status(job, interval):
 # Catalog
 
 
-@main.group()
+@up42.group()
 @click.pass_context
 def catalog(ctx):
     """
@@ -635,10 +634,24 @@ COMMAND_CATALOG = catalog.command(context_settings=CONTEXT_SETTINGS)
 @click.option(
     "--sensors",
     type=click.Choice(
-        ["pleiades", "spot", "sentinel1", "sentinel2", "sentinel3", "sentinel5p",]
+        [
+            "pleiades",
+            "spot",
+            "sentinel1",
+            "sentinel2",
+            "sentinel3",
+            "sentinel5p",
+        ]
     ),
     multiple=True,
-    default=["pleiades", "spot", "sentinel1", "sentinel2", "sentinel3", "sentinel5p",],
+    default=[
+        "pleiades",
+        "spot",
+        "sentinel1",
+        "sentinel2",
+        "sentinel3",
+        "sentinel5p",
+    ],
     help="Imagery sensors to search for.",
 )
 @click.option(

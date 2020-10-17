@@ -1,8 +1,9 @@
 import json
 import logging
+import copy
 from collections import Counter
 from pathlib import Path
-from typing import Dict, List, Union, Optional
+from typing import Dict, List, Union, Tuple
 
 from geopandas import GeoDataFrame
 from shapely.geometry import Point, Polygon
@@ -10,10 +11,16 @@ from geojson import Feature, FeatureCollection
 from geojson import Polygon as geojson_Polygon
 from tqdm import tqdm
 
-from .auth import Auth
-from .job import Job
-from .tools import Tools
-from .utils import get_logger, any_vector_to_fc, fc_to_query_geometry
+from up42.auth import Auth
+from up42.job import Job
+from up42.jobcollection import JobCollection
+from up42.tools import Tools
+from up42.utils import (
+    get_logger,
+    any_vector_to_fc,
+    fc_to_query_geometry,
+    filter_jobs_on_mode,
+)
 
 logger = get_logger(__name__)
 
@@ -21,35 +28,46 @@ logger = get_logger(__name__)
 class Workflow(Tools):
     def __init__(self, auth: Auth, project_id: str, workflow_id: str):
         """
-        The Workflow class can query all available and spawn new jobs for
-        an UP42 Workflow and helps to find and set the the workflow tasks, parameters
-        and aoi.
-
-        Public Methods:
-            get_compatible_blocks, get_workflow_tasks, add_workflow_tasks, get_parameters_info,
-            construct_parameters, test_job, run_job, get_jobs, update_name, delete
+        The Workflow class can query all available and spawn new jobs for an UP42
+        Workflow and helps to find and set the the workflow tasks, parameters and aoi.
         """
         self.auth = auth
         self.project_id = project_id
         self.workflow_id = workflow_id
         if self.auth.get_info:
-            self.info = self._get_info()
+            self._info = self.info
 
     def __repr__(self):
+        info = self.info
         return (
-            f"Workflow(workflow_id={self.workflow_id}, project_id={self.project_id}, "
-            f"auth={self.auth}, info={self.info})"
+            f"Workflow(name: {info['name']}, workflow_id: {self.workflow_id}, "
+            f"description: {info['description']}, createdAt: {info['createdAt']}, "
+            f"project_name: {info['name']}, "
+            f"workflow_tasks: {self.workflow_tasks}"
         )
 
-    def _get_info(self) -> Dict:
-        """Gets metadata info from an existing workflow"""
+    @property
+    def info(self) -> Dict:
+        """
+        Gets the workflow metadata information.
+        """
         url = (
             f"{self.auth._endpoint()}/projects/{self.project_id}/workflows/"
             f"{self.workflow_id}"
         )
         response_json = self.auth._request(request_type="GET", url=url)
-        self.info = response_json["data"]
-        return self.info
+        self._info = response_json["data"]
+        return response_json["data"]
+
+    @property
+    def workflow_tasks(self) -> Dict[str, str]:
+        """
+        Gets the building blocks of the workflow as a dictionary with task_name : block-version
+        """
+        logging.getLogger("up42.workflow").setLevel(logging.CRITICAL)
+        workflow_tasks = self.get_workflow_tasks(basic=True)
+        logging.getLogger("up42.workflow").setLevel(logging.INFO)
+        return workflow_tasks  # type: ignore
 
     def get_compatible_blocks(self) -> Dict:
         """
@@ -66,7 +84,6 @@ class Workflow(Tools):
         )
         response_json = self.auth._request(request_type="GET", url=url)
         compatible_blocks = response_json["data"]["blocks"]
-        # TODO: Plot diagram of current workflow in green, attachable blocks in red.
         compatible_blocks = {
             block["name"]: block["blockId"] for block in compatible_blocks
         }
@@ -77,7 +94,7 @@ class Workflow(Tools):
         Get the workflow-tasks of the workflow (Blocks in a workflow are called workflow_tasks)
 
         Args:
-            basic: If selected returns a simplified task-name : task-id` version.
+            basic: If selected returns a simplified task-name : block-version dict.
 
         Returns:
             The workflow task info.
@@ -88,10 +105,10 @@ class Workflow(Tools):
         )
         response_json = self.auth._request(request_type="GET", url=url)
         tasks = response_json["data"]
-        logger.info("Got %s tasks/blocks in workflow %s.", len(tasks), self.workflow_id)
+        logger.info(f"Got {len(tasks)} tasks/blocks in workflow {self.workflow_id}.")
 
         if basic:
-            return {task["name"]: task["id"] for task in tasks}
+            return {task["name"]: task["blockVersionTag"] for task in tasks}
         else:
             return tasks
 
@@ -205,23 +222,24 @@ class Workflow(Tools):
             ```python
             input_tasks = ["Sentinel-2 L1C MSI AOI clipped",
                            "Raster Tiling"]
-
-
-        Optional: The input_tasks can also be provided as the full, detailed workflow task
-        definition (dict of block id, block name and parent block name). Always use :1
-        to be able to identify the order when two times the same workflow task is used.
-        The name is arbitrary, but best use the block name.
-
-        Example:
-            ```python
-            input_tasks_full = [{'name': 'sobloo-s2-l1c-aoiclipped:1',
-                                 'parentName': None,
-                                 'blockId': 'a2daaab4-196d-4226-a018-a810444dcad1'},
-                                {'name': 'sharpening:1',
-                                 'parentName': 'sobloo-s2-l1c-aoiclipped',
-                                 'blockId': '4ed70368-d4e1-4462-bef6-14e768049471'}]
             ```
         """
+        # Relevant when non-linear workflows are introduced:
+        # Optional:
+        #     The input_tasks can also be provided as the full, detailed workflow task
+        #     definition (dict of block id, block name and parent block name). Always use :1
+        #     to be able to identify the order when two times the same workflow task is used.
+        #     The name is arbitrary, but best use the block name.
+        #
+        # Example:
+        #     ```python
+        #     input_tasks_full = [{'name': 'sobloo-s2-l1c-aoiclipped:1',
+        #                          'parentName': None,
+        #                          'blockId': 'a2daaab4-196d-4226-a018-a810444dcad1'},
+        #                         {'name': 'sharpening:1',
+        #                          'parentName': 'sobloo-s2-l1c-aoiclipped',
+        #                          'blockId': '4ed70368-d4e1-4462-bef6-14e768049471'}]
+
         # Construct proper task definition from simplified input.
         if isinstance(input_tasks[0], str) and not isinstance(input_tasks[0], dict):
             input_tasks = self._construct_full_workflow_tasks_dict(input_tasks)
@@ -231,12 +249,12 @@ class Workflow(Tools):
             f"{self.workflow_id}/tasks/"
         )
         self.auth._request(request_type="POST", url=url, data=input_tasks)
-        logger.info("Added tasks to workflow: %r", input_tasks)
+        logger.info(f"Added tasks to workflow: {input_tasks}")
 
     def get_parameters_info(self) -> Dict:
         """
-        Gets infos about the workflow parameters of each block in the workflow to
-        make it easy to construct the desired parameters.
+        Gets infos about the workflow parameters of each block in the current workflow
+        to make it easy to construct the desired parameters.
 
         Returns:
             Workflow parameters info json.
@@ -274,21 +292,19 @@ class Workflow(Tools):
 
     def construct_parameters(
         self,
-        geometry: Optional[
-            Union[
-                Dict,
-                Feature,
-                FeatureCollection,
-                geojson_Polygon,
-                List,
-                GeoDataFrame,
-                Polygon,
-                Point,
-            ]
+        geometry: Union[
+            Dict,
+            Feature,
+            FeatureCollection,
+            geojson_Polygon,
+            List,
+            GeoDataFrame,
+            Polygon,
+            Point,
         ] = None,
-        geometry_operation: Optional[str] = None,
-        handle_multiple_features: str = "footprint",
-        start_date: str = None,  # TODO: Other format? More time options?
+        geometry_operation: str = None,
+        handle_multiple_features: str = "union",
+        start_date: str = None,
         end_date: str = None,
         limit: int = None,
         scene_ids: List = None,
@@ -314,37 +330,115 @@ class Workflow(Tools):
         Returns:
             Dictionary of constructed input parameters.
         """
-        # TODO: Add ipy slide widget option? One for each block.
         input_parameters = self._get_default_parameters()
         data_block_name = list(input_parameters.keys())[0]
 
         if order_ids is not None:
             # Needs to be handled in this function(not run_job) as it is only
             # relevant for the data block.
-            # TODO: Check for order-id correct schema, should be handled on backend?
             input_parameters[data_block_name] = {"order_ids": order_ids}
         else:
             if limit is not None:
                 input_parameters[data_block_name]["limit"] = limit
+
             if scene_ids is not None:
                 if not isinstance(scene_ids, list):
                     scene_ids = [scene_ids]
                 input_parameters[data_block_name]["ids"] = scene_ids
                 input_parameters[data_block_name]["limit"] = len(scene_ids)
                 input_parameters[data_block_name].pop("time")
-                # TODO: In case of ids remove all non-relevant parameters. Cleaner.
             elif start_date is not None and end_date is not None:
-                datetime = f"{start_date}T00:00:00Z/{end_date}T00:00:00Z"
-                input_parameters[data_block_name]["time"] = datetime
-            aoi_fc = any_vector_to_fc(vector=geometry,)
-            aoi_feature = fc_to_query_geometry(
-                fc=aoi_fc,
-                geometry_operation=geometry_operation,  # type: ignore
-                squash_multiple_features=handle_multiple_features,
+                time = f"{start_date}T00:00:00Z/{end_date}T23:59:59Z"
+                input_parameters[data_block_name]["time"] = time
+
+            if geometry is not None:
+                aoi_fc = any_vector_to_fc(
+                    vector=geometry,
+                )
+                aoi_feature = fc_to_query_geometry(
+                    fc=aoi_fc,
+                    geometry_operation=geometry_operation,  # type: ignore
+                    squash_multiple_features=handle_multiple_features,
+                )
+
+                input_parameters[data_block_name][geometry_operation] = aoi_feature
+        return input_parameters
+
+    def construct_parameters_parallel(
+        self,
+        geometries: List[
+            Union[
+                Dict,
+                Feature,
+                geojson_Polygon,
+                Polygon,
+                Point,
+            ]
+        ] = None,
+        interval_dates: List[Tuple[str, str]] = None,
+        scene_ids: List = None,
+        limit_per_job: int = 1,
+        geometry_operation: str = "intersects",
+    ) -> List[dict]:
+        """
+        Maps a list of geometries and a list of time series into a list
+        of input parameters of a workflow. If you pass 2 geometries and 1 time
+        interval this will result in 2 x 1 input parameters.
+
+        Args:
+            geometries: List of unit geometries to map with times.
+            interval_dates: List of tuples of start and end dates,
+                i.e. `("2014-01-01","2015-01-01")`.
+            scene_ids: List of scene ids. Will be mapped 1:1 to each job.
+                All other arguments are ignored except geometries if passed.
+            limit_per_job: Limit passed to be passed to each individual job parameter.
+            geometry_operation: Geometry operation to be passed to each job parameter.
+
+        Returns:
+            List of dictionary of constructed input parameters.
+        """
+        # TODO: Rename arguments
+        result_params = []
+        # scene_ids mapped to geometries
+        if scene_ids is not None and geometries is not None:
+            for geo in geometries:
+                for scene_id in scene_ids:
+                    params = self.construct_parameters(
+                        geometry=geo,
+                        scene_ids=[scene_id],
+                        geometry_operation=geometry_operation,
+                    )
+                    result_params.append(params)
+
+        # interval_dates mapped to geometries
+        elif interval_dates is not None and geometries is not None:
+            for geo in geometries:
+                for start_date, end_date in interval_dates:
+                    params = self.construct_parameters(
+                        geometry=geo,
+                        geometry_operation=geometry_operation,
+                        start_date=start_date,
+                        end_date=end_date,
+                        limit=limit_per_job,
+                    )
+                    result_params.append(params)
+
+        # only scene_ids
+        elif scene_ids is not None:
+            for scene_id in scene_ids:
+                result_params.append(
+                    self.construct_parameters(
+                        geometry=None,
+                        scene_ids=[scene_id],
+                    )
+                )
+        else:
+            raise ValueError(
+                "Please provides geometries and scene_ids, geometries"
+                "and time_interval or scene_ids."
             )
 
-            input_parameters[data_block_name][geometry_operation] = aoi_feature
-        return input_parameters
+        return result_params
 
     def _helper_run_job(
         self,
@@ -383,10 +477,10 @@ class Workflow(Tools):
             logger.info("Running this job as Test Query...")
             logger.info("+++++++++++++++++++++++++++++++++")
 
-        logger.info("Selected input_parameters: %s.", input_parameters)
+        logger.info(f"Selected input_parameters: {input_parameters}")
 
         if name is None:
-            name = self.info["name"]
+            name = self._info["name"]
         name = f"{name}_py"  # Temporary recognition of python API usage.
         url = (
             f"{self.auth._endpoint()}/projects/{self.project_id}/"
@@ -396,12 +490,114 @@ class Workflow(Tools):
             request_type="POST", url=url, data=input_parameters
         )
         job_json = response_json["data"]
-        logger.info("Created and running new job: %s.", job_json["id"])
-        job = Job(self.auth, job_id=job_json["id"], project_id=self.project_id,)
+        logger.info(f"Created and running new job: {job_json['id']}.")
+        job = Job(
+            self.auth,
+            job_id=job_json["id"],
+            project_id=self.project_id,
+        )
 
         if track_status:
             job.track_status()
         return job
+
+    def _helper_run_parallel_jobs(
+        self,
+        input_parameters_list: List[Dict] = None,
+        max_concurrent_jobs: int = 10,
+        test_job: bool = False,
+        name: str = None,
+    ) -> "JobCollection":
+        """
+        Helper function to create and run parallel real or test jobs.
+
+        Args:
+            input_parameters_list: List of dictionary of input parameters.
+            max_concurrent_jobs: Maximum number of parallel jobs that can be triggered.
+            test_job: If set, runs a test query (search for available imagery based on your data parameters).
+            name: The job name. Optional, by default the workflow name is assigned.
+
+        Returns:
+            The spawned real or test job object.
+
+        Raises:
+            ValueError: When max_concurrent_jobs is greater than max_concurrent_jobs set in project settings.
+        """
+        if input_parameters_list is None:
+            raise ValueError(
+                "Provide the job parameters via `input_parameters_list`."
+                " You can use workflow.construct_parallel_parameters()!"
+            )
+
+        if test_job:
+            input_parameters_list = copy.deepcopy(input_parameters_list)
+            for input_parameters in input_parameters_list:
+                input_parameters.update({"config": {"mode": "DRY_RUN"}})  # type: ignore
+                logger.info("+++++++++++++++++++++++++++++++++")
+                logger.info("Running this job as Test Query...")
+                logger.info("+++++++++++++++++++++++++++++++++")
+
+        if name is None:
+            name = self._info["name"]
+
+        jobs_list = []
+        job_nr = 0
+
+        if max_concurrent_jobs > self.max_concurrent_jobs:
+            logger.error(
+                f"Maximum concurrent jobs {max_concurrent_jobs} greater "
+                f"than project settings {self.max_concurrent_jobs}. "
+                "Use project.update_project_settings to change this value."
+            )
+            raise ValueError("Too many concurrent jobs!")
+
+        # Run all jobs in parallel batches of the max_concurrent_jobs (max. 10.)
+        batches = [
+            input_parameters_list[pos : pos + max_concurrent_jobs]
+            for pos in range(0, len(input_parameters_list), max_concurrent_jobs)
+        ]
+        for batch in batches:
+            batch_jobs = []
+            # for params in ten_selected_input_parameters:
+            for params in batch:
+                logger.info(f"Selected input_parameters: {params}.")
+
+                job_name = (
+                    f"{name}_{job_nr}_py"  # Temporary recognition of python API usage.
+                )
+
+                url = (
+                    f"{self.auth._endpoint()}/projects/{self.project_id}/"
+                    f"workflows/{self.workflow_id}/jobs?name={job_name}"
+                )
+                response_json = self.auth._request(
+                    request_type="POST", url=url, data=params
+                )
+                job_json = response_json["data"]
+                logger.info(f"Created and running new job: {job_json['id']}")
+                job = Job(
+                    self.auth,
+                    job_id=job_json["id"],
+                    project_id=self.project_id,
+                )
+                batch_jobs.append(job)
+                job_nr += 1
+
+            # Track until all jobs in the batch are finished.
+            for job in batch_jobs:
+                try:
+                    job.track_status(report_time=20)
+                except ValueError as e:
+                    if str(e) == "Job has failed! See the above log.":
+                        logger.warning("Skipping failed job...")
+                    else:
+                        raise
+            jobs_list.extend(batch_jobs)
+
+        job_collection = JobCollection(
+            self.auth, project_id=self.project_id, jobs=jobs_list
+        )
+        return job_collection
 
     def test_job(
         self,
@@ -429,6 +625,35 @@ class Workflow(Tools):
             name=name,
         )
 
+    def test_jobs_parallel(
+        self,
+        input_parameters_list: List[Dict] = None,
+        name: str = None,
+        max_concurrent_jobs: int = 10,
+    ) -> "JobCollection":
+        """
+        Create and run test jobs (Test Query) in parallel. With this test query you will not be
+        charged with any data or processing credits, but have a preview of the job result.
+
+        Args:
+            input_parameters_list: List of dictionary of input parameters
+            name: The job name. Optional, by default the workflow name is assigned.
+            max_concurrent_jobs: The maximum number of jobs to run in parallel.
+                This is defined in the project settings.
+
+        Returns:
+            The spawned test JobCollection object.
+
+        Raises:
+            ValueError: When max_concurrent_jobs is greater than max_concurrent_jobs set in project settings.
+        """
+        return self._helper_run_parallel_jobs(
+            input_parameters_list=input_parameters_list,
+            max_concurrent_jobs=max_concurrent_jobs,
+            test_job=True,
+            name=name,
+        )
+
     def run_job(
         self,
         input_parameters: Union[Dict, str, Path] = None,
@@ -451,29 +676,58 @@ class Workflow(Tools):
             input_parameters=input_parameters, track_status=track_status, name=name
         )
 
-    def get_jobs(self, return_json: bool = False) -> Union[List["Job"], Dict]:
+    def run_jobs_parallel(
+        self,
+        input_parameters_list: List[Dict] = None,
+        name: str = None,
+        max_concurrent_jobs: int = 10,
+    ) -> "JobCollection":
         """
-        Get all jobs associated with the workflow as job objects or json.
+        Create and run jobs in parallel.
 
         Args:
-            return_json: If true, returns the job info jsons instead of job objects.
+            input_parameters_list: List of dictionary of input parameters
+            name: The job name. Optional, by default the workflow name is assigned.
+            max_concurrent_jobs: The maximum number of jobs to run in parallel. This is defined in the project settings.
 
         Returns:
-            All job objects as a list, or alternatively the jobs info as json.
+            The spawned JobCollection object.
+
+        Raises:
+            ValueError: When max_concurrent_jobs is greater than max_concurrent_jobs set in project settings.
+        """
+        jobcollection = self._helper_run_parallel_jobs(
+            input_parameters_list=input_parameters_list,
+            max_concurrent_jobs=max_concurrent_jobs,
+            name=name,
+        )
+        return jobcollection
+
+    def get_jobs(
+        self, return_json: bool = False, test_jobs: bool = True, real_jobs: bool = True
+    ) -> Union[JobCollection, List[Dict]]:
+        """
+        Get all jobs associated with the workflow as a JobCollection or json.
+
+        Args:
+            return_json: If true, returns the job info jsons instead of a JobCollection.
+            test_jobs: Return test jobs or test queries.
+            real_jobs: Return real jobs.
+
+        Returns:
+            A JobCollection, or alternatively the jobs info as json.
         """
         url = f"{self.auth._endpoint()}/projects/{self.project_id}/jobs"
         response_json = self.auth._request(request_type="GET", url=url)
-        jobs_json = response_json["data"]
+        jobs_json = filter_jobs_on_mode(response_json["data"], test_jobs, real_jobs)
 
         jobs_workflow_json = [
             j for j in jobs_json if j["workflowId"] == self.workflow_id
         ]
 
         logger.info(
-            "Got %s jobs for workflow %s in project %s.",
-            len(jobs_workflow_json),
-            self.workflow_id,
-            self.project_id,
+            f"Got {len(jobs_workflow_json)} jobs for workflow "
+            f"{self.workflow_id} in project {self.project_id}."
         )
         if return_json:
             return jobs_workflow_json
@@ -482,7 +736,10 @@ class Workflow(Tools):
                 Job(self.auth, job_id=job["id"], project_id=self.project_id)
                 for job in tqdm(jobs_workflow_json)
             ]
-            return jobs
+            jobcollection = JobCollection(
+                auth=self.auth, project_id=self.project_id, jobs=jobs
+            )
+            return jobcollection
 
     def update_name(self, name: str = None, description: str = None) -> None:
         """
@@ -498,7 +755,8 @@ class Workflow(Tools):
             f"{self.workflow_id}"
         )
         self.auth._request(request_type="PUT", url=url, data=properties_to_update)
-        logger.info("Updated workflow name: %r", properties_to_update)
+        # TODO: Renew info
+        logger.info(f"Updated workflow name: {properties_to_update}")
 
     def delete(self) -> None:
         """
@@ -509,5 +767,16 @@ class Workflow(Tools):
             f"{self.workflow_id}"
         )
         self.auth._request(request_type="DELETE", url=url, return_text=False)
-        logger.info("Successfully deleted workflow: %s", self.workflow_id)
+        logger.info(f"Successfully deleted workflow: {self.workflow_id}")
         del self
+
+    @property
+    def max_concurrent_jobs(self) -> int:
+        """
+        Gets the maximum number of concurrent jobs allowed by the project settings.
+        """
+        url = f"{self.auth._endpoint()}/projects/{self.project_id}/settings"
+        response_json = self.auth._request(request_type="GET", url=url)
+        project_settings = response_json["data"]
+        project_settings_dict = {d["name"]: int(d["value"]) for d in project_settings}
+        return project_settings_dict["MAX_CONCURRENT_JOBS"]

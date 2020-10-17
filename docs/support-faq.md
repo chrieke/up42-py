@@ -1,22 +1,22 @@
 # :email: Support & FAQ
 
-### **Contact**
+## **Contact**
 
 Please contact us via Email **[support@up42.com](mailto:support@up42.com)** or open a **[github issue](https://github.com/up42/up42-py/issues)**.
 
-<br>
+## **Related links**
 
-### **Related links**
-
-[UP42 Website](https://up42.com)  
+[UP42 Website](https://up42.com)   
+[UP42 Python SDK Repository](https://github.com/up42/up42-py)    
 [UP42 Github Repositories](https://github.com/up42)  
-[UP42 Python package](https://github.com/up42/up42-py)  
-[UP42 Documentation](https://docs.up42.com)
-[UP42 docs repository](https://github.com/up42/docs)  
+[UP42 Documentation](https://docs.up42.com)  
 
 <br>
 
-### **FAQ**
+[UP42 blockutils](https://blockutils.up42.com/) - Developer tools to easily create custom UP42 data & processing blocks   
+[UP42 mosaicking](https://github.com/up42/mosaicking) - Scripts to create image mosaics using UP42   
+
+## **FAQ**
 
 #### **Can I contribute to the SDK?**
 

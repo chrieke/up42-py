@@ -1,29 +1,24 @@
 import logging
 from pathlib import Path
 from time import sleep
-from typing import Dict, List, Union
+from typing import Dict, List, Union, Optional
 
-import folium
 from geopandas import GeoDataFrame
-import numpy as np
-import rasterio
+import geopandas as gpd
 import requests
 import requests.exceptions
-from rasterio.io import MemoryFile
-from rasterio.warp import calculate_default_transform, reproject, Resampling
-from shapely.geometry import box
+import folium
 
-from .auth import Auth
-from .jobtask import JobTask
-from .tools import Tools
-from .utils import get_logger, folium_base_map, download_results_from_gcs
-
-try:
-    from IPython.display import display
-    from IPython import get_ipython
-except ImportError:
-    # No Ipython installed, Installed but run in shell
-    pass
+from up42.auth import Auth
+from up42.jobtask import JobTask
+from up42.tools import Tools
+from up42.utils import (
+    deprecation,
+    get_logger,
+    _map_images,
+    download_results_from_gcs,
+    download_results_from_gcs_without_unpacking,
+)
 
 logger = get_logger(__name__)
 
@@ -31,54 +26,74 @@ logger = get_logger(__name__)
 # pylint: disable=duplicate-code
 class Job(Tools):
     def __init__(
-        self, auth: Auth, project_id: str, job_id: str, order_ids: List[str] = None,
+        self,
+        auth: Auth,
+        project_id: str,
+        job_id: str,
+        order_ids: List[str] = None,
     ):
-        """The Job class provides access to the results, parameters and tasks of UP42
+        """
+        The Job class provides access to the results, parameters and tasks of UP42
         Jobs (Workflows that have been run as Jobs).
-
-        Public Methods:
-            get_status, track_status, cancel_job, download_quicklooks, get_results_json
-            download_results, upload_results_to_bucket, map_results,
-            get_logs, get_jobtasks, get_jobtasks_results_json
         """
         self.auth = auth
         self.project_id = project_id
         self.job_id = job_id
         self.quicklooks = None
         self.results = None
-        if order_ids is None:
-            self.order_ids = [""]
+        self.order_ids = order_ids
         if self.auth.get_info:
-            self.info = self._get_info()
+            self._info = self.info
 
     def __repr__(self):
+        order_ids = (
+            f", order_ids: {self.order_ids}, " if self.order_ids is not None else ""
+        )
+        info = self.info
         return (
-            f"Job(job_id={self.job_id}, project_id={self.project_id}, "
-            f"order_ids={str(self.order_ids)}, auth={self.auth}, info={self.info})"
+            f"Job(name: {info['name']}, job_id: {self.job_id}, mode: {info['mode']}, "
+            f"status: {info['status']}, startedAt: {info['startedAt']}, "
+            f"finishedAt: {info['finishedAt']}, workflow_name: {info['workflowName']}, "
+            f"{order_ids}, input_parameters: {info['inputs']}"
         )
 
-    def _get_info(self):
-        """Gets metadata info from an existing Job"""
+    @property
+    def info(self) -> Dict:
+        """
+        Gets the job metadata information.
+        """
         url = f"{self.auth._endpoint()}/projects/{self.project_id}/jobs/{self.job_id}"
         response_json = self.auth._request(request_type="GET", url=url)
-        self.info = response_json["data"]
-        return self.info
+        self._info = response_json["data"]
+        return response_json["data"]
 
-    def get_status(self) -> str:
+    @property
+    def status(self) -> str:
         """
-        Gets the job status.
-
-        Returns:
-            The job status.
+        Gets the job progress status. One of `SUCCEEDED`, `NOT STARTED`, `PENDING`,
+            `RUNNING`, `CANCELLED`, `CANCELLING`, `FAILED`, `ERROR`.
         """
-        # logger.info("Getting job status: %s", self.job_id)
-        info = self._get_info()
-        status = info["status"]
-        logger.info("Job is %s", status)
+        status = self.info["status"]
+        logger.info(f"Job is {status}")
         return status
 
-    def track_status(self, report_time: int = 30) -> str:
+    @deprecation("get_status", "job.status")
+    def get_status(self) -> str:
         """
+        `get_status` will be deprecated in release 0.13, use [status attribute](job.md#up42.job.Job.status) instead.
+        """
+        return self.status
+
+    @property
+    def is_succeeded(self) -> bool:
+        """
+        Gets `True` if the job succeeded, `False` otherwise.
+        Also see [status attribute](job.md#up42.job.Job.status).
+        """
+        return self.status == "SUCCEEDED"
+
+    def track_status(self, report_time: int = 30) -> str:
+        """`
         Continuously gets the job status until job has finished or failed.
 
         Internally checks every five seconds for the status, prints the log every
@@ -88,29 +103,29 @@ class Job(Tools):
             report_time: The intervall (in seconds) when to query the job status.
         """
         logger.info(
-            "Tracking job status continuously, reporting every %s seconds...",
-            report_time,
+            f"Tracking job status continuously, reporting every {report_time} seconds...",
         )
         status = "NOT STARTED"
         time_asleep = 0
 
         while status != "SUCCEEDED":
             logger.setLevel(logging.CRITICAL)
-            status = self.get_status()
+            status = self.status
             logger.setLevel(logging.INFO)
 
+            # TODO: Add statuses as constants (maybe objects?)
             if status in ["NOT STARTED", "PENDING", "RUNNING"]:
                 if time_asleep != 0 and time_asleep % report_time == 0:
-                    logger.info("Job is %s! - %s", status, self.job_id)
+                    logger.info(f"Job is {status}! - {self.job_id}")
             elif status in ["FAILED", "ERROR"]:
-                logger.info("Job is %s! - %s - Printing logs ...", status, self.job_id)
+                logger.info(f"Job is {status}! - {self.job_id} - Printing logs ...")
                 self.get_logs(as_print=True)
                 raise ValueError("Job has failed! See the above log.")
             elif status in ["CANCELLED", "CANCELLING"]:
-                logger.info("Job is %s! - %s", status, self.job_id)
+                logger.info(f"Job is {status}! - {self.job_id}")
                 raise ValueError("Job has been cancelled!")
             elif status == "SUCCEEDED":
-                logger.info("Job finished successfully! - %s", self.job_id)
+                logger.info(f"Job finished successfully! - {self.job_id}")
 
             sleep(5)
             time_asleep += 5
@@ -121,7 +136,7 @@ class Job(Tools):
         """Cancels a pending or running job."""
         url = f"{self.auth._endpoint()}/jobs/{self.job_id}/cancel/"
         self.auth._request(request_type="POST", url=url)
-        logger.info("Job canceled: %s", self.job_id)
+        logger.info(f"Job canceled: {self.job_id}")
 
     def download_quicklooks(
         self, output_directory: Union[str, Path, None] = None
@@ -157,7 +172,7 @@ class Job(Tools):
             f"/outputs/data-json/"
         )
         response_json = self.auth._request(request_type="GET", url=url)
-        logger.info("Retrieved %s features.", len(response_json["features"]))
+        logger.info(f"Retrieved {len(response_json['features'])} features.")
 
         if as_dataframe:
             # UP42 results are always in EPSG 4326
@@ -176,34 +191,41 @@ class Job(Tools):
         return download_url
 
     def download_results(
-        self, output_directory: Union[str, Path, None] = None,
+        self, output_directory: Union[str, Path, None] = None, unpacking: bool = True
     ) -> List[str]:
         """
-        Downloads and unpacks the job results.
+        Downloads the job results. Unpacking the final file will happen as default.
 
         Args:
             output_directory: The file output directory, defaults to the current working
                 directory.
+            unpacking: By default the final result which is in TAR archive format will be unpacked.
 
         Returns:
             List of the downloaded results' filepaths.
         """
-        # TODO: Overwrite argument
-        logger.info("Downloading results of job %s", self.job_id)
+        logger.info(f"Downloading results of job {self.job_id}")
 
         if output_directory is None:
             output_directory = (
-                Path.cwd() / f"project_{self.auth.project_id}" / f"job_{self.job_id}"
+                Path.cwd() / f"project_{self.auth.project_id}/job_{self.job_id}"
             )
         else:
             output_directory = Path(output_directory)
         output_directory.mkdir(parents=True, exist_ok=True)
-        logger.info("Download directory: %s", str(output_directory))
+        logger.info(f"Download directory: {str(output_directory)}")
 
         download_url = self._get_download_url()
-        out_filepaths = download_results_from_gcs(
-            download_url=download_url, output_directory=output_directory,
-        )
+        if unpacking:
+            out_filepaths = download_results_from_gcs(
+                download_url=download_url,
+                output_directory=output_directory,
+            )
+        else:
+            out_filepaths = download_results_from_gcs_without_unpacking(
+                download_url=download_url,
+                output_directory=output_directory,
+            )
 
         self.results = out_filepaths
         return out_filepaths
@@ -211,164 +233,76 @@ class Job(Tools):
     def upload_results_to_bucket(
         self, gs_client, bucket, folder, extension: str = ".tgz", version: str = "v0"
     ) -> None:
-        """Uploads the results to a custom google cloud storage bucket."""
+        """
+        Uploads the results of a job directly to a custom google cloud storage bucket.
+        """
         download_url = self._get_download_url()
         r = requests.get(download_url)
 
-        if self.order_ids != [""]:
+        if self.order_ids is not None:
             blob = bucket.blob(
                 str(Path(version) / Path(folder) / Path(self.order_ids[0] + extension))
             )
             logger.info(
-                "Upload job %s results with order_ids to %s...", self.job_id, blob.name
+                f"Upload job {self.job_id} results with order_ids to "
+                f"{blob.name} ..."
             )
         else:
             blob = bucket.blob(
                 str(Path(version) / Path(folder) / Path(self.job_id + extension))
             )
-            logger.info("Upload job %s results to %s...", self.job_id, blob.name)
+            logger.info(f"Upload job {self.job_id} results to {blob.name} ...")
         blob.upload_from_string(
-            data=r.content, content_type="application/octet-stream", client=gs_client,
+            data=r.content,
+            content_type="application/octet-stream",
+            client=gs_client,
         )
         logger.info("Uploaded!")
 
-    def map_results(self, show_images=True, name_column: str = "uid") -> None:
+    def map_results(
+        self, show_images: bool = True, name_column: str = "uid", save_html=None
+    ) -> folium.Map:
         """
         Displays data.json, and if available, one or multiple results geotiffs.
 
         Args:
             show_images: Shows images if True (default), only features if False.
-            name_column: Name of the column that provides the Feature/Layer name.
-        # TODO: Make generic with scene_id column integrated.
+            name_column: Name of the feature property that provides the Feature/Layer name.
+            save_html: The path for saving folium map as html file. With default None, no file is saved.
         """
         if self.results is None:
             raise ValueError(
                 "You first need to download the results via job.download_results()!"
             )
 
-        def _style_function(feature):  # pylint: disable=unused-argument
-            return {
-                "fillColor": "#5288c4",
-                "color": "blue",
-                "weight": 2.5,
-                "dashArray": "5, 5",
-            }
+        # Add features to map.
+        # Some blocks store vector results in an additional geojson file.
+        json_fp = [fp for fp in self.results if fp.endswith(".geojson")]
+        if json_fp:
+            json_fp = json_fp[0]
+        else:
+            json_fp = [fp for fp in self.results if fp.endswith(".json")][0]
+        df: GeoDataFrame = gpd.read_file(json_fp)
 
-        def _highlight_function(feature):  # pylint: disable=unused-argument
-            return {
-                "fillColor": "#ffaf00",
-                "color": "red",
-                "weight": 3.5,
-                "dashArray": "5, 5",
-            }
-
-        # Add feature to map.
-        df: GeoDataFrame = self.get_results_json(as_dataframe=True)  # type: ignore
-        centroid = box(*df.total_bounds).centroid
-        m = folium_base_map(lat=centroid.y, lon=centroid.x,)
-
-        for idx, row in df.iterrows():  # type: ignore
-            try:
-                feature_name = row.loc[name_column]
-            except KeyError:
-                feature_name = ""
-            layer_name = f"Feature {idx+1} - {feature_name}"
-            f = folium.GeoJson(
-                row["geometry"],
-                name=layer_name,
-                style_function=_style_function,
-                highlight_function=_highlight_function,
-            )
-            folium.Popup(
-                f"{layer_name}: {row.drop('geometry', axis=0).to_json()}"
-            ).add_to(f)
-            f.add_to(m)
-            # Same: folium.GeoJson(df, name=name_column, style_function=style_function,
-            # highlight_function=highlight_function).add_to(map)
+        plot_file_format = [".tif"]
 
         # Add image to map.
-        if show_images and self.results is not None:
-            plot_file_format = [".tif"]
-            plottable_images = [
-                path for path in self.results if Path(path).suffix in plot_file_format
-            ]
+        m = _map_images(
+            plot_file_format=plot_file_format,
+            result_df=df,
+            filepaths=self.results,
+            aoi=None,
+            show_images=show_images,
+            show_features=True,
+            name_column=name_column,
+            save_html=save_html,
+        )
 
-            if plottable_images:
-                dst_crs = "EPSG:4326"
-                filepaths: List[Path] = self.results
-                try:
-                    feature_names = df[name_column].to_list()
-                except KeyError:
-                    feature_names = ["" for i in range(df.shape[0])]
-                for idx, (raster_fp, feature_name) in enumerate(
-                    zip(filepaths, feature_names)
-                ):
-                    # TODO: Not ideal, streaming images are webmercator, folium requires wgs 84.0
-                    # TODO: Switch to ipyleaflet!
-                    # This requires reprojecting on the user pc, not via the api.
-                    # Reproject raster and add to map
-                    with rasterio.open(raster_fp) as src:
-                        dst_profile = src.meta.copy()
+        return m
 
-                        if src.crs == dst_crs:
-                            dst_array = src.read()[:3, :, :]
-                            minx, miny, maxx, maxy = src.bounds
-                        else:
-                            transform, width, height = calculate_default_transform(
-                                src.crs, dst_crs, src.width, src.height, *src.bounds
-                            )
-                            dst_profile.update(
-                                {
-                                    "crs": dst_crs,
-                                    "transform": transform,
-                                    "width": width,
-                                    "height": height,
-                                }
-                            )
-
-                            with MemoryFile() as memfile:
-                                with memfile.open(**dst_profile) as mem:
-                                    for i in range(1, src.count + 1):
-                                        reproject(
-                                            source=rasterio.band(src, i),
-                                            destination=rasterio.band(mem, i),
-                                            src_transform=src.transform,
-                                            src_crs=src.crs,
-                                            dst_transform=transform,
-                                            dst_crs=dst_crs,
-                                            resampling=Resampling.nearest,
-                                        )
-
-                                    dst_array = mem.read()[:3, :, :]
-                                    minx, miny, maxx, maxy = mem.bounds
-
-                    # TODO: Make band configuration available
-                    m.add_child(
-                        folium.raster_layers.ImageOverlay(
-                            np.moveaxis(np.stack(dst_array), 0, 2),
-                            bounds=[[miny, minx], [maxy, maxx]],  # different order.
-                            name=f"Image {idx+1} - {feature_name}",
-                        )
-                    )
-
-        # Collapse layer control with too many features.
-        if df.shape[0] > 4:  # pylint: disable=simplifiable-if-statement  #type: ignore
-            collapsed = True
-        else:
-            collapsed = False
-        folium.LayerControl(position="bottomleft", collapsed=collapsed).add_to(m)
-
-        try:
-            assert get_ipython() is not None
-            display(m)
-        except (AssertionError, NameError):
-            logger.info(
-                "Returning folium map object. To display it directly run in a "
-                "Jupyter notebook!"
-            )
-            return m
-
-    def get_logs(self, as_print: bool = True, as_return: bool = False):
+    def get_logs(
+        self, as_print: bool = True, as_return: bool = False
+    ) -> Optional[Dict]:
         """
         Convenience function to print or return the logs of all job tasks.
 
@@ -379,14 +313,12 @@ class Job(Tools):
         Returns:
             The log strings (only if as_return was selected).
         """
+        job_logs = {}
+
         jobtasks: List[Dict] = self.get_jobtasks(return_json=True)  # type: ignore
         jobtasks_ids = [task["id"] for task in jobtasks]
 
-        logger.info(
-            "Getting logs for %s job tasks: %s", len(jobtasks_ids), jobtasks_ids
-        )
-        job_logs = {}
-
+        logger.info(f"Getting logs for {len(jobtasks_ids)} job tasks: {jobtasks_ids}")
         if as_print:
             print(
                 f"Printing logs of {len(jobtasks_ids)} JobTasks in Job with job_id "
@@ -406,8 +338,10 @@ class Job(Tools):
                 print("----------------------------------------------------------")
                 print(f"JobTask {idx+1} with jobtask_id {jobtask_id}:\n")
                 print(response_json)
-            if as_return:
-                return job_logs
+        if as_return:
+            return job_logs
+        else:
+            return None
 
     def get_jobtasks(
         self, return_json: bool = False
@@ -425,22 +359,22 @@ class Job(Tools):
             f"{self.auth._endpoint()}/projects/{self.project_id}/jobs/{self.job_id}"
             f"/tasks/"
         )
-        logger.info("Getting job tasks: %s", self.job_id)
+        logger.info(f"Getting job tasks: {self.job_id}")
         response_json = self.auth._request(request_type="GET", url=url)
         jobtasks_json: List[Dict] = response_json["data"]
 
-        jobtasks = [
-            JobTask(
-                auth=self.auth,
-                project_id=self.project_id,
-                job_id=self.job_id,
-                jobtask_id=task["id"],
-            )
-            for task in jobtasks_json
-        ]
         if return_json:
             return jobtasks_json
         else:
+            jobtasks = [
+                JobTask(
+                    auth=self.auth,
+                    project_id=self.project_id,
+                    job_id=self.job_id,
+                    jobtask_id=task["id"],
+                )
+                for task in jobtasks_json
+            ]
             return jobtasks
 
     def get_jobtasks_results_json(self) -> Dict:

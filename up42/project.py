@@ -3,11 +3,12 @@ from typing import Dict, List, Union
 
 from tqdm import tqdm
 
-from .auth import Auth
-from .job import Job
-from .tools import Tools
-from .utils import get_logger
-from .workflow import Workflow
+from up42.auth import Auth
+from up42.job import Job
+from up42.jobcollection import JobCollection
+from up42.tools import Tools
+from up42.utils import get_logger, filter_jobs_on_mode
+from up42.workflow import Workflow
 
 logger = get_logger(__name__)
 
@@ -17,27 +18,30 @@ class Project(Tools):
         """
         The Project class can query all available workflows and spawn new workflows
         within an UP42 project. Also handles project user settings.
-
-        Public Methods:
-            create_workflow, get_workflows, get_jobs, get_project_settings,
-            update_project_settings
         """
         self.auth = auth
         self.project_id = project_id
         if self.auth.get_info:
-            self.info = self._get_info()
+            self._info = self.info
 
     def __repr__(self):
+        info = self.info
+        env = ", env: dev" if self.auth.env == "dev" else ""
         return (
-            f"Project(project_id={self.project_id}, auth={self.auth}, info={self.info})"
+            f"Project(name: {info['name']}, project_id: {self.project_id}, "
+            f"description: {info['description']}, createdAt: {info['createdAt']}"
+            f"{env})"
         )
 
-    def _get_info(self):
-        """Gets metadata info from sever for an existing project"""
+    @property
+    def info(self) -> Dict:
+        """
+        Gets the project metadata information.
+        """
         url = f"{self.auth._endpoint()}/projects/{self.project_id}"
         response_json = self.auth._request(request_type="GET", url=url)
-        self.info = response_json["data"]
-        return self.info
+        self._info = response_json["data"]
+        return response_json["data"]
 
     def create_workflow(
         self, name: str, description: str = "", use_existing: bool = False
@@ -63,15 +67,13 @@ class Project(Tools):
             matching_workflows = [
                 workflow
                 for workflow in existing_workflows
-                if workflow.info["name"] == name
-                and workflow.info["description"] == description
+                if workflow._info["name"] == name
+                and workflow._info["description"] == description
             ]
             if matching_workflows:
                 existing_workflow = matching_workflows[0]
                 logger.info(
-                    "Using existing workflow: %s, %s.",
-                    name,
-                    existing_workflow.workflow_id,
+                    f"Using existing workflow: {name} - {existing_workflow.workflow_id}"
                 )
                 return existing_workflow
 
@@ -79,7 +81,7 @@ class Project(Tools):
         payload = {"name": name, "description": description}
         response_json = self.auth._request(request_type="POST", url=url, data=payload)
         workflow_id = response_json["data"]["id"]
-        logger.info("Created new workflow: %s.", workflow_id)
+        logger.info(f"Created new workflow: {workflow_id}")
         workflow = Workflow(
             self.auth, project_id=self.project_id, workflow_id=workflow_id
         )
@@ -99,7 +101,7 @@ class Project(Tools):
         response_json = self.auth._request(request_type="GET", url=url)
         workflows_json = response_json["data"]
         logger.info(
-            "Got %s workflows for project %s.", len(workflows_json), self.project_id
+            f"Got {len(workflows_json)} workflows for project {self.project_id}."
         )
 
         if return_json:
@@ -111,24 +113,27 @@ class Project(Tools):
             ]
             return workflows
 
-    def get_jobs(self, return_json: bool = False) -> Union[List["Job"], Dict]:
+    def get_jobs(
+        self, return_json: bool = False, test_jobs: bool = True, real_jobs: bool = True
+    ) -> Union[JobCollection, List[Dict]]:
         """
-        Get all jobs in the project as job objects or json.
+        Get all jobs in the project as a JobCollection or json.
 
-        Use Workflow().get_job() to get jobs associated with a specific workflow.
+        Use Workflow().get_job() to get a JobCollection with jobs associated with a
+        specific workflow.
 
         Args:
-            return_json: If true, returns the job info jsons instead of job objects.
+            return_json: If true, returns the job info jsons instead of JobCollection.
+            test_jobs: Return test jobs or test queries.
+            real_jobs: Return real jobs.
 
         Returns:
-            All job objects as a list, or alternatively the jobs info as json.
+            All job objects in a JobCollection, or alternatively the jobs info as json.
         """
         url = f"{self.auth._endpoint()}/projects/{self.project_id}/jobs"
         response_json = self.auth._request(request_type="GET", url=url)
-        jobs_json = response_json["data"]
-        logger.info(
-            "Got %s jobs in project %s.", len(jobs_json), self.project_id,
-        )
+        jobs_json = filter_jobs_on_mode(response_json["data"], test_jobs, real_jobs)
+        logger.info(f"Got {len(jobs_json)} jobs in project {self.project_id}.")
         if return_json:
             return jobs_json
         else:
@@ -136,9 +141,12 @@ class Project(Tools):
                 Job(self.auth, job_id=job["id"], project_id=self.project_id)
                 for job in tqdm(jobs_json)
             ]
-            return jobs
+            jobcollection = JobCollection(
+                auth=self.auth, project_id=self.project_id, jobs=jobs
+            )
+            return jobcollection
 
-    def get_project_settings(self) -> List:
+    def get_project_settings(self) -> List[Dict[str, str]]:
         """
         Gets the project settings.
 
@@ -149,6 +157,15 @@ class Project(Tools):
         response_json = self.auth._request(request_type="GET", url=url)
         project_settings = response_json["data"]
         return project_settings
+
+    @property
+    def max_concurrent_jobs(self) -> int:
+        """
+        Gets the maximum number of concurrent jobs allowed by the project settings.
+        """
+        project_settings = self.get_project_settings()
+        project_settings_dict = {d["name"]: int(d["value"]) for d in project_settings}
+        return project_settings_dict["MAX_CONCURRENT_JOBS"]
 
     def update_project_settings(
         self,
@@ -180,4 +197,4 @@ class Project(Tools):
             },
         ]
         self.auth._request(request_type="PUT", url=url, data=payload)
-        logger.info("Updated project settings: %s", payload)
+        logger.info(f"Updated project settings: {payload}")

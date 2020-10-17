@@ -8,13 +8,15 @@ from geopandas import GeoDataFrame
 import pandas as pd
 import pytest
 from shapely.geometry import Point, Polygon, LinearRing
-import requests_mock
+from shapely import wkt
 
 from .context import (
     folium_base_map,
     any_vector_to_fc,
     fc_to_query_geometry,
     download_results_from_gcs,
+    _map_images,
+    filter_jobs_on_mode,
 )
 
 
@@ -58,7 +60,12 @@ poly = Polygon([(0, 0), (1, 1), (1, 0)])
                 "geometry": {
                     "type": "Polygon",
                     "coordinates": (
-                        ((10.00001, 6.0), (10.0, 5.99), (10.1, 6.00), (10.00001, 6.0),),
+                        (
+                            (10.00001, 6.0),
+                            (10.0, 5.99),
+                            (10.1, 6.00),
+                            (10.00001, 6.0),
+                        ),
                     ),
                 },
             },
@@ -161,7 +168,9 @@ def test_fc_to_query_geometry_multiple_intersects_union_default():
     )
     with open(fp) as json_file:
         fc = json.load(json_file)
-    query_geometry = fc_to_query_geometry(fc=fc, geometry_operation="intersects")
+    query_geometry = fc_to_query_geometry(
+        fc=fc, geometry_operation="intersects", squash_multiple_features="union"
+    )
     assert isinstance(query_geometry, dict)
 
     # TODO: Reduce coordinate precision.
@@ -202,7 +211,9 @@ def test_fc_to_query_geometry_multiple_bbox_union_default():
     )
     with open(fp) as json_file:
         fc = json.load(json_file)
-    query_geometry = fc_to_query_geometry(fc=fc, geometry_operation="bbox")
+    query_geometry = fc_to_query_geometry(
+        fc=fc, geometry_operation="bbox", squash_multiple_features="union"
+    )
     assert isinstance(query_geometry, list)
     assert len(query_geometry) == 4
     assert query_geometry == [-17.66426739, 14.60807946, -17.1360538, 14.99399093]
@@ -254,19 +265,109 @@ def test_fc_to_query_geometry_raises_with_not_accepted():
         fc_to_query_geometry(ring, geometry_operation="bbox")
 
 
-def test_download_result_from_gcs():
+def test_download_result_from_gcs(requests_mock):
     cloud_storage_url = "http://clouddownload.api.com/abcdef"
 
-    with requests_mock.Mocker() as m:
-        out_tgz = Path(__file__).resolve().parent / "mock_data/result_tif.tgz"
-        out_tgz_file = open(out_tgz, "rb")
-        m.get(
-            url=cloud_storage_url, content=out_tgz_file.read(),
+    out_tgz = Path(__file__).resolve().parent / "mock_data/result_tif.tgz"
+    out_tgz_file = open(out_tgz, "rb")
+    requests_mock.get(
+        url=cloud_storage_url,
+        content=out_tgz_file.read(),
+    )
+    with tempfile.TemporaryDirectory() as tempdir:
+        with open(Path(tempdir) / "dummy.txt", "w") as fp:
+            fp.write("dummy")
+        out_files = download_results_from_gcs(
+            download_url=cloud_storage_url,
+            output_directory=tempdir,
         )
-        with tempfile.TemporaryDirectory() as tempdir:
-            out_files = download_results_from_gcs(
-                download_url=cloud_storage_url, output_directory=tempdir,
-            )
-            for file in out_files:
-                assert Path(file).exists()
-            assert len(out_files) == 2
+
+        for file in out_files:
+            assert Path(file).exists()
+        assert len(out_files) == 2
+        assert not (Path(tempdir) / "output").exists()
+
+
+def test_map_images_2_scenes():
+    plot_file_format = [".jpg"]
+
+    result_csv = Path(__file__).resolve().parent / "mock_data/df_2scenes.csv"
+    result_df = pd.read_csv(result_csv)
+    result_df["geometry"] = result_df["geometry"].apply(wkt.loads)
+    gdf = gpd.GeoDataFrame(result_df, geometry="geometry")
+
+    quicklook_1 = (
+        Path(__file__).resolve().parent
+        / "mock_data/quicklooks/quicklook_16e18e15-c941-4aae-97cd-d67b18dc9f6e.jpg"
+    )
+    quicklook_2 = (
+        Path(__file__).resolve().parent
+        / "mock_data/quicklooks/quicklook_f8c03432-cec1-41b7-a203-4d871a03290f.jpg"
+    )
+    filepaths = [quicklook_1, quicklook_2]
+
+    m = _map_images(plot_file_format, gdf, filepaths)
+    m._repr_html_()
+    out = m._parent.render()
+
+    assert "Image 1 - f8c03432-cec1-41b7-a203-4d871a03290f" in out
+    assert "Image 2 - 16e18e15-c941-4aae-97cd-d67b18dc9f6e" in out
+
+
+def test_map_images_2_scenes_no_column_name():
+    plot_file_format = [".jpg"]
+
+    result_csv = Path(__file__).resolve().parent / "mock_data/df_2scenes.csv"
+    result_df = pd.read_csv(result_csv)
+    result_df["geometry"] = result_df["geometry"].apply(wkt.loads)
+    gdf = gpd.GeoDataFrame(result_df, geometry="geometry")
+
+    quicklook_1 = (
+        Path(__file__).resolve().parent
+        / "mock_data/quicklooks/quicklook_16e18e15-c941-4aae-97cd-d67b18dc9f6e.jpg"
+    )
+    quicklook_2 = (
+        Path(__file__).resolve().parent
+        / "mock_data/quicklooks/quicklook_f8c03432-cec1-41b7-a203-4d871a03290f.jpg"
+    )
+    filepaths = [quicklook_1, quicklook_2]
+
+    m = _map_images(plot_file_format, gdf, filepaths, name_column="nikoo")
+    m._repr_html_()
+    out = m._parent.render()
+
+    assert "Image 1 - " in out
+    assert "Image 2 - " in out
+
+
+def test_map_images_1_scene():
+    plot_file_format = [".jpg"]
+
+    result_csv = Path(__file__).resolve().parent / "mock_data/df_1scene.csv"
+    result_df = pd.read_csv(result_csv)
+    result_df["geometry"] = result_df["geometry"].apply(wkt.loads)
+    gdf = gpd.GeoDataFrame(result_df, geometry="geometry")
+
+    quicklook = (
+        Path(__file__).resolve().parent
+        / "mock_data/quicklooks/quicklook_16e18e15-c941-4aae-97cd-d67b18dc9f6e.jpg"
+    )
+    filepaths = [quicklook]
+
+    m = _map_images(plot_file_format, gdf, filepaths)
+    m._repr_html_()
+    out = m._parent.render()
+
+    assert "Image 1 - 2a581680-17e4-4a61-8aa9-9e47e1bf36bb" in out
+
+
+def test_filter_jobs_on_mode():
+    job_json = [{"mode": "DEFAULT"}, {"mode": "DRY_RUN"}]
+    r = filter_jobs_on_mode(job_json)
+    assert len(r) == 2
+    r = filter_jobs_on_mode(job_json, test_jobs=False, real_jobs=True)
+    assert len(r) == 1
+    r = filter_jobs_on_mode(job_json, test_jobs=True, real_jobs=False)
+    assert len(r) == 1
+    with pytest.raises(ValueError):
+        filter_jobs_on_mode(job_json, test_jobs=False, real_jobs=False)

@@ -2,27 +2,34 @@ import copy
 import logging
 from typing import Dict, List, Union, Tuple
 from pathlib import Path
+import shutil
 import tempfile
 import tarfile
 import math
+import warnings
+import functools
 
 import folium
 from folium.plugins import Draw
 from geopandas import GeoDataFrame
+import numpy as np
 import shapely
 import rasterio
 from rasterio.plot import show
-from shapely.geometry import Point, Polygon
+from rasterio.vrt import WarpedVRT
+from shapely.geometry import Point, Polygon, box
 from geojson import Feature, FeatureCollection
 from geojson import Polygon as geojson_Polygon
 import requests
 from tqdm import tqdm
 import matplotlib.pyplot as plt
 
-LOG_FORMAT = "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
 
-
-def get_logger(name, level=logging.INFO):
+def get_logger(
+    name,
+    level=logging.INFO,
+    verbose=False,
+):
     """
     Use level=logging.CRITICAL to disable temporarily.
     """
@@ -31,7 +38,12 @@ def get_logger(name, level=logging.INFO):
     # create console handler and set level to debug
     ch = logging.StreamHandler()
     ch.setLevel(level)
-    formatter = logging.Formatter(LOG_FORMAT)
+    if verbose:
+        log_format = "%(asctime)s - %(name)s - %(levelname)s - %(message)"
+    else:
+        # hide logger module & level, truncate log messages > 2000 characters (e.g. huge geometries)
+        log_format = "%(asctime)s - %(message).2000s"
+    formatter = logging.Formatter(log_format)
     ch.setFormatter(formatter)
     logger.addHandler(ch)
     logger.propagate = False
@@ -39,6 +51,37 @@ def get_logger(name, level=logging.INFO):
 
 
 logger = get_logger(__name__)
+
+
+def deprecation(
+    function_name: str,
+    replacement_name: str,
+    version: str = "0.13.0",
+    extra_message: str = "",
+):
+    """
+    Decorator for custom deprecation warnings.
+
+    Args:
+        function_name: Name of the to be deprecated function.
+        replacement_name: Name of the replacement function.
+        version: The package version in which the deprecation will happen.
+        extra_message: Optional message after default deprecation warning.
+    """
+
+    def actual_decorator(func):
+        @functools.wraps(func)
+        def wrapper(*args, **kwargs):
+            message = (
+                f"`{function_name}` will be deprecated in version {version}, "
+                f"use `{replacement_name}` instead! {extra_message}"
+            )
+            warnings.warn(message, DeprecationWarning, stacklevel=2)
+            return func(*args, **kwargs)
+
+        return wrapper
+
+    return actual_decorator
 
 
 def download_results_from_gcs(
@@ -65,29 +108,65 @@ def download_results_from_gcs(
                 if chunk:  # filter out keep-alive new chunks
                     dst_tgz.write(chunk)
         except requests.exceptions.HTTPError as err:
-            logger.debug("Connection error, please try again! %s", err)
+            logger.debug(f"Connection error, please try again! {err}")
             raise requests.exceptions.HTTPError(
                 f"Connection error, please try again! {err}"
             )
 
-    # Unpack and exclude data.json
-    out_filepaths: List[str] = []
     with tarfile.open(tgz_file) as tar:
-        members = tar.getmembers()
-        files = [f for f in members if f.isfile()]
-        for file in files:
-            f = tar.extractfile(file)
-            content = f.read()  # type: ignore
-            out_fp = output_directory / f"{Path(file.name).name}"
-            with open(out_fp, "wb") as dst:
-                dst.write(content)
-            out_filepaths.append(str(out_fp))
+        tar.extractall(path=output_directory)
+        output_folder_path = output_directory / "output"
+        out_filepaths = []
+        for src_path in output_folder_path.glob("**/*"):
+            dst_path = output_directory / src_path.relative_to(output_folder_path)
+            shutil.move(str(src_path), str(dst_path))
+            if dst_path.is_dir():
+                out_filepaths += [str(x) for x in dst_path.glob("**/*")]
+            elif dst_path.is_file():
+                out_filepaths.append(str(dst_path))
+        output_folder_path.rmdir()
 
     logger.info(
-        "Download successful of %s files to output_directory '%s': %s",
-        len(out_filepaths),
-        output_directory,
-        [Path(p).name for p in out_filepaths],
+        f"Download successful of {len(out_filepaths)} files to output_directory "
+        f"'{output_directory}': {[Path(p).name for p in out_filepaths]}"
+    )
+    return out_filepaths
+
+
+def download_results_from_gcs_without_unpacking(
+    download_url: str, output_directory: Union[str, Path]
+) -> List[str]:
+    """
+    General download function for results of job and jobtask from cloud storage
+    provider.
+
+    Args:
+        download_url: The signed gcs url to download.
+        output_directory: The file output directory, defaults to the current working
+            directory.
+    """
+    output_directory = Path(output_directory)
+
+    # Download
+    out_filepaths: List[str] = []
+    out_fp = Path().joinpath(output_directory, "output.tgz")
+    with open(out_fp, "wb") as dst:
+        try:
+            r = requests.get(download_url)
+            r.raise_for_status()
+            for chunk in tqdm(r.iter_content(chunk_size=1024)):
+                if chunk:  # filter out keep-alive new chunks
+                    dst.write(chunk)
+            out_filepaths.append(str(out_fp))
+        except requests.exceptions.HTTPError as err:
+            logger.debug(f"Connection error, please try again! {err}")
+            raise requests.exceptions.HTTPError(
+                f"Connection error, please try again! {err}"
+            )
+
+    logger.info(
+        f"Download successful of {len(out_filepaths)} files to output_directory"
+        f" '{output_directory}': {[Path(p).name for p in out_filepaths]}"
     )
     return out_filepaths
 
@@ -147,6 +226,24 @@ def folium_base_map(
     return m
 
 
+def _style_function(_):
+    return {
+        "fillColor": "#5288c4",
+        "color": "blue",
+        "weight": 2.5,
+        "dashArray": "5, 5",
+    }
+
+
+def _highlight_function(_):
+    return {
+        "fillColor": "#ffaf00",
+        "color": "red",
+        "weight": 3.5,
+        "dashArray": "5, 5",
+    }
+
+
 class DrawFoliumOverride(Draw):
     def render(self, **kwargs):
         # pylint: disable=import-outside-toplevel
@@ -204,7 +301,7 @@ class DrawFoliumOverride(Draw):
 
 def _plot_images(
     plot_file_format: List[str],
-    figsize: Tuple[int, int] = (8, 8),
+    figsize: Tuple[int, int] = (14, 8),
     filepaths: List[Union[str, Path]] = None,
     titles: List[str] = None,
 ) -> None:
@@ -228,7 +325,7 @@ def _plot_images(
     ]
     if not imagepaths:
         raise ValueError(
-            f"Only files of the formats {plot_file_format} can " "currently be plotted."
+            f"This function only plots files of format {plot_file_format}."
         )
 
     if not titles:
@@ -247,22 +344,138 @@ def _plot_images(
         axs = axs.ravel()
     else:
         axs = [axs]
+
     for idx, (fp, title) in enumerate(zip(imagepaths, titles)):
         with rasterio.open(fp) as src:
             img_array = src.read()[:3, :, :]
             # TODO: Handle more band configurations.
             # TODO: add histogram equalization?
             show(
-                img_array, transform=src.transform, title=title, ax=axs[idx],
+                img_array,
+                transform=src.transform,
+                title=title,
+                ax=axs[idx],
+                aspect="auto",
             )
         axs[idx].set_axis_off()
+    plt.axis("off")
     plt.tight_layout()
     plt.show()
 
 
+def _map_images(
+    plot_file_format: List[str],
+    result_df: GeoDataFrame,
+    filepaths,
+    aoi=None,
+    show_images=True,
+    show_features=False,
+    name_column: str = "id",
+    save_html: Path = None,
+) -> folium.Map:
+    """
+    Displays data.json, and if available, one or multiple results geotiffs.
+
+    Args:
+        plot_file_format: List of accepted image file formats e.g. [".png"]
+        result_df: GeoDataFrame of scenes, results of catalog.search()
+        aoi: GeoDataFrame of aoi
+        filepaths: Paths to images to plot. Optional, by default picks up the last
+            downloaded results.
+        show_images: Shows images if True (default).
+        show_features: Show features if True. For quicklooks maps is set to False.
+        name_column: Name of the feature property that provides the Feature/Layer name.
+        save_html: The path for saving folium map as html file. With default None, no file is saved.
+    """
+
+    centroid = box(*result_df.total_bounds).centroid
+    m = folium_base_map(
+        lat=centroid.y,
+        lon=centroid.x,
+    )
+
+    df_bounds = result_df.bounds
+    list_bounds = df_bounds.values.tolist()
+    raster_filepaths = [
+        path for path in filepaths if Path(path).suffix in plot_file_format
+    ]
+
+    try:
+        feature_names = result_df[name_column].to_list()
+    except KeyError:
+        feature_names = [""] * len(result_df.index)
+
+    if aoi is not None:
+        folium.GeoJson(
+            aoi,
+            name="geojson",
+            style_function=_style_function,
+            highlight_function=_highlight_function,
+        ).add_to(m)
+
+    if show_features:
+        for idx, row in result_df.iterrows():  # type: ignore
+            try:
+                feature_name = row.loc[name_column]
+            except KeyError:
+                feature_name = ""
+            layer_name = f"Feature {idx+1} - {feature_name}"
+            f = folium.GeoJson(
+                row["geometry"],
+                name=layer_name,
+                style_function=_style_function,
+                highlight_function=_highlight_function,
+            )
+            folium.Popup(
+                f"{layer_name}: {row.drop('geometry', axis=0).to_json()}"
+            ).add_to(f)
+            f.add_to(m)
+
+    if show_images and raster_filepaths:
+        for idx, (raster_fp, feature_name) in enumerate(
+            zip(raster_filepaths, feature_names)
+        ):
+            with rasterio.open(raster_fp) as src:
+                if src.meta["crs"] is None:
+                    dst_array = src.read()[:3, :, :]
+                    minx, miny, maxx, maxy = list_bounds[idx]
+                else:
+                    # Folium requires 4326, streaming blocks are 3857
+                    with WarpedVRT(src, crs="EPSG:4326") as vrt:
+                        dst_array = vrt.read()[:3, :, :]
+                        minx, miny, maxx, maxy = vrt.bounds
+
+            m.add_child(
+                folium.raster_layers.ImageOverlay(
+                    np.moveaxis(np.stack(dst_array), 0, 2),
+                    bounds=[[miny, minx], [maxy, maxx]],  # different order.
+                    name=f"Image {idx + 1} - {feature_name}",
+                )
+            )
+
+    # Collapse layer control with too many features.
+    collapsed = bool(result_df.shape[0] > 4)
+    folium.LayerControl(position="bottomleft", collapsed=collapsed).add_to(m)
+
+    if save_html:
+        save_html = Path(save_html)
+        if not save_html.exists():
+            save_html.mkdir(parents=True, exist_ok=True)
+        filepath = save_html / "final_map.html"
+        with filepath.open("w") as f:
+            f.write(m._repr_html_())
+    return m
+
+
 def any_vector_to_fc(
     vector: Union[
-        Dict, Feature, FeatureCollection, List, GeoDataFrame, Polygon, Point,
+        Dict,
+        Feature,
+        FeatureCollection,
+        List,
+        GeoDataFrame,
+        Polygon,
+        Point,
     ],
     as_dataframe: bool = False,
 ) -> Union[Dict, GeoDataFrame]:
@@ -300,6 +513,7 @@ def any_vector_to_fc(
             if vector["type"] == "FeatureCollection":
                 df = GeoDataFrame.from_features(vector, crs=4326)
             elif vector["type"] == "Feature":
+                # TODO: Handle point features?
                 df = GeoDataFrame.from_features(FeatureCollection([vector]), crs=4326)
             elif vector["type"] == "Polygon":  # Geojson geometry
                 df = GeoDataFrame.from_features(
@@ -368,7 +582,9 @@ def fc_to_query_geometry(
     """
     if geometry_operation not in ["bbox", "intersects", "contains"]:
         raise ValueError(
-            "geometry_operation needs to be one of bbox", "intersects", "contains",
+            "geometry_operation needs to be one of bbox",
+            "intersects",
+            "contains",
         )
     try:
         if fc["type"] != "FeatureCollection":
@@ -392,9 +608,8 @@ def fc_to_query_geometry(
     # geometry via handle_multiple_features method.
     else:
         logger.info(
-            "The provided geometry contains multiple geometries, the %s feature is "
-            "taken instead.",
-            squash_multiple_features,
+            f"The provided geometry contains multiple geometries, "
+            f"the {squash_multiple_features} feature is taken instead."
         )
         if geometry_operation == "bbox":
             if squash_multiple_features == "union":
@@ -421,3 +636,32 @@ def fc_to_query_geometry(
             elif squash_multiple_features == "first":
                 query_geometry = fc["features"][0]["geometry"]
     return query_geometry
+
+
+def filter_jobs_on_mode(
+    jobs_json: List[dict], test_jobs: bool = True, real_jobs: bool = True
+) -> List[dict]:
+    """
+    Filter jobs according to selected mode.
+
+    Args:
+        jobs_json: List of jobs as returned by /jobs endpoint.
+        test_jobs: If returning test jobs or test queries.
+        real_jobs: If returning real jobs.
+
+    Returns:
+        List of filtered jobs.
+
+    Raises:
+        ValueError: When no modes are selected to filter jobs with.
+    """
+    selected_modes = []
+    if test_jobs:
+        selected_modes.append("DRY_RUN")
+    if real_jobs:
+        selected_modes.append("DEFAULT")
+    if not selected_modes:
+        raise ValueError("At least one of test_jobs and real_jobs must be True.")
+    jobs_json = [job for job in jobs_json if job["mode"] in selected_modes]
+    logger.info(f"Returning {selected_modes} jobs.")
+    return jobs_json

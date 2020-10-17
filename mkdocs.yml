@@ -17,33 +17,46 @@ extra:
     - icon: fontawesome/brands/github-alt
       link: https://github.com/up42
     - icon: fontawesome/brands/twitter
-      link: https://twitter.com/up42official
+      link: https://twitter.com/up42_
     - icon: fontawesome/brands/linkedin
       link: https://www.linkedin.com/company/up42/
+    - icon: fontawesome/solid/envelope
+      link: mailto:support@up42.com
 
 ## Page tree
 nav:
     - Home: index.md
-    - Guides:
+    - Getting Started:
+      - 30 Second Example: 30-second-example.md
       - Installation: installation.md
       - Authentication: authentication.md
       - Structure: structure.md
-      - 30 Second Example: 30-second-example.md
-      - Typical Usage: typical-usage.md
       - Catalog Search: catalog.md
-      - Command Line Interface: cli.md
+      - Detailed Example: detailed-example.md
+    - Examples:
+        - Examples: examples-intro.md
+        - Radar processing: examples/radar_processing_1.ipynb
+        - Airport monitoring: examples/airports-parallel.ipynb
+        - Flood mapping: examples/flood_mapping.ipynb
+        - Catalog Quicklooks: examples/map-quicklooks.ipynb
+    - CLI:
+        - Command Line Interface (CLI): cli.md
+        - Command Reference: reference/cli.md
     - Code Reference:
+        - up42: reference/up42.md
         - Project: reference/project.md
         - Workflow: reference/workflow.md
         - Job: reference/job.md
+        - JobCollection: reference/jobcollection.md
         - JobTask: reference/jobtask.md
         - Catalog: reference/catalog.md
         - Tools: reference/tools.md
-    - Examples:
-        - Examples: examples/examples-intro.md
-        - Airport monitoring: examples/airport-monitoring.md
-    - Support & FAQ:
-        - FAQ: support-faq.md
+        - CLI: reference/cli.md
+    -  Releases:
+        - Releases: CHANGELOG.md
+    - FAQ & Support:
+        - FAQ & Support: support-faq.md
+        - Privacy Policy: privacy-policy.md
 
 ## Configuration
 theme:
@@ -58,8 +71,7 @@ theme:
   # Default values, taken from mkdocs_theme.yml
   language: en
   features:
-    - tabs
-    #- instant
+    - navigation.tabs
   palette:
     primary: indigo
     accent: purple
@@ -75,16 +87,30 @@ plugins:
   - search
   - autolinks
   - table-reader
-  - minify:
-      minify_html: false #true
+  - mkdocs-jupyter
+  - exclude:
+      glob:
+        - "*config*.json"
+        - "*cfg*.json"
+        - ".ipynb_checkpoints"
+        - "*examples/project*"
+        - "*examples/guides/*"
+  #- minify:
+  #    minify_html: false
   - mkdocstrings:
       default_handler: python
       handlers:
         python:
           rendering:
+            show_root_heading: false
             show_source: true
+            show_category_heading: true
+          selection:
+            filters:
+              - "!^_"  # exlude all members starting with _
       watch:
         - src/my_library
+  #- pdf-export
 
 ## Custom theme additions
 extra_javascript:
@@ -125,6 +151,7 @@ markdown_extensions:
       custom_checkbox: true
   - pymdownx.tilde
   - pymdownx.tabbed
+  - mkdocs-click
 
 google_analytics:
   - 'UA-132885718-1'

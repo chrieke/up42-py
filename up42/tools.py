@@ -9,8 +9,15 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import shapely
 import rasterio
+import folium
 
-from .utils import get_logger, folium_base_map, DrawFoliumOverride, _plot_images
+from up42.utils import (
+    get_logger,
+    folium_base_map,
+    DrawFoliumOverride,
+    _plot_images,
+    _map_images,
+)
 
 try:
     from IPython.display import display
@@ -31,9 +38,6 @@ class Tools:
         The tools class contains functionality that is not bound to a specific UP42 object,
         e.g. for aoi handling etc., UP42 block information, validatin a block manifest etc.
         They can be accessed from every object and also from the imported up42 package directly.
-
-        Public methods:
-            read_vector_file, get_example_aoi, draw_aoi, plot_coverage, plot_quicklooks
         """
         if auth:
             self.auth = auth
@@ -74,11 +78,8 @@ class Tools:
 
         if df.crs.to_string() != "EPSG:4326":
             df = df.to_crs(epsg=4326)
-        df.geometry = df.geometry.buffer(0)
         # TODO: Explode multipolygons (if neccessary as union in aoi anyway most often).
-
         # TODO: Have both bboxes for each feature and overall?
-
         if as_dataframe:
             return df
         else:
@@ -98,7 +99,7 @@ class Tools:
         Returns:
             Feature collection json with the selected aoi.
         """
-        logger.info("Getting small example aoi in %s.", location)
+        logger.info(f"Getting small example aoi in location '{location}'.")
         if location == "Berlin":
             example_aoi = self.read_vector_file(
                 f"{str(Path(__file__).resolve().parent)}/data/aoi_berlin.geojson"
@@ -109,7 +110,7 @@ class Tools:
             )
         else:
             raise ValueError(
-                "Please select one of 'Berlin' or 'Washington' as the " "location!"
+                "Please select one of 'Berlin' or 'Washington' as the location!"
             )
 
         if as_dataframe:
@@ -185,14 +186,8 @@ class Tools:
             alpha=0.7,
             legend_kwds=dict(loc="upper left", bbox_to_anchor=(1, 1)),
         )
-
         if aoi is not None:
             aoi.plot(color="r", ax=ax, fc="None", edgecolor="r", lw=1)
-            # TODO: Add aoi to legend.
-            # from matplotlib.patches import Patch
-            # patch = Patch(label="aoi", facecolor='None', edgecolor='r')
-            # ax.legend(handles=handles, labels=labels)
-            # TODO: Overlay quicklooks on geometry.
         ax.set_axis_off()
         plt.show()
 
@@ -229,9 +224,49 @@ class Tools:
             titles=titles,
         )
 
+    def map_quicklooks(
+        self,
+        scenes: GeoDataFrame,
+        aoi: GeoDataFrame = None,
+        filepaths: List = None,
+        name_column: str = "id",
+        save_html: Path = None,
+    ) -> folium.Map:
+        """
+        Plots the downloaded quicklooks (filepaths saved to self.quicklooks of the
+        respective object, e.g. job, catalog).
+
+        Args:
+            scenes: GeoDataFrame of scenes, results of catalog.search()
+            aoi: GeoDataFrame of aoi.
+            filepaths: Paths to images to plot. Optional, by default picks up the last
+                downloaded results.
+            name_column: Name of the feature property that provides the Feature/Layer name.
+            save_html: The path for saving folium map as html file. With default None, no file is saved.
+        """
+        if filepaths is None:
+            if self.quicklooks is None:
+                raise ValueError("You first need to download the quicklooks!")
+            filepaths = self.quicklooks
+
+        plot_file_format = [".jpg", ".jpeg", ".png"]
+        warnings.filterwarnings(
+            "ignore", category=rasterio.errors.NotGeoreferencedWarning
+        )
+        m = _map_images(
+            plot_file_format=plot_file_format,
+            result_df=scenes,
+            filepaths=filepaths,
+            aoi=aoi,
+            name_column=name_column,
+            save_html=save_html,
+        )
+
+        return m
+
     def plot_results(
         self,
-        figsize: Tuple[int, int] = (8, 8),
+        figsize: Tuple[int, int] = (14, 8),
         filepaths: List[Union[str, Path]] = None,
         titles: List[str] = None,
     ) -> None:
@@ -248,6 +283,11 @@ class Tools:
             if self.results is None:
                 raise ValueError("You first need to download the results!")
             filepaths = self.results
+            # Unpack results path dict in case of jobcollection.
+            if isinstance(filepaths, dict):
+                filepaths = [
+                    item for sublist in list(filepaths.values()) for item in sublist  # type: ignore
+                ]
 
         plot_file_format = [".tif"]  # TODO: Add other fileformats.
         _plot_images(
@@ -258,7 +298,10 @@ class Tools:
         )
 
     def get_blocks(
-        self, block_type=None, basic: bool = True, as_dataframe=False,
+        self,
+        block_type=None,
+        basic: bool = True,
+        as_dataframe=False,
     ) -> Union[List[Dict], Dict]:
         """
         Gets a list of all public blocks on the marketplace.
